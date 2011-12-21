@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+  <TextView
+    android:id="@+id/textViewMapMessage"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="Pozdravljeni"
+  />
+  <com.google.android.maps.MapView
+    android:id="@+id/mapViewProvider"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:enabled="true"
+    android:clickable="true"
+    android:apiKey="0r_4s6Jn9ahPi5JTH0nk41IRaDPkJSrOVa5dWgQ"
+  />
+</LinearLayout>

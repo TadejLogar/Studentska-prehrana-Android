@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    
+ <LinearLayout android:id="@+id/linearLayout3" android:layout_width="match_parent" android:layout_height="wrap_content">
+     <TextView android:textColor="#ffffff" android:layout_gravity="center_vertical" android:layout_width="0pt" android:layout_height="wrap_content" android:text="Ponudnik" android:layout_weight="2" android:textSize="25sp" android:id="@+id/textViewProviderName"></TextView>
+     <ImageButton android:layout_height="wrap_content" android:layout_width="wrap_content" android:src="@drawable/unstarred48" android:onClick="addToFavoritesListClick" android:background="@null" android:id="@+id/imageButtonFav"></ImageButton>
+ </LinearLayout>
+ <LinearLayout android:id="@+id/linearLayout3" android:layout_width="match_parent" android:layout_height="wrap_content">
+     <TextView android:background="#ffffff" android:id="@+id/textView1" android:text="TextView" android:layout_width="match_parent" android:layout_height="1dip"></TextView>
+     <TextView android:id="@+id/textView1" android:text="TextView" android:layout_width="match_parent" android:layout_height="15dip"></TextView>
+ </LinearLayout>
+ <LinearLayout android:id="@+id/linearLayout3" android:layout_width="match_parent" android:layout_height="wrap_content">
+     <TextView android:layout_width="0pt" android:layout_height="wrap_content" android:text="Naslov" android:layout_weight="2" android:id="@+id/textViewAddress"></TextView>
+ </LinearLayout>
+ <LinearLayout android:id="@+id/linearLayout3" android:layout_width="match_parent" android:layout_height="wrap_content">
+     <TextView android:layout_width="0pt" android:layout_height="wrap_content" android:text="Doplačilo" android:layout_weight="2" android:id="@+id/textViewFee"></TextView>
+ </LinearLayout>
+ <LinearLayout android:id="@+id/linearLayout3" android:layout_width="match_parent" android:layout_height="wrap_content">
+     <TextView android:layout_width="0pt" android:layout_height="wrap_content" android:text="Čas nudenja" android:layout_weight="2" android:id="@+id/textViewOpenTime"></TextView>
+ </LinearLayout>
+ <LinearLayout android:id="@+id/linearLayout3" android:layout_width="match_parent" android:layout_height="wrap_content">
+     <Button android:text="Jedilnik" android:layout_width="wrap_content" android:layout_height="wrap_content" android:onClick="menuClick" android:id="@+id/buttonMenu"></Button>
+ </LinearLayout>
+ <LinearLayout android:id="@+id/linearLayout3" android:layout_width="match_parent" android:layout_height="wrap_content">
+     <ImageView android:src="@drawable/icon" android:id="@+id/mapImage" android:onClick="mapLocationClick" android:layout_height="wrap_content" android:layout_width="match_parent"></ImageView>
+ </LinearLayout>
+ <LinearLayout android:id="@+id/linearLayout3" android:layout_width="match_parent" android:layout_height="wrap_content">
+     <Button android:text="Nazaj" android:layout_weight="1" android:id="@+id/buttonUgibanja" android:onClick="backClick" android:layout_height="wrap_content" android:layout_width="match_parent"></Button>
+ </LinearLayout>
+ 
+ </LinearLayout>

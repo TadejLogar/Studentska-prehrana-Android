@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/foodMenu" android:title="Študentska prehrana"></item>
+    <item android:id="@+id/settingsMenu" android:title="Nastavitve"></item>
+    <item android:id="@+id/gameMenu" android:title="Igra"></item>
+    <item android:id="@+id/exitMenu" android:title="Izhod"></item>
+</menu>

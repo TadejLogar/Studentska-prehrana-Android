@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="si.feri.projekt.studentskaprehrana"
+      android:versionCode="1"
+      android:versionName="1.0">
+    <uses-sdk android:minSdkVersion="8" />
+    
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application android:name=".ListApplication" android:icon="@drawable/logo" android:label="@string/app_name">
+        <activity android:name=".Main" android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+   		<activity android:name=".activity.RestaurantsListActivity" android:label="@string/app_name">
+			<!-- <intent-filter>
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter> -->
+		</activity>
+		
+   		<activity android:name=".activity.ProvidersNearMyLocationActivity" android:label="@string/app_name">
+			<!-- <intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter> -->
+		</activity>
+		
+   		<activity android:name=".activity.DetailsActivity" android:label="@string/app_name">
+			<!-- <intent-filter>
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter> -->
+		</activity>
+		
+   		<activity android:name=".activity.MenuListActivity" android:label="@string/app_name">
+			<!-- <intent-filter>
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter> -->
+		</activity>
+		
+		<activity android:name="si.feri.projekt.studentskaprehrana.activity.ProviderMapActivity" android:label="@string/app_name">
+			<!-- <intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter> -->
+		</activity>
+
+		<activity android:name=".activity.FavProvidersActivity" android:label="@string/app_name">
+			<!-- <intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter> -->
+		</activity>
+		
+		<activity android:name="si.feri.mui.igra.connectfour.ConnectFourActivity" android:label="@string/app_name">
+			<!-- <intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter> -->
+		</activity>
+		
+		<activity android:name="si.feri.mui.igra.tictactoe.TicTacToeActivity" android:label="@string/app_name">
+			<!-- <intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter> -->
+		</activity>
+		
+		<activity android:name=".Preferences"></activity>
+		
+	    <activity android:name="com.sciget.studentmeals.client.StudentMealsWebServiceClientActivity"></activity>
+		
+		<uses-library android:name="com.google.android.maps" />
+		<uses-feature android:name="android.hardware.camera" />
+		<uses-feature android:name="android.hardware.camera.autofocus" />
+		
+		<receiver android:name="com.sciget.studentmeals.service.UpdateBroadcastReciver">
+		    <intent-filter>
+		        <action android:name="android.intent.action.BOOT_COMPLETED" />  
+		    </intent-filter>  
+		</receiver>
+
+        <service android:enabled="true" android:name="com.sciget.studentmeals.service.UpdateService" />
+    </application>
+    
+</manifest>

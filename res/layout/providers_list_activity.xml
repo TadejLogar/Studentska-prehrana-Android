@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+         android:orientation="vertical"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+         <!-- 
+         android:paddingLeft="8dp"
+         android:paddingRight="8dp"
+         -->
+	
+	<EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/editTextSearch" android:hint="Išči po imenu ali najvišji ceni"></EditText>
+
+     <ListView android:id="@id/android:list"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_weight="1"
+               android:drawSelectorOnTop="false"/>
+     <LinearLayout android:layout_width="match_parent" android:id="@+id/linearLayout1" android:layout_height="wrap_content" >
+         <ImageButton android:id="@+id/all" android:src="@drawable/all" android:layout_width="wrap_content" android:layout_height="wrap_content" android:onClick="allClick" android:layout_weight="1" android:background="@null"></ImageButton>
+         <ImageButton android:id="@+id/near" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/near" android:onClick="nearClick" android:layout_weight="1" android:background="@null"></ImageButton>
+         <ImageButton android:id="@+id/fav" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/fav" android:onClick="favoriteClick" android:layout_weight="1" android:background="@null"></ImageButton>
+     </LinearLayout>
+
+     <TextView android:id="@id/android:empty"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:background="#000000"
+               android:text="Ni podatkov" />
+               
+ </LinearLayout>

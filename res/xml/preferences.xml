@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Če uporabnik vpiše elektronski naslov in geslo bodo prenešeni podatki o številu preostalih subvancij. Podpora bo dodana naslednje šolsko leto. -->
+    <PreferenceCategory android:title="Nastavitve">
+        <!-- <EditTextPreference android:title="Elektronski naslov" android:key="email"></EditTextPreference>
+        <EditTextPreference android:title="Geslo" android:key="password"></EditTextPreference> -->
+        <Preference android:title="Dodaj račun" android:key="createAccountKey"></Preference>
+    </PreferenceCategory>
+</PreferenceScreen>
