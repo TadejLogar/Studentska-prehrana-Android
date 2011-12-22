@@ -21,7 +21,8 @@ public class StudentMealsServiceTest {
 	public void setUp() throws Exception {
 		meals = new StudentMealsService();
 		key = meals.getUserKey("tadej.logar.101@gmail.com", "studentskaprehrana.si");
-		assertEquals(key, "zgC9iaTh7O3HHJGYkswT");
+		assertTrue(key.length() > 0);
+		//assertEquals(key, "zgC9iaTh7O3HHJGYkswT");
 	}
 	
 	@Test
@@ -35,7 +36,8 @@ public class StudentMealsServiceTest {
 	public void testRestaurants() {
 		Vector<RestaurantData> list = meals.restaurants();
 		assertNotNull(list);
-		assertTrue(list.size() > 0);
+		assertTrue(list.size() > 10);
+		assertTrue(list.get(0).id != list.get(1).id);
 	}
 
 	@Test

@@ -29,6 +29,10 @@ public class Database {
             open();
         }
     }
+    
+    public SQLiteDatabase getDatabase() {
+        return database;
+    }
 
     public Database open() throws SQLException {
         if (database == null) {
@@ -38,17 +42,26 @@ public class Database {
     }
 
     public void close() {
-        databaseHelper.close();
+        try {
+            databaseHelper.close();
+        } catch (Exception e) {}
+        
+        try {
+            database.close();
+        } catch (Exception e) {}
+        
+        databaseHelper = null;
         database = null;
         context = null;
     }
     
     public int getValue(String sql, String param) {
+        int id = -1;
         Cursor cursor = rawQuery(sql, new String[] { param });
         if (cursor.moveToNext()) {
-            return cursor.getInt(0);
+            id = cursor.getInt(0);
         }
-        return -1;
+        return id;
     }
 
     public int update(String sql, Object[] params) {
@@ -69,6 +82,7 @@ public class Database {
     }
     
     public Cursor rawQuery(String sql) {
+        System.out.println(sql);
         return database.rawQuery(sql, new String[] {});
     }
     

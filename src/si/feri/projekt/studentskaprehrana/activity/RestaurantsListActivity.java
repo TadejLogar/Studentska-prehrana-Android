@@ -2,6 +2,8 @@ package si.feri.projekt.studentskaprehrana.activity;
 
 import java.util.ArrayList;
 
+import com.sciget.studentmeals.service.UpdateService;
+
 import si.feri.projekt.studentskaprehrana.ListApplication;
 import si.feri.projekt.studentskaprehrana.Provider;
 import si.feri.projekt.studentskaprehrana.R;
@@ -23,17 +25,39 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class RestaurantsListActivity extends MyListActivity {
-	ListApplication app;
-	EditText etSearch;
-	
-	public void onCreate(Bundle savedInstanceState) {
-			super.onCreate(savedInstanceState);
-			app = (ListApplication) getApplication();
-			setListAdapter(app.providersAdapter);
-			setContentView(R.layout.providers_list_activity);
-			setListeners(app.completeList, app.list, app.providersAdapter);
-			getListView().setOnItemClickListener(this);
-			Settings.arrayListProviders = app.list;
-	}
+    ListApplication app;
+    EditText etSearch;
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        start();
+    }
+    
+    public void start() {
+        app = (ListApplication) getApplication();
+        setListAdapter(app.providersAdapter);
+        setContentView(R.layout.providers_list_activity);
+        setListeners(app.completeList, app.list, app.providersAdapter);
+        getListView().setOnItemClickListener(this);
+        Settings.arrayListProviders = app.list;
+
+        if (!UpdateService.updated) {
+            new Thread() {
+                public void run() {
+                    while (!UpdateService.updated) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    app.loadData();
+                    finish();
+                    Intent intent = new Intent(RestaurantsListActivity.this, RestaurantsListActivity.class);
+                    startActivity(intent);
+                }
+            }.start();
+        }
+    }
 
 }

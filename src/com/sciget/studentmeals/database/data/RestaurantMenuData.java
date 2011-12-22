@@ -76,7 +76,7 @@ public class RestaurantMenuData extends Data {
     }
 
 	public int add(Database db) {
-		return db.update("INSERT INTO " + NAME + " (id, restaurantId, date, menu) VALUES (?, ?, ?, ?)", new Object[] { id, restaurantId, date, menu });
+		return db.update("INSERT INTO " + NAME + " (restaurantId, date, menu) VALUES (?, ?, ?)", new Object[] { restaurantId, date, menu });
 	}
 
     @Override
@@ -93,10 +93,14 @@ public class RestaurantMenuData extends Data {
     }
 
     public String getFood1() {
-        return menu; // TODO popravi
+        if (date == null) {
+            return "Stalna ponudba";
+        } else {
+            return toString(date);
+        }
     }
     
     public String getFood2() {
-        return "derp"; // TODO popravi
+        return menu; // TODO popravi
     }
 }

@@ -5,9 +5,11 @@ import java.util.Vector;
 import com.sciget.studentmeals.client.service.StudentMealsService;
 import com.sciget.studentmeals.client.service.data.MenuData;
 import com.sciget.studentmeals.client.service.data.RestaurantData;
+import com.sciget.studentmeals.database.data.RestaurantMenuData;
 import com.sciget.studentmeals.database.model.RestaurantModel;
 
 import android.content.Context;
+import android.util.Log;
 
 public class UpdateDataTask {
     private Context context;
@@ -22,13 +24,15 @@ public class UpdateDataTask {
     
     public void all() {
         updateRestaurants();
+        new RestaurantMenuData().create(restaurantModel.getDatabase());
         updateDailyMenus();
         updatePermanentMenus();
-        restaurantModel.close();
+        closeModel();
     }
     
     public void updateRestaurants() {
         Vector<RestaurantData> list = meals.restaurants();
+        Log.e("A", "DOWNLOADED");
         restaurantModel.addRestaurants(list);
     }
     
@@ -40,5 +44,9 @@ public class UpdateDataTask {
     public void updatePermanentMenus() {
         Vector<MenuData> list = meals.allRestaurantsPermanentMenus();
         restaurantModel.addMenus(list);
+    }
+    
+    public void closeModel() {
+        restaurantModel.close();
     }
 }

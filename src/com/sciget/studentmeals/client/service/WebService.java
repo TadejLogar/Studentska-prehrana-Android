@@ -39,7 +39,7 @@ public abstract class WebService {
 		if (soapSerializationEnvelope == null) return null;
 		
         try {
-            httpTransportSE = new HttpTransportSE(url, 30000);
+            httpTransportSE = new HttpTransportSE(url, 300000);
             httpTransportSE.call(namespace + method, soapSerializationEnvelope);
             Object obj = soapSerializationEnvelope.getResponse();   
             return obj;

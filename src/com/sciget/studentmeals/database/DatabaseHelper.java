@@ -39,6 +39,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     
     public void dropTable(String name) throws Exception {
         // db.execSQL("DROP TABLE IF EXISTS " + name);
-        throw new Exception("suckadick");
+        throw new Exception("not supported");
     }
 }

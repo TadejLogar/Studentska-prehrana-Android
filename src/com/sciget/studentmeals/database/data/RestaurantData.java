@@ -139,7 +139,7 @@ public class RestaurantData extends Data {
     public void create(SQLiteDatabase db) {
         db.execSQL("DROP TABLE IF EXISTS " + NAME);
         String sql = new StringBuilder().append("CREATE TABLE `" + NAME + "` (\n").
-        append("  `id` INTEGER PRIMARY KEY AUTOINCREMENT,\n").
+        append("  `id` INTEGER,\n").
         append("  `hash` varchar(50),\n").
         append("  `name` varchar(250),\n").
         append("  `address` varchar(250),\n").

@@ -25,4 +25,9 @@ public class Model extends Database {
         Calendar calendar = Calendar.getInstance();
         return calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DATE);
     }
+    
+    protected void finalize() throws Throwable {
+        close();
+        super.finalize();
+    }
 }

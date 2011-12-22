@@ -47,6 +47,7 @@ public class RestaurantData extends Data {
 		}
 	}
 	
+	public int id;
 	public String hash;
 	public String name;
 	public String address;
@@ -68,6 +69,7 @@ public class RestaurantData extends Data {
 	public RestaurantData(SoapObject obj) {
 		super(obj);
 		
+		this.id = getInt("id");
 		this.hash = get("hash");
 		this.name = get("name");
 		this.address = get("address");
@@ -85,6 +87,10 @@ public class RestaurantData extends Data {
 		this.locationLongitude = getDouble("locationLongitude");
 		setFeatures(get("features"));
 		this.message = get("message");
+	}
+	
+	public int getId() {
+	    return id;
 	}
 	
 	public String getHash() {

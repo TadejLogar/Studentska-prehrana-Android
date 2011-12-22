@@ -16,7 +16,7 @@ public class RestaurantMenuModel extends Model {
     public Vector<RestaurantMenuData> getMenusByHash(String hash) {
         int restaurantId = getValue("SELECT id FROM " + RestaurantData.NAME + " WHERE hash = ?", hash);
         Vector<RestaurantMenuData> menus = new Vector<RestaurantMenuData>();
-        Cursor cursor = rawQuery("SELECT id, restaurantId, date, menu FROM " + RestaurantMenuData.NAME + " WHERE restaurantId = ?", restaurantId);
+        Cursor cursor = rawQuery("SELECT restaurantId, date, menu FROM " + RestaurantMenuData.NAME + " WHERE restaurantId = " + restaurantId);
         while (cursor.moveToNext()) {
             RestaurantMenuData menu = new RestaurantMenuData(cursor.getInt(0), toDate(cursor.getString(1)), cursor.getString(2));
             menus.add(menu);

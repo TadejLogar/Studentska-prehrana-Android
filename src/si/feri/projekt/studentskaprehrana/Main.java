@@ -49,7 +49,13 @@ public class Main extends Activity {
         app = (ListApplication) getApplication();
         setContentView(R.layout.main);
         startUpdateService();
-        new NewThread().start();
+        //new NewThread().start();
+        
+        app.loadData();
+        finish();
+        Intent intent = new Intent(Main.this, RestaurantsListActivity.class);
+        startActivityForResult(intent, 1);
+        
         new LocationTask().execute();
     }
 
@@ -59,36 +65,35 @@ public class Main extends Activity {
         }
     }
     
-    Handler msgHandler = new Handler() {
+    /*Handler msgHandler = new Handler() {
     	public void handleMessage(Message m) {
     		dialogWait = ProgressDialog.show(Main.this, "", "Nalagam podatke o ponudnikih. Lahko traja dalj časa.", true);
     	}
-	};
+	};*/
 	
-    Handler startHandler = new Handler() {
+    /*Handler startHandler = new Handler() {
     	public void handleMessage(Message m) {
     		dialogWait.dismiss();
     		
     		app.loadData();
     		
+    		finish();
     		Intent intent = new Intent(Main.this, RestaurantsListActivity.class);
     		startActivityForResult(intent, 1);
     	}
-	};
+	};*/
     
-    public class NewThread extends Thread {
+    /*public class NewThread extends Thread {
     	public void run() {
             Message msg = new Message();
             msgHandler.sendMessage(msg);
-            
-            /*si.feri.projekt.studentskaprehrana.trash.Testing.insertProviders(new ProvidersDB(Main.this));*/
+
 
             Message msg2 = new Message();
             startHandler.sendMessage(msg2);
-            
-            /*si.feri.projekt.studentskaprehrana.trash.Testing.insertMenus(new MenusDB(Main.this));*/
+
     	}
-    }
+    }*/
     
 	private final LocationListener locationListener = new LocationListener() {
     	public void onLocationChanged(Location location) {
