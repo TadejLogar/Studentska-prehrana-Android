@@ -31,6 +31,13 @@ public abstract class Data {
         return format.format(new java.util.Date(time.getTime()));
     }
     
+    public static String toString(java.sql.Timestamp time) {
+        if (time == null) return null;
+        
+        SimpleDateFormat format = simpleDateFormat(FORMAT_FULL_TIME_SQL);
+        return format.format(new java.util.Date(time.getTime()));
+    }
+    
     public static SimpleDateFormat simpleDateFormat(String format) {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         sdf.setTimeZone(TimeZone.getTimeZone("Europe/Paris"));

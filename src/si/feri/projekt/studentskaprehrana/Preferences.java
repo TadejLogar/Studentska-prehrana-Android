@@ -1,5 +1,7 @@
 package si.feri.projekt.studentskaprehrana;
 
+import si.feri.projekt.studentskaprehrana.activity.HistoryListActivity;
+
 import com.sciget.studentmeals.client.StudentMealsWebServiceClientActivity;
 
 import android.content.Intent;
@@ -19,14 +21,27 @@ public class Preferences extends PreferenceActivity {
 	}
 	
     private void perferences() {
-        Preference myPref = (Preference) findPreference("createAccountKey");
-        myPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-             public boolean onPreferenceClick(Preference preference) {
-                 Intent intent = new Intent(Preferences.this, StudentMealsWebServiceClientActivity.class);
-                 startActivity(intent);
-                 return true;
-             }
-         });
+        {
+            Preference myPref = (Preference) findPreference("createAccountKey");
+            myPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                 public boolean onPreferenceClick(Preference preference) {
+                     Intent intent = new Intent(Preferences.this, StudentMealsWebServiceClientActivity.class);
+                     startActivity(intent);
+                     return true;
+                 }
+             });
+        }
+        
+        {
+            Preference myPref = (Preference) findPreference("historyKey");
+            myPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                 public boolean onPreferenceClick(Preference preference) {
+                     Intent intent = new Intent(Preferences.this, HistoryListActivity.class);
+                     startActivity(intent);
+                     return true;
+                 }
+             });
+        }
     }
 
 }

@@ -13,10 +13,19 @@ public class MenuData {
 	public MenuData(SoapObject obj) {
 		try {
 			restaurantId = Integer.parseInt(obj.getProperty("restaurantId").toString());
-			date = obj.getPropertyAsString("date");
+			date = toString(obj.getProperty("date"));
 			menu = obj.getPropertyAsString("menu");
 		} catch (Exception e) {
+		    System.out.println(e.toString());
 		}
+	}
+	
+	public String toString(Object obj) {
+	    if (obj == null) {
+	        return null;
+	    } else {
+	        return obj.toString();
+	    }
 	}
 	
 	public MenuData(int restaurantId, String date, String menu) {

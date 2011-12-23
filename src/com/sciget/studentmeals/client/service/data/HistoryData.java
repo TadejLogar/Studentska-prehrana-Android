@@ -3,13 +3,13 @@ package com.sciget.studentmeals.client.service.data;
 import org.ksoap2.serialization.SoapObject;
 
 public class HistoryData extends Data {
-	private int userId;
-	private String time;
-	private String provider;
-	private String company;
-	private double fee;
-	private double fullPrice;
-	private String note;
+	public int userId;
+	public String time;
+	public String provider;
+	public String company;
+	public double fee;
+	public double fullPrice;
+	public String note;
 	
 	public HistoryData(SoapObject obj) {
 		super(obj);

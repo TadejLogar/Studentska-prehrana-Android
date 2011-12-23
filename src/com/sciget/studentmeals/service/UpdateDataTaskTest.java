@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import com.sciget.studentmeals.database.data.RestaurantData;
 import com.sciget.studentmeals.database.data.RestaurantMenuData;
+import com.sciget.studentmeals.database.data.StudentMealHistoryData;
 import com.sciget.studentmeals.database.model.RestaurantMenuModel;
 import com.sciget.studentmeals.database.model.RestaurantModel;
 
@@ -40,15 +41,55 @@ public class UpdateDataTaskTest extends AndroidTestCase {
         assertTrue(list.size() > 20);
         
         RestaurantMenuModel restaurantMenuModel = new RestaurantMenuModel(getContext());
+        
+        Vector<RestaurantMenuData> allMenusList = restaurantMenuModel.getAllMenus();
+        assertTrue(allMenusList.size() > 0);
+        int nAllPermMenus = 0;
+        for (int i = 0; i < allMenusList.size(); i++) {
+            if (allMenusList.get(i).date == null) {
+                nAllPermMenus++;
+            }
+        }
+        assertTrue(nAllPermMenus > 0);
+        
         int n = 0;
-        for (int i = 0; i < 20; i++) {
+        int nTempMenus = 0; // število dnevnih menijev (date != null)
+        int nPermMenus = 0; // število stalnih menijev (date == null)
+        for (int i = 0; i < list.size(); i++) {
             Vector<RestaurantMenuData> menusList = restaurantMenuModel.getMenusByHash(list.get(i).hash);
             if (menusList.size() > 0) {
-                System.out.println(list.get(i).name);
                 n++;
+                
+                for (int j = 0; j < menusList.size(); j++) {
+                    if (menusList.get(j).date == null) {
+                        nPermMenus++;
+                    } else {
+                        nTempMenus++;
+                    }
+                }
             }
         }
         assertTrue(n > 0);
+        assertTrue(nTempMenus > 0);
+        assertTrue(nPermMenus > 0);
+        restaurantModel.close();
+        
+        history();
+    }
+    
+    public void testUpdateUserHistory() {
+        UpdateDataTask updateDataTask = new UpdateDataTask(getContext());
+        updateDataTask.updateUserHistory();
+        updateDataTask.closeModel();
+        
+        history();
+    }
+    
+    private void history() {
+        RestaurantModel restaurantModel = new RestaurantModel(getContext());
+        Vector<StudentMealHistoryData> list2 = restaurantModel.getHistory();
+        assertTrue(list2.size() > 0);
+        restaurantModel.close();
     }
 
 }

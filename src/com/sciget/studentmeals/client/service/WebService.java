@@ -3,6 +3,7 @@ package com.sciget.studentmeals.client.service;
 import java.util.Vector;
 
 import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.MarshalBase64;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
@@ -10,6 +11,9 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 public abstract class WebService {
+    public static final int OK = 1;
+    public static final int FAIL = 2;
+    
 	private String url;
 	private String namespace;
 	
@@ -109,5 +113,11 @@ public abstract class WebService {
 		propertyInfo.setValue(value);
 		soapObject.addProperty(propertyInfo);
 	}
+	
+    protected void addBytes(String key, byte[] bytes) {
+        MarshalBase64 marshal = new MarshalBase64();
+        marshal.register(soapSerializationEnvelope);
+        soapObject.addProperty(key, bytes);
+    }
 
 }

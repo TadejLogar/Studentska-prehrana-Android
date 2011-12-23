@@ -3,6 +3,7 @@ package com.sciget.studentmeals.service;
 import java.util.Vector;
 
 import com.sciget.studentmeals.client.service.StudentMealsService;
+import com.sciget.studentmeals.client.service.data.HistoryData;
 import com.sciget.studentmeals.client.service.data.MenuData;
 import com.sciget.studentmeals.client.service.data.RestaurantData;
 import com.sciget.studentmeals.database.data.RestaurantMenuData;
@@ -27,6 +28,7 @@ public class UpdateDataTask {
         new RestaurantMenuData().create(restaurantModel.getDatabase());
         updateDailyMenus();
         updatePermanentMenus();
+        updateUserHistory();
         closeModel();
     }
     
@@ -44,6 +46,12 @@ public class UpdateDataTask {
     public void updatePermanentMenus() {
         Vector<MenuData> list = meals.allRestaurantsPermanentMenus();
         restaurantModel.addMenus(list);
+    }
+    
+    public void updateUserHistory() {
+        String key = meals.getUserKey("tadej.logar.101@gmail.com", "studentskaprehrana.si");
+        Vector<HistoryData> list = meals.history(key);
+        restaurantModel.addUserHistory(list);
     }
     
     public void closeModel() {

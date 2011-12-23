@@ -82,7 +82,7 @@ public class Database {
     }
     
     public Cursor rawQuery(String sql) {
-        System.out.println(sql);
+        //System.out.println(sql);
         return database.rawQuery(sql, new String[] {});
     }
     
@@ -94,23 +94,27 @@ public class Database {
         return rawQuery(sql, new String[] { Integer.toString(param) });
     }
     
-    private static long stringToLongTime(String timeStr) throws Exception {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+    private static long stringToLongTime(String timeStr, String format) throws Exception {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
         java.util.Date parsedDate = dateFormat.parse(timeStr);
         return parsedDate.getTime();
     }
     
     public static java.sql.Timestamp toTimestamp(String timeStr) {
         try {
-            return new java.sql.Timestamp(stringToLongTime(timeStr));
+            return new java.sql.Timestamp(stringToLongTime(timeStr, "yyyy-MM-dd hh:mm:ss.SSS"));
         } catch (Exception e) {
-            return null;
         }
+        try {
+            return new java.sql.Timestamp(stringToLongTime(timeStr, "yyyy-MM-dd hh:mm:ss"));
+        } catch (Exception ex) {
+        }
+        return null;
     }
     
     public static Date toDate(String timeStr) {
         try {
-            return new java.sql.Date(stringToLongTime(timeStr));
+            return new java.sql.Date(stringToLongTime(timeStr, "yyyy-MM-dd"));
         } catch (Exception e) {
             return null;
         }
@@ -118,7 +122,7 @@ public class Database {
     
     public static Time toTime(String timeStr) {
         try {
-            return new java.sql.Time(stringToLongTime(timeStr));
+            return new java.sql.Time(stringToLongTime(timeStr, "hh:mm:ss"));
         } catch (Exception e) {
             return null;
         }

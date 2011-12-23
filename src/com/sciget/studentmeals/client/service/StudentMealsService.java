@@ -1,5 +1,9 @@
 package com.sciget.studentmeals.client.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Vector;
 
 import org.ksoap2.SoapEnvelope;
@@ -142,5 +146,28 @@ public class StudentMealsService extends WebService {
 		SoapPrimitive primitive = requestPrimitive();
 		return new DataPrimitive(primitive).getString();
 	}
+	
+    public int uploadRestaurantPicture(int restaurantId, File image) {
+        try {
+            FileInputStream fin = new FileInputStream(image);
+            byte[] contents = new byte[(int) image.length()];
+            fin.read(contents);
+            return uploadRestaurantPicture(restaurantId, contents);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return FAIL;
+    }
+    
+    public int uploadRestaurantPicture(int restaurantId, byte[] image) {
+        setMethodName("uploadRestaurantPicture");
+        prepare();
+        addInt("restaurantId", restaurantId);
+        addBytes("image", image);
+        SoapPrimitive primitive = requestPrimitive();
+        return new DataPrimitive(primitive).getInt();
+    }
 	
 }

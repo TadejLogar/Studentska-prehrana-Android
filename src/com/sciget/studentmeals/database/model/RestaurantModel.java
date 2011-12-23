@@ -2,10 +2,12 @@ package com.sciget.studentmeals.database.model;
 
 import java.util.Vector;
 
+import com.sciget.studentmeals.client.service.data.HistoryData;
 import com.sciget.studentmeals.client.service.data.MenuData;
 import com.sciget.studentmeals.database.Database;
 import com.sciget.studentmeals.database.data.RestaurantData;
 import com.sciget.studentmeals.database.data.RestaurantMenuData;
+import com.sciget.studentmeals.database.data.StudentMealHistoryData;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -132,8 +134,6 @@ public class RestaurantModel extends Model {
         int i = 0;
         getDatabase().beginTransaction();
         for (com.sciget.studentmeals.client.service.data.MenuData menu : list) {
-            if (menu.menu == null || menu.menu.length() == 0) continue;
-            
             ih.prepareForInsert();
             
             ih.bind(restaurantIdPosition, menu.restaurantId);
@@ -153,5 +153,46 @@ public class RestaurantModel extends Model {
 
     public void create() {
         new RestaurantData().create(getDatabase());
+    }
+
+    public void addUserHistory(Vector<HistoryData> list) {
+        new StudentMealHistoryData().create(getDatabase());
+        
+        InsertHelper ih = new InsertHelper(getDatabase(), StudentMealHistoryData.NAME);
+
+        final int userId = ih.getColumnIndex("userId");
+        final int time = ih.getColumnIndex("time");
+        final int provider = ih.getColumnIndex("provider");
+        final int company = ih.getColumnIndex("company");
+        final int fee = ih.getColumnIndex("fee");
+        final int fullPrice = ih.getColumnIndex("fullPrice");
+        final int note = ih.getColumnIndex("note");
+
+        getDatabase().beginTransaction();
+        for (com.sciget.studentmeals.client.service.data.HistoryData history : list) {
+            ih.prepareForInsert();
+            
+            ih.bind(userId, history.userId);
+            ih.bind(time, history.time);
+            ih.bind(provider, history.provider);
+            ih.bind(company, history.company);
+            ih.bind(fee, history.fee);
+            ih.bind(fullPrice, history.fullPrice);
+            ih.bind(note, history.note);
+            
+            ih.execute();
+        }
+        getDatabase().setTransactionSuccessful();
+        getDatabase().endTransaction();
+    }
+    
+    public Vector<StudentMealHistoryData> getHistory() {
+        Vector<StudentMealHistoryData> list = new Vector<StudentMealHistoryData>();
+        Cursor cursor = rawQuery("SELECT id, userId, time, provider, company, fee, fullPrice, note FROM " + StudentMealHistoryData.NAME);
+        while (cursor.moveToNext()) {
+            StudentMealHistoryData history = new StudentMealHistoryData(cursor.getInt(0), cursor.getInt(1), toTimestamp(cursor.getString(2)), cursor.getString(3), cursor.getString(4), cursor.getDouble(5), cursor.getDouble(6), cursor.getString(7));
+            list.add(history);
+        }
+        return list;
     }
 }

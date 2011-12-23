@@ -5,5 +5,7 @@
         <!-- <EditTextPreference android:title="Elektronski naslov" android:key="email"></EditTextPreference>
         <EditTextPreference android:title="Geslo" android:key="password"></EditTextPreference> -->
         <Preference android:title="Dodaj račun" android:key="createAccountKey"></Preference>
+        <Preference android:title="Zgodovina" android:key="historyKey"></Preference>
     </PreferenceCategory>
 </PreferenceScreen>
+ 

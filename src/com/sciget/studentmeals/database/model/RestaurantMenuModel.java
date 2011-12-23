@@ -24,6 +24,16 @@ public class RestaurantMenuModel extends Model {
         return menus;
     }
     
+    public Vector<RestaurantMenuData> getAllMenus() {
+        Vector<RestaurantMenuData> menus = new Vector<RestaurantMenuData>();
+        Cursor cursor = rawQuery("SELECT restaurantId, date, menu FROM " + RestaurantMenuData.NAME);
+        while (cursor.moveToNext()) {
+            RestaurantMenuData menu = new RestaurantMenuData(cursor.getInt(0), toDate(cursor.getString(1)), cursor.getString(2));
+            menus.add(menu);
+        }
+        return menus;
+    }
+    
     public void add() {
         
     }

@@ -56,6 +56,14 @@ public class StudentMealsServiceTest {
 	public void testAllRestaurantsPermanentMenus() {
 		Vector<MenuData> list = meals.allRestaurantsPermanentMenus();
 		assertTrue(list.size() > 0);
+		for (MenuData menu : list) {
+		    if (menu.date != null) {
+		        fail("menu.date != null");
+		    }
+            if (menu.menu == null) {
+                fail("menu.menu == null");
+            }
+		}
 	}
 
 	@Test
@@ -87,5 +95,12 @@ public class StudentMealsServiceTest {
 	public void testDonateSubsidies() {
 		meals.donateSubsidies(key, "tadej.logar.101@gmail.com", 5);
 	}
+	
+    @Test
+    public void testUploadRestaurantPicture() {
+        byte[] image = { 't', 'e', 's', 't', '2' };
+        int result = meals.uploadRestaurantPicture(0, image);
+        assertTrue(result == StudentMealsService.OK);
+    }
 
 }
