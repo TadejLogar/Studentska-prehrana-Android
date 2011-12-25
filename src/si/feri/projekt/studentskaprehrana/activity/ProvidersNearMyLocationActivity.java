@@ -51,8 +51,8 @@ public class ProvidersNearMyLocationActivity extends MyListActivity {
 			double lon = Settings.locationLon;
 			
             public int compare(Object o1, Object o2) {
-            	Provider p1 = (Provider) o1;
-            	Provider p2 = (Provider) o2;
+                RestaurantData p1 = (RestaurantData) o1;
+                RestaurantData p2 = (RestaurantData) o2;
             	Double r1 = p1.howNear(lat, lon);
             	Double r2 = p2.howNear(lat, lon);
                 return r1.compareTo(r2) * -1;

@@ -5,7 +5,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Vector;
 
+import si.feri.projekt.studentskaprehrana.Main;
 import si.feri.projekt.studentskaprehrana.R;
+import si.feri.projekt.studentskaprehrana.activity.RestaurantsListActivity;
 
 import com.sciget.studentmeals.client.service.StudentMealsService;
 import com.sciget.studentmeals.client.service.data.MenuData;
@@ -81,7 +83,8 @@ public class StudentMealsWebServiceClientActivity extends Activity {
 		EditText recaptchaCode = (EditText) findViewById(R.id.editTextRecaptchaCode);
 		loginDataResponse = service.addLoginData(appEmail.getText().toString(), appPassword.getText().toString(), studentMealsEmail.getText().toString(), studentMealsPassword.getText().toString(), state.stateHash, recaptchaCode.getText().toString());
 		if (loginDataResponse == 1) {
-	        Intent myIntent = new Intent(view.getContext(), AccountCreatedActivity.class);
+		    finish();
+	        Intent myIntent = new Intent(view.getContext(), Main.class);
 	        startActivityForResult(myIntent, 0);
 		} else {
 			finish();

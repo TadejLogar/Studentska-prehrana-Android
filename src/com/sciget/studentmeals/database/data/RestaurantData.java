@@ -30,6 +30,8 @@ public class RestaurantData extends Data {
 	public Double locationLongitude;
 	public String features;
 	public String message;
+
+    private boolean favorited;
 	
 	public static final double SUBSIDY = 2.62;
 	
@@ -163,9 +165,6 @@ public class RestaurantData extends Data {
     public String getFullAddress() {
         return address;
     }
-    public boolean getFavorited() {
-        return false;
-    }
     
     public String getEuroFee() {
         String fee = getFee() + "";
@@ -223,4 +222,13 @@ public class RestaurantData extends Data {
         double distance = Math.sqrt(Math.pow(lat - locationLatitude, 2.0) + Math.pow(lon - locationLongitude, 2.0));
         return Math.abs(locationLatitude - lat);
     }
+    
+    public void setFavorited(boolean favorited) {
+        this.favorited = favorited;
+    }
+    
+    public boolean getFavorited() {
+        return favorited;
+    }
+
 }

@@ -1,5 +1,11 @@
 package com.sciget.studentmeals.service;
 
+import java.sql.Timestamp;
+
+import com.sciget.studentmeals.MyPerferences;
+import com.sciget.studentmeals.Perferences;
+import com.sciget.studentmeals.database.data.Data;
+
 import si.feri.projekt.studentskaprehrana.R;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -44,6 +50,8 @@ public class UpdateService extends Service {
 
     @Override
     public void onCreate() {
+        new MyPerferences(this);
+        
         if (!running) {
             running = true;
             System.out.println("service studentmeals create");
@@ -61,6 +69,15 @@ public class UpdateService extends Service {
                 }
                 
                 public void run() {
+                    Timestamp last = MyPerferences.getInstance().getLastRestaurantsUpdate();
+                    if (last != null) {
+                        long last1 = last.getTime() + (24 * 3600 * 1000);
+                        long now = Data.time().getTime();
+                        if (last1 > now) {
+                            return;
+                        }
+                    }
+                    
                     while (!isOnline()) {
                         try {
                             Thread.sleep(60 * 1000);
@@ -76,6 +93,7 @@ public class UpdateService extends Service {
                     UpdateDataTask updateDataTask = new UpdateDataTask(UpdateService.this);
                     updateDataTask.all();
                     updated = true;
+                    MyPerferences.getInstance().setLastRestaurantsUpdate(Data.time());
                     
                     sendMessage("DONE");
                     displayNotification("DONE", "DONE", "DONE", UpdateService.class, 1);

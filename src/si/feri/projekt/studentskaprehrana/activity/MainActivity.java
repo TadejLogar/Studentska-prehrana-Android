@@ -2,6 +2,7 @@ package si.feri.projekt.studentskaprehrana.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 

@@ -7,6 +7,8 @@ import java.util.Vector;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.sciget.studentmeals.client.service.data.CommentData;
+import com.sciget.studentmeals.client.service.data.FavoritedRestaurantData;
 import com.sciget.studentmeals.client.service.data.HistoryData;
 import com.sciget.studentmeals.client.service.data.MenuData;
 import com.sciget.studentmeals.client.service.data.RestaurantData;
@@ -16,12 +18,15 @@ import com.sciget.studentmeals.client.service.data.UserData;
 public class StudentMealsServiceTest {
 	private StudentMealsService meals;
 	private String key;
+	private int userId;
 
 	@Before
 	public void setUp() throws Exception {
 		meals = new StudentMealsService();
 		key = meals.getUserKey("tadej.logar.101@gmail.com", "studentskaprehrana.si");
 		assertTrue(key.length() > 0);
+		userId = meals.userId(key);
+		assertTrue(userId > 0);
 		//assertEquals(key, "zgC9iaTh7O3HHJGYkswT");
 	}
 	
@@ -101,6 +106,40 @@ public class StudentMealsServiceTest {
         byte[] image = { 't', 'e', 's', 't', '2' };
         int result = meals.uploadRestaurantPicture(0, image);
         assertTrue(result == StudentMealsService.OK);
+    }
+    
+    @Test
+    public void testAddComment() {
+        int restaurantId = 1;
+        String commentStr = "test comment";
+        
+        meals.addComment(key, restaurantId, commentStr);
+        Vector<CommentData> comments = meals.getComments(restaurantId);
+        assertTrue(comments.size() > 0);
+        boolean pass = false;
+        for (CommentData comment : comments) {
+            if (comment.restaurantId == restaurantId && comment.comment.equals(commentStr)) {
+                pass = true;
+            }
+        }
+        assertTrue(pass);
+    }
+    
+    @Test
+    public void testFavoritedRestaurants() {
+        assertTrue(meals.setFavoritedRestaurant(key, 1) == StudentMealsService.OK);
+        assertTrue(meals.setFavoritedRestaurant(key, 2) == StudentMealsService.OK);
+        assertTrue(meals.removeFavoritedRestaurant(key, 1) == StudentMealsService.OK);
+        
+        Vector<FavoritedRestaurantData> list = meals.favoritedRestaurants(key);
+        assertTrue(list.size() > 0);
+        boolean pass = false;
+        for (FavoritedRestaurantData favorite : list) {
+            if (favorite.getRestaurantId() == 2 && favorite.getUserId() == userId) {
+                pass = true;
+            }
+        }
+        assertTrue(pass);
     }
 
 }

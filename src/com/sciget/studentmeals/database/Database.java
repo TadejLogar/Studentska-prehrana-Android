@@ -57,7 +57,13 @@ public class Database {
     
     public int getValue(String sql, String param) {
         int id = -1;
-        Cursor cursor = rawQuery(sql, new String[] { param });
+        String[] params;
+        if (param == null) {
+            params = new String[] {};
+        } else {
+            params = new String[] { param };
+        }
+        Cursor cursor = rawQuery(sql, params);
         if (cursor.moveToNext()) {
             id = cursor.getInt(0);
         }
@@ -74,7 +80,7 @@ public class Database {
     }
 
     public int getValue(String sql) {
-        return 0;
+        return getValue(sql, null);
     }
     
     public Cursor rawQuery(String sql, String[] obj) {

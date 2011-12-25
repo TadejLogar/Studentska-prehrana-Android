@@ -2,6 +2,7 @@ package si.feri.projekt.studentskaprehrana;
 
 import java.util.Vector;
 
+import com.sciget.studentmeals.MyPerferences;
 import com.sciget.studentmeals.client.service.StudentMealsService;
 import com.sciget.studentmeals.client.service.data.RestaurantData;
 import com.sciget.studentmeals.database.model.RestaurantModel;
@@ -45,6 +46,7 @@ public class Main extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new MyPerferences(this);
         Settings.setMain(this);
         app = (ListApplication) getApplication();
         setContentView(R.layout.main);

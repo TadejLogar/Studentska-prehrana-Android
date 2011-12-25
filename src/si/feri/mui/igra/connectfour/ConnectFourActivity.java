@@ -41,11 +41,13 @@ public class ConnectFourActivity extends MainActivity {
     }
     
     public void novaIgraClick(View v) {
+        finish();
     	Intent i = new Intent(this, si.feri.mui.igra.connectfour.ConnectFourActivity.class);
     	startActivity(i);
     }
     
     public void novaIgraKKClick(View v) {
+        finish();
     	Intent i = new Intent(this, si.feri.mui.igra.tictactoe.TicTacToeActivity.class);
     	startActivity(i);
     }

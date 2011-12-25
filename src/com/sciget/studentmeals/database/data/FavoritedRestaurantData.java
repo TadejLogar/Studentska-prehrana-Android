@@ -10,30 +10,27 @@ public class FavoritedRestaurantData extends Data {
     public static final String NAME = "favorited_restaurants";
 
     public int id;
-    public int level;
     public int userId;
     public int restaurantId;
     public Timestamp time;
     
     public FavoritedRestaurantData() {}
     
-    public FavoritedRestaurantData(int id, int level, int userId, int restaurantId, Timestamp time) {
+    /*public FavoritedRestaurantData(int id, int userId, int restaurantId, Timestamp time) {
         this.id = id;
-        this.level = level;
         this.userId = userId;
         this.restaurantId = restaurantId;
         this.time = time;
-    }
+    }*/
     
-    public FavoritedRestaurantData(int level, int userId, int restaurantId, Timestamp time) {
-        this.level = level;
+    public FavoritedRestaurantData(int userId, int restaurantId, Timestamp time) {
         this.userId = userId;
         this.restaurantId = restaurantId;
         this.time = time;
     }
     
     public int add(Database db) {
-        return db.update("INSERT INTO " + NAME + " (level, userId, restaurantId, time) VALUES (?, ?, ?, ?)", new Object[] { level, userId, restaurantId, time });
+        return db.update("INSERT INTO " + NAME + " (userId, restaurantId, time) VALUES (?, ?, ?)", new Object[] { userId, restaurantId, time });
     }
     
     @Override

@@ -81,6 +81,9 @@
 		<activity android:name=".Preferences"></activity>
 		<activity android:name=".activity.HistoryListActivity"></activity>
 		<activity android:name=".activity.AccountCreatedActivity"></activity>
+		<activity android:name=".activity.CommentActivity"></activity>
+		
+		    
 		
 	    <activity android:name="com.sciget.studentmeals.client.StudentMealsWebServiceClientActivity"></activity>
 		

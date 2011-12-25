@@ -24,11 +24,15 @@ public class UpdateDataTask {
     }
     
     public void all() {
-        updateRestaurants();
-        new RestaurantMenuData().create(restaurantModel.getDatabase());
-        updateDailyMenus();
-        updatePermanentMenus();
-        updateUserHistory();
+        try {
+            updateRestaurants();
+            new RestaurantMenuData().create(restaurantModel.getDatabase());
+            updateDailyMenus();
+            updatePermanentMenus();
+            updateUserHistory();
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
         closeModel();
     }
     

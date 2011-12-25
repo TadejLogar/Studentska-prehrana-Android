@@ -11,12 +11,14 @@ public class DatabaseHelperOld extends SQLiteOpenHelper {
 	private static final int DATABASE_VERSION = 1;
 	private static final String DATABASE_NAME = "studentskaprehrana";
 
-	DatabaseHelperOld(Context context) {
+	DatabaseHelperOld(Context context) throws Exception {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		
+		if (true) throw new Exception("Deprecated");
 	}
 
 	@Override
-	public void onCreate(SQLiteDatabase db) {		
+	public void onCreate(SQLiteDatabase db) {
 		dropTable(db, ProvidersDB.TABLE_NAME);
 		dropTable(db, FavoritesDB.TABLE_NAME);
 		dropTable(db, UsersDB.TABLE_NAME);

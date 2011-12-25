@@ -12,8 +12,11 @@ import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import com.sciget.studentmeals.Perferences;
+import com.sciget.studentmeals.client.service.data.CommentData;
 import com.sciget.studentmeals.client.service.data.Data;
 import com.sciget.studentmeals.client.service.data.DataPrimitive;
+import com.sciget.studentmeals.client.service.data.FavoritedRestaurantData;
 import com.sciget.studentmeals.client.service.data.HistoryData;
 import com.sciget.studentmeals.client.service.data.MenuData;
 import com.sciget.studentmeals.client.service.data.RestaurantData;
@@ -45,7 +48,7 @@ public class StudentMealsService extends WebService {
 		}
 	}
 	
-	private static String URL = "http://164.8.221.136:8080/StudentMealsWebService/services/StudentMealsMain?wsdl";
+	private static String URL = "http://" + Perferences.SERVER + ":8080/StudentMealsWebService/services/StudentMealsMain?wsdl";
 	private static String NAMESPACE = "http://studentmeals.sciget.com";
 	
 	public StudentMealsService() {
@@ -147,6 +150,30 @@ public class StudentMealsService extends WebService {
 		return new DataPrimitive(primitive).getString();
 	}
 	
+    public int addComment(String key, int restaurantId, String comment) {
+        setMethodName("addComment");
+        prepare();
+        addString("key", key);
+        addInt("restaurantId", restaurantId);
+        addString("comment", comment);
+        SoapPrimitive primitive = requestPrimitive();
+        return new DataPrimitive(primitive).getInt();
+    }
+    
+    public Vector<CommentData> getComments(int restaurantId) {
+        setMethodName("getComments");
+        prepare();
+        addInt("restaurantId", restaurantId);
+        Vector<SoapObject> list = requestVector();
+        Vector<CommentData> comments = new Vector<CommentData>();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i) != null) {
+                comments.add(new CommentData(list.get(i)));
+            }
+        }
+        return comments;
+    }
+	
     public int uploadRestaurantPicture(int restaurantId, File image) {
         try {
             FileInputStream fin = new FileInputStream(image);
@@ -166,6 +193,46 @@ public class StudentMealsService extends WebService {
         prepare();
         addInt("restaurantId", restaurantId);
         addBytes("image", image);
+        SoapPrimitive primitive = requestPrimitive();
+        return new DataPrimitive(primitive).getInt();
+    }
+    
+    public Vector<FavoritedRestaurantData> favoritedRestaurants(String key) {
+        setMethodName("favoritedRestaurants");
+        prepare();
+        addString("key", key);
+        Vector<SoapObject> list = requestVector();
+        Vector<FavoritedRestaurantData> favorites = new Vector<FavoritedRestaurantData>();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i) != null) {
+                favorites.add(new FavoritedRestaurantData(list.get(i)));
+            }
+        }
+        return favorites;
+    }
+    
+    public int setFavoritedRestaurant(String key, int restaurantId) {
+        setMethodName("setFavoritedRestaurant");
+        prepare();
+        addString("key", key);
+        addInt("restaurantId", restaurantId);
+        SoapPrimitive primitive = requestPrimitive();
+        return new DataPrimitive(primitive).getInt();
+    }
+    
+    public int removeFavoritedRestaurant(String key, int restaurantId) {
+        setMethodName("removeFavoritedRestaurant");
+        prepare();
+        addString("key", key);
+        addInt("restaurantId", restaurantId);
+        SoapPrimitive primitive = requestPrimitive();
+        return new DataPrimitive(primitive).getInt();
+    }
+    
+    public int userId(String key) {
+        setMethodName("userId");
+        prepare();
+        addString("key", key);
         SoapPrimitive primitive = requestPrimitive();
         return new DataPrimitive(primitive).getInt();
     }

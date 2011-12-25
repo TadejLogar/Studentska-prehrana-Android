@@ -1,6 +1,8 @@
 package com.sciget.studentmeals.database.data;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.TimeZone;
 
 import android.database.sqlite.SQLiteDatabase;
@@ -53,5 +55,12 @@ public abstract class Data {
         
         SimpleDateFormat format = simpleDateFormat(FORMAT_DATE);
         return format.format(date);
+    }
+    public static Timestamp toTimestamp(String time) {
+        return Database.toTimestamp(time);
+    }
+    
+    public static Timestamp time() {
+        return new Timestamp(Calendar.getInstance().getTimeInMillis());
     }
 }

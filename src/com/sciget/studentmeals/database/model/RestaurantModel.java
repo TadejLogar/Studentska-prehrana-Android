@@ -34,6 +34,8 @@ public class RestaurantModel extends Model {
     }
     
     public void addRestaurantsFast(Vector<com.sciget.studentmeals.client.service.data.RestaurantData> list) {
+        if (list.isEmpty()) return;
+        
         new RestaurantData().create(getDatabase());
         
         InsertHelper ih = new InsertHelper(getDatabase(), RestaurantData.NAME);
@@ -125,6 +127,8 @@ public class RestaurantModel extends Model {
     }
     
     public void addMenusFast(Vector<com.sciget.studentmeals.client.service.data.MenuData> list) {
+        if (list.isEmpty()) return;
+        
         InsertHelper ih = new InsertHelper(getDatabase(), RestaurantMenuData.NAME);
 
         final int restaurantIdPosition = ih.getColumnIndex("restaurantId");
@@ -156,6 +160,8 @@ public class RestaurantModel extends Model {
     }
 
     public void addUserHistory(Vector<HistoryData> list) {
+        if (list.isEmpty()) return;
+        
         new StudentMealHistoryData().create(getDatabase());
         
         InsertHelper ih = new InsertHelper(getDatabase(), StudentMealHistoryData.NAME);

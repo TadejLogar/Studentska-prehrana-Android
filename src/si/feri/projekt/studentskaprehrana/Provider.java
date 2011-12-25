@@ -9,6 +9,7 @@ import android.location.Location;
 /*
  * Ponudnik - restavracija
  */
+@Deprecated
 public class Provider {
     private String hash;
     private String name;
