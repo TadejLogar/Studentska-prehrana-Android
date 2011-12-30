@@ -12,8 +12,11 @@ import java.net.URLEncoder;
 import java.util.Vector;
 
 import com.sciget.studentmeals.MyPerferences;
+import com.sciget.studentmeals.Perferences;
+import com.sciget.studentmeals.camera.CameraActivity;
 import com.sciget.studentmeals.client.service.StudentMealsService;
 import com.sciget.studentmeals.client.service.data.CommentData;
+import com.sciget.studentmeals.client.service.data.FileData;
 import com.sciget.studentmeals.database.Database;
 import com.sciget.studentmeals.database.data.RestaurantData;
 import com.sciget.studentmeals.database.data.StudentMealCommentData;
@@ -40,9 +43,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class DetailsActivity extends MainActivity {
+    private static final String FILE_URL = "http://" + Perferences.SERVER + ":8080/StudentMealsWebService/restaurantFiles?hash=";
+    
     private ListApplication app;
 
     TextView name;
@@ -52,6 +58,7 @@ public class DetailsActivity extends MainActivity {
     ImageButton fav;
     Button menuButton;
     TextView comments;
+    LinearLayout imagesLinearLayout;
 
     private RestaurantData currentProvider;
 
@@ -70,6 +77,7 @@ public class DetailsActivity extends MainActivity {
         menuButton = (Button) findViewById(R.id.buttonMenu);
         comments = (TextView) findViewById(R.id.textViewComments);
         addButton = (Button) findViewById(R.id.buttonAdd);
+        imagesLinearLayout = (LinearLayout) findViewById(R.id.linearLayoutImages);
         
         registerForContextMenu(addButton);
         
@@ -127,16 +135,20 @@ public class DetailsActivity extends MainActivity {
     public void setData(int id) {
         final RestaurantData provider = app.getProviderById(id);
         provider.setFavorited(app.favoritesDB.isFavorited(currentProvider.getId()));
-        Vector<StudentMealCommentData> commentsList = getComments(currentProvider.getId());
+        
+        int restaurantId = currentProvider.getId();
+        /*Vector<StudentMealCommentData> commentsList = getComments(currentProvider.getId());
         String comm = "";
         for (StudentMealCommentData comment : commentsList) {
             comm += comment.toString();
         }
+        comments.setText(comm);
+        */
 
         name.setText(provider.getName());
         address.setText(provider.getFullAddress());
         fee.setText("Doplačilo: " + provider.getEuroFee());
-        comments.setText(comm);
+        
         // TODO time.setText(provider.getOpenTime());
         // TODO popravi blok
         /*
@@ -155,6 +167,10 @@ public class DetailsActivity extends MainActivity {
         }
 
         new DownloadImageTask().execute(provider.getFullAddress());
+        
+        new DownloadRestaurantImagesTask().execute();
+        
+        new DownloadRestaurantCommentsTask().execute(restaurantId);
     }
 
     public void addClick(View view) {
@@ -176,6 +192,10 @@ public class DetailsActivity extends MainActivity {
             startActivity(i);
         } else if (item.getItemId() == 2) {
             //function2(item.getItemId());
+        } else if (item.getItemId() == 3) {
+            Intent i = new Intent(this, CameraActivity.class);
+            i.putExtra("restaurantId", currentProvider.getId());
+            startActivity(i);
         } else {
             return false;
         }
@@ -190,6 +210,63 @@ public class DetailsActivity extends MainActivity {
             comments.add(new StudentMealCommentData(comment.userId, comment.restaurantId, comment.comment, Database.toTimestamp(comment.time)));
         }
         return comments;
+    }
+    
+    private Vector<FileData> getFiles(int restaurantId) {
+        StudentMealsService meals = new StudentMealsService();
+        Vector<FileData> list = meals.restaurantFiles(restaurantId);
+        return list;
+    }
+    
+    private class DownloadRestaurantCommentsTask extends AsyncTask<Integer, StudentMealCommentData, Void> {
+
+        @Override
+        protected Void doInBackground(Integer... restaurantId) {
+            Vector<StudentMealCommentData> commentsList = getComments(currentProvider.getId());
+            StudentMealCommentData[] comments = new StudentMealCommentData[commentsList.size()];
+            commentsList.toArray(comments);
+            publishProgress(comments);
+            return null;
+        }
+
+        protected void onProgressUpdate(StudentMealCommentData... commentsList) {
+            String comm = "";
+            for (StudentMealCommentData comment : commentsList) {
+                comm += comment.toString();
+            }
+            comments.setText(comm);
+        }
+    }
+    
+    private class DownloadRestaurantImagesTask extends AsyncTask<String, Bitmap, Void> {
+
+        @Override
+        protected Void doInBackground(String... url) {
+            Vector<FileData> files = getFiles(currentProvider.getId());
+            Bitmap[] imgs = new Bitmap[files.size()];
+            for (int i = 0; i < files.size(); i++) {
+                try {
+                    Bitmap img = BitmapFactory.decodeStream((InputStream) new URL(FILE_URL + files.get(i).getSmallHash()).getContent());
+                    imgs[i] = img;
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            publishProgress(imgs);
+            return null;
+        }
+
+        protected void onProgressUpdate(Bitmap... imgs) {
+            int i = 0;
+            for (Bitmap img : imgs) {
+                ImageView image = new ImageView(DetailsActivity.this);
+                image.setImageBitmap(img);
+                imagesLinearLayout.addView(image, i);
+                i++;
+            }
+        }
     }
 
     private class DownloadImageTask extends AsyncTask<String, Bitmap, Void> {

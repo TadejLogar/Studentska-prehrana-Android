@@ -49,7 +49,7 @@ public class Main extends Activity {
         new MyPerferences(this);
         Settings.setMain(this);
         app = (ListApplication) getApplication();
-        setContentView(R.layout.main);
+        //setContentView(R.layout.main);
         startUpdateService();
         //new NewThread().start();
         

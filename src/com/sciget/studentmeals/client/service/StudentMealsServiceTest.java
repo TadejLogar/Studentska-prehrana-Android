@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import com.sciget.studentmeals.client.service.data.CommentData;
 import com.sciget.studentmeals.client.service.data.FavoritedRestaurantData;
+import com.sciget.studentmeals.client.service.data.FileData;
 import com.sciget.studentmeals.client.service.data.HistoryData;
 import com.sciget.studentmeals.client.service.data.MenuData;
 import com.sciget.studentmeals.client.service.data.RestaurantData;
@@ -140,6 +141,23 @@ public class StudentMealsServiceTest {
             }
         }
         assertTrue(pass);
+    }
+    
+    @Test
+    public void testUploadRestaurantFile() {
+        int restaurantId = 1;
+        String fileKey = "testtest";
+        String smallHash = "abc";
+        String hash = "abc2";
+        int type = FileData.FileType.IMAGE;
+        int result = meals.uploadRestaurantFile(null, restaurantId, smallHash, type, FileData.Size.SMALL, fileKey);
+        int result2 = meals.uploadRestaurantFile(null, restaurantId, hash, type, FileData.Size.ORIGINAL, fileKey);
+        assertTrue(result == StudentMealsService.OK);
+        assertTrue(result2 == StudentMealsService.OK);
+        
+        Vector<FileData> files = meals.restaurantFiles(restaurantId);
+        assertTrue(files.size() > 0);
+        assertTrue(new FileData(1, restaurantId, 0, type, smallHash, hash, false, false, fileKey).equals(files.get(0)));
     }
 
 }

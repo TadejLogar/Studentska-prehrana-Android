@@ -10,7 +10,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class Perferences {
-    public static final String SERVER = "192.168.1.101";
+    public static final String SERVER = "192.168.1.100";
+    public static final String SERVER2 = "192.168.1.101";
     
     private Context context;
     

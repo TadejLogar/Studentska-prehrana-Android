@@ -21,6 +21,15 @@ public class Data {
 		}
 	}
 	
+	public boolean getBoolean(String name) {
+        try {
+            return Boolean.parseBoolean(obj.getProperty(name).toString());
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            return false;
+        }
+	}
+	
 	public int getInt(String name) {
 		return parseInt(obj.getProperty(name));
 	}

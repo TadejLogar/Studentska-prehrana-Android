@@ -17,6 +17,7 @@ import com.sciget.studentmeals.client.service.data.CommentData;
 import com.sciget.studentmeals.client.service.data.Data;
 import com.sciget.studentmeals.client.service.data.DataPrimitive;
 import com.sciget.studentmeals.client.service.data.FavoritedRestaurantData;
+import com.sciget.studentmeals.client.service.data.FileData;
 import com.sciget.studentmeals.client.service.data.HistoryData;
 import com.sciget.studentmeals.client.service.data.MenuData;
 import com.sciget.studentmeals.client.service.data.RestaurantData;
@@ -31,7 +32,7 @@ public class StudentMealsService extends WebService {
 		public static final int APP_DATA_INVALID = 4; // neveljavni podatki za račun aplikacije
 		public static final int CREATE_ACCOUNT_ERROR = 5; // napaka pri ustvarjanju računa aplikacije
 		
-		public static String toString(int result) throws Exception {
+		public static String toString(int result) {
 			if (result == OK) {
 				return "OK";
 			} else if (result == SESSION_INVALID) {
@@ -43,7 +44,7 @@ public class StudentMealsService extends WebService {
 			} else if (result == CREATE_ACCOUNT_ERROR) {
 				return "CREATE_ACCOUNT_ERROR";
 			} else {
-				throw new Exception("Result value is not supported.");
+				throw new RuntimeException("Result value is not supported.");
 			}
 		}
 	}
@@ -235,6 +236,33 @@ public class StudentMealsService extends WebService {
         addString("key", key);
         SoapPrimitive primitive = requestPrimitive();
         return new DataPrimitive(primitive).getInt();
+    }
+
+    public int uploadRestaurantFile(String key, int restaurantId, String hash, int type, int size, String fileKey) {
+        setMethodName("uploadRestaurantFile");
+        prepare();
+        addString("key", key);
+        addInt("restaurantId", restaurantId);
+        addString("hash", hash);
+        addInt("type", type);
+        addInt("size", size);
+        addString("fileKey", fileKey);
+        SoapPrimitive primitive = requestPrimitive();
+        return new DataPrimitive(primitive).getInt();
+    }
+    
+    public Vector<FileData> restaurantFiles(int restaurantId) {
+        setMethodName("restaurantFiles");
+        prepare();
+        addInt("restaurantId", restaurantId);
+        Vector<SoapObject> list = requestVector();
+        Vector<FileData> files = new Vector<FileData>();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i) != null) {
+                files.add(new FileData(list.get(i)));
+            }
+        }
+        return files;
     }
 	
 }

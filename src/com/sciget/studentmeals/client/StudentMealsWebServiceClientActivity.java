@@ -45,7 +45,7 @@ public class StudentMealsWebServiceClientActivity extends Activity {
 		UserData user = service.userData("tadej.logar.101@gmail.com", "studentskaprehrana.si");
 		System.out.println(user.getFirstName());*/
 
-		StudentMealsService service = new StudentMealsService(); 
+		StudentMealsService service = new StudentMealsService();
 		state = service.captchaImageUrl();
 		
 		status.setText(state.imageUrl);
