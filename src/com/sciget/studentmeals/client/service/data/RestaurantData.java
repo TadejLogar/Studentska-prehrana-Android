@@ -65,6 +65,7 @@ public class RestaurantData extends Data {
 	public Double locationLongitude;
 	public Features features;
 	public String message;
+	public String imageSha1;
 	
 	public RestaurantData(SoapObject obj) {
 		super(obj);
@@ -87,6 +88,7 @@ public class RestaurantData extends Data {
 		this.locationLongitude = getDouble("locationLongitude");
 		setFeatures(get("features"));
 		this.message = get("message");
+		this.imageSha1 = get("imageSha1");
 	}
 	
 	public int getId() {
@@ -150,5 +152,9 @@ public class RestaurantData extends Data {
 		f.parse(features);
 		this.features = f;
 	}
+	
+    public String getImageSha1() {
+        return imageSha1;
+    }
 	
 }

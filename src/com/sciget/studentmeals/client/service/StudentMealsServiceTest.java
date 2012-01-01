@@ -44,6 +44,18 @@ public class StudentMealsServiceTest {
 		assertNotNull(list);
 		assertTrue(list.size() > 10);
 		assertTrue(list.get(0).id != list.get(1).id);
+		boolean hash = false;
+		boolean time = false;
+		for (RestaurantData data : list) {
+		    if (data.imageSha1 != null && data.imageSha1.length() == 40) {
+		        hash = true;
+		    }
+		    if (data.openWorkdayFrom != null) {
+		        time = true;
+		    }
+		}
+		assertTrue(time);
+		assertTrue(hash);
 	}
 
 	@Test

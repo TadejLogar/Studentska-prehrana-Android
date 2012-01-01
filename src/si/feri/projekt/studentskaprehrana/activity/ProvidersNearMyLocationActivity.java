@@ -45,7 +45,7 @@ public class ProvidersNearMyLocationActivity extends MyListActivity {
 				completeNearList.add(provider);
 			}
 		}
-		nearProvidersAdapter = new ProvidersArrayAdapter(this, R.layout.provider_layout, nearList);
+		nearProvidersAdapter = new ProvidersArrayAdapter(this, R.layout.provider_layout2, nearList);
 		nearProvidersAdapter.sort(new Comparator() {
 			double lat = Settings.locationLat;
 			double lon = Settings.locationLon;

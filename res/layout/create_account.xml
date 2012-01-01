@@ -4,18 +4,20 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
+
+<!-- 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Elektronski naslov (aplikacija)" />
-
-
+
     <EditText
         android:id="@+id/editTextAppEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
-        android:text="tadej.logar.101@gmail.com">
+        android:text="@string/gmail" >
+
         <requestFocus />
     </EditText>
 
@@ -31,6 +33,7 @@
         android:inputType="textPassword"
         android:text="studentskaprehrana.si"
         />
+         -->
 
     <TextView
         android:layout_width="fill_parent"
@@ -42,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
-        android:text="tadej.logar.101@gmail.com"
+        android:text=""
         />
 
     <TextView
@@ -57,6 +60,21 @@
         android:inputType="textPassword"
         android:text="studentskaprehrana.si"
         />
+    
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Geslo (aplikacija)" />
+
+    <EditText
+        android:id="@+id/editTextAppPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:text="studentskaprehrana.si"
+        />
+    
+    
 
     <TextView
         android:id="@+id/textView1"

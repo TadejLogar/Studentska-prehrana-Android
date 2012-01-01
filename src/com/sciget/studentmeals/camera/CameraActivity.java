@@ -104,7 +104,6 @@ public class CameraActivity extends Activity {
 	
 	public PictureCallback rawCallback = new PictureCallback() {
 		public void onPictureTaken(byte[] data, Camera camera) {
-			muteMusicAudio(false);
 		}
 	};
 	
@@ -117,6 +116,8 @@ public class CameraActivity extends Activity {
 		private String userKey;
 		
 		public void onPictureTaken(byte[] data, Camera camera) {
+		    muteMusicAudio(false);
+		    
 			File dir = new File(Environment.getExternalStorageDirectory() + "/StudentMeals/");
 			dir.mkdirs();
 			

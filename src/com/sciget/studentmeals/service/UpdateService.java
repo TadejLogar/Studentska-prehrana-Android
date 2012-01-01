@@ -1,12 +1,16 @@
 package com.sciget.studentmeals.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
 
+import com.sciget.mvc.MVC;
 import com.sciget.studentmeals.MyPerferences;
 import com.sciget.studentmeals.Perferences;
 import com.sciget.studentmeals.database.data.Data;
 
 import si.feri.projekt.studentskaprehrana.R;
+import si.feri.projekt.studentskaprehrana.activity.DetailsActivity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -16,6 +20,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -57,6 +62,21 @@ public class UpdateService extends Service {
             System.out.println("service studentmeals create");
             
             mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            
+            final String dir = Environment.getExternalStorageDirectory() + "/StudentMeals/";
+            final File zipFile = new File(dir + "imgs.zip");
+            if (!zipFile.exists()) {
+                new Thread() {
+                    public void run() {
+                        try {
+                            MVC.downloadToFile(DetailsActivity.FILE_URL + "imgs.zip", zipFile);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        new Decompress(zipFile, dir).unzip();
+                    }
+                }.start();
+            }
     
             new Thread() {
                 public void sendMessage(String msg) {

@@ -3,23 +3,23 @@ package com.sciget.studentmeals.client.service.data;
 import org.ksoap2.serialization.SoapObject;
 
 public class UserData extends Data {
-	private int userId;
-	private String email;
-	private String password;
-	private String firstName;
-	private String lastName;
-	private String pin;
-	private String address;
-	private String tempAddress;
-	private String university;
-	private String facility;
-	private String length;
-	private String currentYear;
-	private String studyMethod;
-	private String statusValidation;
-	private String enrollmentNumber;
-	private String phone;
-	private int remainingSubsidies;
+	public int userId;
+	public String email;
+	public String password;
+	public String firstName;
+	public String lastName;
+	public String pin;
+	public String address;
+	public String tempAddress;
+	public String university;
+	public String facility;
+	public String length;
+	public String currentYear;
+	public String studyMethod;
+	public String statusValidation;
+	public String enrollmentNumber;
+	public String phone;
+	public int remainingSubsidies;
 
 	public UserData(SoapObject obj) {
 		super(obj);

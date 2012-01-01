@@ -47,12 +47,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class DetailsActivity extends MainActivity {
-    private static final String FILE_URL = "http://" + Perferences.SERVER + ":8080/StudentMealsWebService/restaurantFiles?hash=";
+    public static final String FILE_URL = "http://" + Perferences.SERVER + ":8080/StudentMealsWebService/restaurantFiles?hash=";
     
     private ListApplication app;
 
     TextView name;
     TextView address;
+    TextView phone;
     TextView fee;
     TextView time;
     ImageButton fav;
@@ -71,6 +72,7 @@ public class DetailsActivity extends MainActivity {
 
         name = (TextView) findViewById(R.id.textViewProviderName);
         address = (TextView) findViewById(R.id.textViewAddress);
+        phone = (TextView) findViewById(R.id.textViewPhone);
         fee = (TextView) findViewById(R.id.textViewFee);
         time = (TextView) findViewById(R.id.textViewOpenTime);
         fav = (ImageButton) findViewById(R.id.imageButtonFav);
@@ -147,9 +149,16 @@ public class DetailsActivity extends MainActivity {
 
         name.setText(provider.getName());
         address.setText(provider.getFullAddress());
+        String providerStr = provider.getFullPhone();
+        if (providerStr == null) {
+            phone.setText(providerStr);
+        } else {
+            phone.setVisibility(View.GONE); 
+        }
+        
         fee.setText("Doplačilo: " + provider.getEuroFee());
         
-        // TODO time.setText(provider.getOpenTime());
+        time.setText(provider.getOpenTimes());
         // TODO popravi blok
         /*
          * Boolean menu = provider.getMenu(); if (menu == null) {
@@ -246,7 +255,8 @@ public class DetailsActivity extends MainActivity {
             Bitmap[] imgs = new Bitmap[files.size()];
             for (int i = 0; i < files.size(); i++) {
                 try {
-                    Bitmap img = BitmapFactory.decodeStream((InputStream) new URL(FILE_URL + files.get(i).getSmallHash()).getContent());
+                    String url0 = FILE_URL + files.get(i).getSmallHash();
+                    Bitmap img = BitmapFactory.decodeStream(new URL(url0).openStream());
                     imgs[i] = img;
                 } catch (MalformedURLException e) {
                     e.printStackTrace();

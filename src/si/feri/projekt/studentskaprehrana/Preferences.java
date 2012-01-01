@@ -1,7 +1,10 @@
 package si.feri.projekt.studentskaprehrana;
 
 import si.feri.projekt.studentskaprehrana.activity.HistoryListActivity;
+import si.feri.projekt.studentskaprehrana.activity.PersonalInfoActivity;
 
+import com.sciget.studentmeals.MyPerferences;
+import com.sciget.studentmeals.Perferences;
 import com.sciget.studentmeals.client.StudentMealsWebServiceClientActivity;
 
 import android.content.Intent;
@@ -41,6 +44,19 @@ public class Preferences extends PreferenceActivity {
                      return true;
                  }
              });
+             myPref.setEnabled(MyPerferences.getInstance().getUserId() > 0);
+        }
+        
+        {
+            Preference myPref = (Preference) findPreference("personalInfoKey");
+            myPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                 public boolean onPreferenceClick(Preference preference) {
+                     Intent intent = new Intent(Preferences.this, PersonalInfoActivity.class);
+                     startActivity(intent);
+                     return true;
+                 }
+             });
+             myPref.setEnabled(MyPerferences.getInstance().getUserId() > 0);
         }
     }
 

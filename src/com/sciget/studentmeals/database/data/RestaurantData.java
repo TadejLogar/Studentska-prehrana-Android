@@ -30,6 +30,8 @@ public class RestaurantData extends Data {
 	public Double locationLongitude;
 	public String features;
 	public String message;
+	
+	public String imageSha1;
 
     private boolean favorited;
 	
@@ -43,7 +45,9 @@ public class RestaurantData extends Data {
 	public String getCountry() { return country; }
 	public double getPrice() { return price - SUBSIDY; }
 	public String getPhone() { return phone; }
-	public String getOpenWorkdayFrom() { return toString(openWorkdayFrom); }
+	public String getOpenWorkdayFrom() {
+	    return toString(openWorkdayFrom);
+    }
 	public String getOpenWorkdayTo() { return toString(openWorkdayTo); }
 	public String getOpenSaturdayFrom() { return toString(openSaturdayFrom); }
 	public String getOpenSaturdayTo() { return toString(openSaturdayTo); }
@@ -86,7 +90,7 @@ public class RestaurantData extends Data {
 		this.hash = hash;
 	}
 	
-	public RestaurantData(int id, String hash, String name, String address, String post, String country, double price, String phone, Time openWorkdayFrom, Time openWorkdayTo, Time openSaturdayFrom, Time openSaturdayTo, Time openSundayFrom, Time openSundayTo, double locationLatitude, double locationLongitude, String features, String message) {
+	public RestaurantData(int id, String hash, String name, String address, String post, String country, double price, String phone, Time openWorkdayFrom, Time openWorkdayTo, Time openSaturdayFrom, Time openSaturdayTo, Time openSundayFrom, Time openSundayTo, double locationLatitude, double locationLongitude, String features, String message, String imageSha1) {
 		this.id = id;
 		this.hash = hash;
 		this.name = name;
@@ -105,6 +109,7 @@ public class RestaurantData extends Data {
 		this.locationLongitude = locationLongitude;
 		this.features = features;
 		this.message = message;
+		this.imageSha1 = imageSha1;
 	}
 	
 	public RestaurantData(String hash, String name, String address, String post, String country, double price, String phone, Time openWorkdayFrom, Time openWorkdayTo, Time openSaturdayFrom, Time openSaturdayTo, Time openSundayFrom, Time openSundayTo, Double locationLatitude, Double locationLongitude, String features, String message) {
@@ -158,12 +163,13 @@ public class RestaurantData extends Data {
         append("  `locationLatitude` double,\n").
         append("  `locationLongitude` double,\n").
         append("  `features` varchar(20),\n").
-        append("  `message` text\n").
+        append("  `message` text,\n").
+        append("  `imageSha1` varchar(50)\n").
         append(")").toString();
         db.execSQL(sql);
     }
     public String getFullAddress() {
-        return address;
+        return address + ", " + post;
     }
     
     public String getEuroFee() {
@@ -229,6 +235,38 @@ public class RestaurantData extends Data {
     
     public boolean getFavorited() {
         return favorited;
+    }
+    public String getOpenTime() {
+        if (getOpenWorkdayFrom() != null) {
+            return getOpenWorkdayFrom() + " - " + getOpenWorkdayTo();
+        } else {
+            return "";
+        }
+    }
+    public String getOpenTimes() {
+        StringBuilder str = new StringBuilder();
+        
+        if (getOpenWorkdayFrom() != null) {
+            str.append("Delovnik: " + getOpenWorkdayFrom() + " - " + getOpenWorkdayTo()).append("\n");
+        }
+        
+        if (getOpenSaturdayFrom() != null) {
+            str.append("Sobota: " + getOpenSaturdayFrom() + " - " + getOpenSaturdayTo()).append("\n");
+        }
+        
+        if (getOpenSundayFrom() != null) {
+            str.append("Nedelja: " + getOpenSundayFrom() + " - " + getOpenSundayTo());
+        }
+        
+        return str.toString();
+    }
+    
+    public String getFullPhone() {
+        if (phone != null && phone.length() > 0) {
+            return "Telefon: " + phone;
+        } else {
+            return null;
+        }
     }
 
 }

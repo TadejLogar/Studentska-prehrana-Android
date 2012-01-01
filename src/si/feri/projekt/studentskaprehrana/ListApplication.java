@@ -60,12 +60,12 @@ public class ListApplication extends Application {
 		usersDB = new StudentMealUserModel(this);
 		
 		fillProvidersFromDB();
-		providersAdapter = new ProvidersArrayAdapter(this, R.layout.provider_layout, list);
+		providersAdapter = new ProvidersArrayAdapter(this, R.layout.provider_layout2, list);
 	}
 	
 	public void newProvidersList(ArrayList<RestaurantData> list) {
 		this.list = list;
-		providersAdapter = new ProvidersArrayAdapter(this, R.layout.provider_layout, list);
+		providersAdapter = new ProvidersArrayAdapter(this, R.layout.provider_layout2, list);
 	}
 
 	private void fillProvidersFromDB() {

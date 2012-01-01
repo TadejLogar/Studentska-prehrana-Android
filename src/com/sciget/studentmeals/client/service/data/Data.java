@@ -1,6 +1,8 @@
 package com.sciget.studentmeals.client.service.data;
 
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import org.ksoap2.serialization.SoapObject;
 
@@ -57,7 +59,11 @@ public class Data {
 	public Time getTime(String name) {
 		try {
 			String value = get(name);
-			return null;
+
+			DateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+			java.util.Date date = sdf.parse(value);
+			
+			return new Time(date.getTime());
 		} catch (Exception e) {
 			return null;
 		}
