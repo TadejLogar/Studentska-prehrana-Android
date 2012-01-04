@@ -146,8 +146,8 @@ public class CameraActivity extends Activity {
             sha1 = Security.fileSha1(image);
             userKey = MyPerferences.getInstance().getUserKey();
 			
-			upload(Perferences.SERVER);
-			upload(Perferences.SERVER2);
+			upload(MyPerferences.getInstance().getServer());
+			//upload(Perferences.SERVER2);
 
 			destroyPreview();
 			createPreview();

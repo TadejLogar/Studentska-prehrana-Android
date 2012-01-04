@@ -6,6 +6,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import com.sciget.studentmeals.MyPerferences;
 import com.sciget.studentmeals.Perferences;
 
 import android.app.Activity;
@@ -14,7 +15,7 @@ import android.os.ParcelFileDescriptor;
 
 public class RecordActivity extends Activity {
 	public void onCreate() throws UnknownHostException, IOException {
-		String hostname = Perferences.SERVER;
+		String hostname = MyPerferences.getInstance().getServer();
 		int port = 7775;
 		
 		Socket socket = new Socket(InetAddress.getByName(hostname), port);

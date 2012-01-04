@@ -17,6 +17,7 @@ import com.sciget.studentmeals.camera.CameraActivity;
 import com.sciget.studentmeals.client.service.StudentMealsService;
 import com.sciget.studentmeals.client.service.data.CommentData;
 import com.sciget.studentmeals.client.service.data.FileData;
+import com.sciget.studentmeals.client.service.data.RestaurantData.Features;
 import com.sciget.studentmeals.database.Database;
 import com.sciget.studentmeals.database.data.RestaurantData;
 import com.sciget.studentmeals.database.data.StudentMealCommentData;
@@ -47,8 +48,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class DetailsActivity extends MainActivity {
-    public static final String FILE_URL = "http://" + Perferences.SERVER + ":8080/StudentMealsWebService/restaurantFiles?hash=";
-    
     private ListApplication app;
 
     TextView name;
@@ -64,6 +63,11 @@ public class DetailsActivity extends MainActivity {
     private RestaurantData currentProvider;
 
     private Button addButton;
+    private TextView properties;
+    
+    public static String getFileDownloadUrl() {
+        return "http://" + MyPerferences.getInstance().getServer() + ":8080/StudentMealsWebService/restaurantFiles?hash=";
+    }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +84,7 @@ public class DetailsActivity extends MainActivity {
         comments = (TextView) findViewById(R.id.textViewComments);
         addButton = (Button) findViewById(R.id.buttonAdd);
         imagesLinearLayout = (LinearLayout) findViewById(R.id.linearLayoutImages);
+        properties = (TextView) findViewById(R.id.textViewProperties);
         
         registerForContextMenu(addButton);
         
@@ -174,6 +179,8 @@ public class DetailsActivity extends MainActivity {
         if (provider.getFavorited()) {
             fav.setBackgroundResource(R.drawable.starred48);
         }
+        
+        properties.setText(provider.getFeatures().toString());
 
         new DownloadImageTask().execute(provider.getFullAddress());
         
@@ -255,7 +262,7 @@ public class DetailsActivity extends MainActivity {
             Bitmap[] imgs = new Bitmap[files.size()];
             for (int i = 0; i < files.size(); i++) {
                 try {
-                    String url0 = FILE_URL + files.get(i).getSmallHash();
+                    String url0 = getFileDownloadUrl() + files.get(i).getSmallHash();
                     Bitmap img = BitmapFactory.decodeStream(new URL(url0).openStream());
                     imgs[i] = img;
                 } catch (MalformedURLException e) {

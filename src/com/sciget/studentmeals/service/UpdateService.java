@@ -64,12 +64,13 @@ public class UpdateService extends Service {
             mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             
             final String dir = Environment.getExternalStorageDirectory() + "/StudentMeals/";
+            new File(dir).mkdir();
             final File zipFile = new File(dir + "imgs.zip");
             if (!zipFile.exists()) {
                 new Thread() {
                     public void run() {
                         try {
-                            MVC.downloadToFile(DetailsActivity.FILE_URL + "imgs.zip", zipFile);
+                            MVC.downloadToFile(DetailsActivity.getFileDownloadUrl() + "imgs.zip", zipFile);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -132,7 +133,7 @@ public class UpdateService extends Service {
         System.out.println("service studentmeals start");
     }
     
-    private void displayNotification(String extra, String contentTitle, String contentText, Class<?> cls, int id) {     
+    public void displayNotification(String extra, String contentTitle, String contentText, Class<?> cls, int id) {     
         Notification notifyDetails = new Notification(R.drawable.icon, "New Alert!", System.currentTimeMillis());
         Intent intent = new Intent(this, cls);
         intent.putExtra("extra", extra);

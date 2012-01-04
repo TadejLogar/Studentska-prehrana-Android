@@ -6,7 +6,9 @@ import java.util.Comparator;
 import java.util.Vector;
 
 import com.google.android.maps.MyLocationOverlay;
+import com.sciget.studentmeals.MyPerferences;
 import com.sciget.studentmeals.database.data.RestaurantData;
+import com.sciget.studentmeals.database.data.StudentMealUserData;
 import com.sciget.studentmeals.database.model.FavoritedRestaurantModel;
 import com.sciget.studentmeals.database.model.RestaurantMenuModel;
 import com.sciget.studentmeals.database.model.RestaurantModel;
@@ -102,4 +104,13 @@ public class ListApplication extends Application {
 	public RestaurantData getProviderById(int id) {
 		return Settings.arrayListProviders.get(id);
 	}
+	
+    public int getSubsidiesNumber() {
+        StudentMealUserData user = new StudentMealUserModel(this).getUserAll();
+        return user.remainingSubsidies;
+    }
+
+    public String getLastProvider() {
+        return new StudentMealUserModel(this).getLastVisitedProvider();
+    }
 }

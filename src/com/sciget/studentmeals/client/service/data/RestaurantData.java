@@ -1,6 +1,7 @@
 package com.sciget.studentmeals.client.service.data;
 
 import java.sql.Time;
+import java.util.Vector;
 
 import org.ksoap2.serialization.SoapObject;
 
@@ -42,6 +43,33 @@ public class RestaurantData extends Data {
 			}
 		}
 		
+		public Vector<String> toList() {
+		    Vector<String> list = new Vector<String>();
+	        if (celiac) list.add("celiakiji prijazni obroki");
+	        if (delivery) list.add("dostava");
+	        if (mealAssembly) list.add("možnost sestavljanja obrokov");
+	        if (salad) list.add("solatni bar");
+	        if (invalid) list.add("dostop za invalide");
+	        if (invalidWC) list.add("dostop za invalide (WC)");
+	        if (vegetarian) list.add("vegetarijanska prehrana");
+	        if (weekend) list.add("odprto ob vikendih");
+	        return list;
+		}
+		
+		public String toString() {
+		    StringBuilder str = new StringBuilder();
+		    Vector<String> list = toList();
+		    for (String element : list) {
+		        if (str.length() > 0) str.append(", ");
+		        str.append(element);
+		    }
+		    return str.toString();
+		}
+		
+		/*public String toString() {
+		    return values;
+		}*/
+		
 		public boolean booleanValue(char b) {
 			return b == '1';
 		}
@@ -63,7 +91,7 @@ public class RestaurantData extends Data {
 	public Time openSundayTo;
 	public Double locationLatitude;
 	public Double locationLongitude;
-	public Features features;
+	public String features;
 	public String message;
 	public String imageSha1;
 	
@@ -86,7 +114,7 @@ public class RestaurantData extends Data {
 		this.openSundayTo = getTime("openSundayTo");
 		this.locationLatitude = getDouble("locationLatitude");
 		this.locationLongitude = getDouble("locationLongitude");
-		setFeatures(get("features"));
+		this.features = get("features");
 		this.message = get("message");
 		this.imageSha1 = get("imageSha1");
 	}
@@ -140,18 +168,18 @@ public class RestaurantData extends Data {
 	public Double getLocationLongitude() {
 		return locationLongitude;
 	}
-	public Features getFeatures() {
+	public String getFeatures() {
 		return features;
 	}
 	public String getMessage() {
 		return message;
 	}
 
-	public void setFeatures(String features) {
+	/*public void setFeatures(String features) {
 		Features f = new Features();
 		f.parse(features);
 		this.features = f;
-	}
+	}*/
 	
     public String getImageSha1() {
         return imageSha1;

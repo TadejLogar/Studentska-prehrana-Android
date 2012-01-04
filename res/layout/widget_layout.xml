@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dip"
+    android:orientation="vertical" >
+
+	<TextView android:layout_margin="4dip" android:text="Static Text"
+		android:id="@+id/textViewWidget" android:layout_width="match_parent"
+		android:layout_height="wrap_content" style="@android:style/TextAppearance.Medium"
+		android:layout_gravity="center"></TextView>
+
+	<Button
+	    android:id="@+id/buttonWidgetUpdate"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:text="Posodobi" />
+
+</LinearLayout>

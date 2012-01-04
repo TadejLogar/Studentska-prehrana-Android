@@ -1,7 +1,10 @@
 package com.sciget.studentmeals.service;
 
+import java.io.IOException;
 import java.util.Vector;
 
+import com.sciget.mvc.MVC;
+import com.sciget.studentmeals.MyPerferences;
 import com.sciget.studentmeals.client.service.StudentMealsService;
 import com.sciget.studentmeals.client.service.data.HistoryData;
 import com.sciget.studentmeals.client.service.data.MenuData;
@@ -25,17 +28,37 @@ public class UpdateDataTask {
     
     public void all() {
         try {
+            updateServerHost();
+            updateSubsidy();
             updateRestaurants();
             new RestaurantMenuData().create(restaurantModel.getDatabase());
             updateDailyMenus();
             updatePermanentMenus();
-            updateUserHistory();
         } catch (Exception e) {
             System.out.println(e.toString());
         }
         closeModel();
     }
     
+    public static void updateServerHost() {
+        String ip;
+        try {
+            ip = MVC.downloadToString("http://dl.dropbox.com/u/14013671/ip.txt");
+            if (ip != null) {
+                MyPerferences.getInstance().setServer(ip);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateSubsidy() {
+        double subsidy = meals.getSubsidy();
+        if (subsidy > 0) {
+            MyPerferences.getInstance().setSubsidy(subsidy);
+        }
+    }
+
     public void updateRestaurants() {
         Vector<RestaurantData> list = meals.restaurants();
         Log.e("A", "DOWNLOADED");
@@ -53,7 +76,8 @@ public class UpdateDataTask {
     }
     
     public void updateUserHistory() {
-        String key = meals.getUserKey("tadej.logar.101@gmail.com", "studentskaprehrana.si");
+        //String key = meals.getUserKey("tadej.logar.101@gmail.com", "studentskaprehrana.si");
+        String key = MyPerferences.getInstance().getUserKey();
         Vector<HistoryData> list = meals.history(key);
         restaurantModel.addUserHistory(list);
     }

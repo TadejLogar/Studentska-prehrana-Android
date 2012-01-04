@@ -65,7 +65,7 @@ public class RestaurantModel extends Model {
         for (com.sciget.studentmeals.client.service.data.RestaurantData data : list) {
             ih.prepareForInsert();
             
-            RestaurantData restaurant = new RestaurantData(data.id, data.hash, data.name, data.address, data.post, data.country, data.price, data.phone, data.openWorkdayFrom, data.openWorkdayTo, data.openSaturdayFrom, data.openSaturdayTo, data.openSundayFrom, data.openSundayTo, data.locationLatitude, data.locationLongitude, data.features.toString(), data.message, data.imageSha1);
+            RestaurantData restaurant = new RestaurantData(data.id, data.hash, data.name, data.address, data.post, data.country, data.price, data.phone, data.openWorkdayFrom, data.openWorkdayTo, data.openSaturdayFrom, data.openSaturdayTo, data.openSundayFrom, data.openSundayTo, data.locationLatitude, data.locationLongitude, data.features, data.message, data.imageSha1);
             ih.bind(id, restaurant.id);
             ih.bind(hash, restaurant.hash);
             ih.bind(name, restaurant.name);
@@ -162,7 +162,7 @@ public class RestaurantModel extends Model {
     }
 
     public void addUserHistory(Vector<HistoryData> list) {
-        if (list.isEmpty()) return;
+        //if (list.isEmpty()) return;
         
         new StudentMealHistoryData().create(getDatabase());
         
@@ -196,7 +196,7 @@ public class RestaurantModel extends Model {
     
     public Vector<StudentMealHistoryData> getHistory() {
         Vector<StudentMealHistoryData> list = new Vector<StudentMealHistoryData>();
-        Cursor cursor = rawQuery("SELECT id, userId, time, provider, company, fee, fullPrice, note FROM " + StudentMealHistoryData.NAME);
+        Cursor cursor = rawQuery("SELECT id, userId, time, provider, company, fee, fullPrice, note FROM " + StudentMealHistoryData.NAME + " ORDER BY time DESC");
         while (cursor.moveToNext()) {
             StudentMealHistoryData history = new StudentMealHistoryData(cursor.getInt(0), cursor.getInt(1), toTimestamp(cursor.getString(2)), cursor.getString(3), cursor.getString(4), cursor.getDouble(5), cursor.getDouble(6), cursor.getString(7));
             list.add(history);

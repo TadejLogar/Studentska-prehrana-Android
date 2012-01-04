@@ -2,9 +2,13 @@ package com.sciget.mvc;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.channels.Channels;
@@ -59,6 +63,33 @@ public class MVC {
                 fout.close();
             }
         }
+    }
+    
+    /*
+     * Download page from to string. Maximum transfered data is 1 kB.
+     */
+    public static String downloadToString(String url) throws IOException {
+        BufferedInputStream in = null;
+        FileOutputStream fout = null;
+        try {
+            in = new BufferedInputStream(new URL(url).openStream());
+            byte data[] = new byte[1024];
+            int count;
+            while ((count = in.read(data, 0, 1024)) != -1) {
+                byte[] data0 = new byte[count];
+                System.arraycopy(data, 0, data0, 0, count);
+                return new String(data0);
+            }
+        } finally {
+            if (in != null) {
+                in.close();
+            }
+            if (fout != null) {
+                fout.close();
+            }
+        }
+        
+        return null;
     }
 
 }

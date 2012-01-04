@@ -2,6 +2,7 @@ package com.sciget.studentmeals.service;
 
 import java.util.Vector;
 
+import com.sciget.studentmeals.MyPerferences;
 import com.sciget.studentmeals.database.data.RestaurantData;
 import com.sciget.studentmeals.database.data.RestaurantMenuData;
 import com.sciget.studentmeals.database.data.StudentMealHistoryData;
@@ -13,6 +14,7 @@ import android.test.AndroidTestCase;
 public class UpdateDataTaskTest extends AndroidTestCase {
 
     public void setUp() throws Exception {
+        new MyPerferences(getContext());
     }
 
     public void testUpdateRestaurants() {

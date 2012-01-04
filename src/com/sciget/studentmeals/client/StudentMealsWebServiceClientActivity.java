@@ -22,10 +22,12 @@ import com.sciget.studentmeals.client.service.data.StudentMealsStateData;
 import com.sciget.studentmeals.client.service.data.UserData;
 import com.sciget.studentmeals.database.data.StudentMealUserData;
 import com.sciget.studentmeals.database.model.StudentMealUserModel;
+import com.sciget.studentmeals.service.UpdateDataTask;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -124,31 +126,55 @@ public class StudentMealsWebServiceClientActivity extends Activity {
 		new DownloadRecaptchaCode().execute(url1);
 	}
 	
-	public void createAccount(View view) {
-		StudentMealsService service = new StudentMealsService();
-		//final EditText appEmail = (EditText) findViewById(R.id.editTextAppEmail);
-		EditText appPassword = (EditText) findViewById(R.id.editTextAppPassword);
-		//final EditText studentMealsEmail = (EditText) findViewById(R.id.editTextStudentMealsEmail);
-		EditText studentMealsPassword = (EditText) findViewById(R.id.editTextTextStudentMealsPassword);
-		EditText recaptchaCode = (EditText) findViewById(R.id.editTextRecaptchaCode);
-		String email = studentMealsEmail.getText().toString();
-		String password = studentMealsPassword.getText().toString();
-		loginDataResponse = service.addLoginData(email, password, email, password, state.stateHash, recaptchaCode.getText().toString());
-		if (loginDataResponse == 1) {
-		    String key = service.getUserKey(email, password);
-		    MyPerferences.getInstance().setUserKey(key);
-		    UserData user = service.userData(key);
-		    if (user != null) {
-		        MyPerferences.getInstance().setUserId(user.getUserId());
-		        new StudentMealUserModel(this).add(new StudentMealUserData(0, user.userId, user.email, user.password, user.firstName, user.lastName, user.pin, user.getAddress(), "", "", user.getTempAddress(), "", "", user.university, user.facility, user.length, user.currentYear, user.studyMethod, user.statusValidation, user.enrollmentNumber, user.phone, key, "", user.remainingSubsidies));
-		    }
-		    finish();
-	        Intent myIntent = new Intent(view.getContext(), Main.class);
-	        startActivityForResult(myIntent, 0);
-		} else {
-			finish();
-	        Intent myIntent = new Intent(view.getContext(), StudentMealsWebServiceClientActivity.class);
-	        startActivityForResult(myIntent, 0);
-		}
+	private ProgressDialog pd;
+	public void createAccount(final View view) {
+	    pd = ProgressDialog.show(this,"Ustvarjanje računa","Račun bo ustvarjen čez nekaj trenutkov. Zgodovina bo posodobljena ko bodo podatki na voljo.",true,false,null);
+
+        final StudentMealsService service = new StudentMealsService();
+        //final EditText appEmail = (EditText) findViewById(R.id.editTextAppEmail);
+        //EditText appPassword = (EditText) findViewById(R.id.editTextAppPassword);
+        //final EditText studentMealsEmail = (EditText) findViewById(R.id.editTextStudentMealsEmail);
+        EditText studentMealsPassword = (EditText) findViewById(R.id.editTextTextStudentMealsPassword);
+        EditText recaptchaCode = (EditText) findViewById(R.id.editTextRecaptchaCode);
+        final String email = studentMealsEmail.getText().toString();
+        final String password = studentMealsPassword.getText().toString();
+        final String recaptcha = recaptchaCode.getText().toString();
+	    
+	    new Thread() {
+	        public void run() {
+	            loginDataResponse = service.addLoginData(email, password, email, password, state.stateHash, recaptcha);
+	            if (loginDataResponse == 1) {
+	                String key = service.getUserKey(email, password);
+	                MyPerferences.getInstance().setUserKey(key);
+	                UserData user = service.userData(key);
+	                if (user != null) {
+	                    MyPerferences.getInstance().setUserId(user.getUserId());
+	                    new StudentMealUserModel(StudentMealsWebServiceClientActivity.this).add(new StudentMealUserData(0, user.userId, user.email, user.password, user.firstName, user.lastName, user.pin, user.getAddress(), "", "", user.getTempAddress(), "", "", user.university, user.facility, user.length, user.currentYear, user.studyMethod, user.statusValidation, user.enrollmentNumber, user.phone, key, "", user.remainingSubsidies));
+	                    new Thread() {
+	                        public void run() {
+	                            try {
+	                                Thread.sleep(60 * 1000);
+	                            } catch (InterruptedException e) {
+	                                e.printStackTrace();
+	                            }
+	                            new UpdateDataTask(StudentMealsWebServiceClientActivity.this).updateUserHistory();
+	                        }
+	                    }.start();
+	                }
+	                
+	                pd.cancel();
+	                
+	                finish();
+	                Intent myIntent = new Intent(view.getContext(), Main.class);
+	                startActivityForResult(myIntent, 0);
+	            } else {
+	                pd.cancel();
+	                
+	                finish();
+	                Intent myIntent = new Intent(view.getContext(), StudentMealsWebServiceClientActivity.class);
+	                startActivityForResult(myIntent, 0);
+	            }
+	        }
+	    }.start();
 	}
 }

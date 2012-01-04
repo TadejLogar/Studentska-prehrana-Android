@@ -19,7 +19,7 @@ public class MVCTest extends AndroidTestCase {
     }
 
     public void testDownloadToFile() throws IOException {
-        String zip = DetailsActivity.FILE_URL + "imgs.zip";
+        String zip = DetailsActivity.getFileDownloadUrl() + "imgs.zip";
         
         File file1 = new File(Environment.getExternalStorageDirectory() + "/StudentMeals/a.zip");
         //File file2 = new File(Environment.getExternalStorageDirectory() + "/StudentMeals/b.zip");

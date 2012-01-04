@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.UUID;
 
+import com.sciget.studentmeals.MyPerferences;
 import com.sciget.studentmeals.database.data.RestaurantData;
 
 import android.content.SharedPreferences;
@@ -18,7 +19,7 @@ public class Settings {
 	public static String username;
 	public static String password;
 	
-	public static double subsidy = 2.62; // cena subvencije
+	public static double subsidy = 2.63; // cena subvencije
 	
 	public static int openTimeType;
 	
@@ -114,7 +115,12 @@ public class Settings {
 	}
 
 	public static double getSubsidy() {
-		return subsidy;
+	    double s = MyPerferences.getInstance().getSubsidy();
+	    if (s > 0) {
+	        return s;
+	    } else {
+	        return subsidy;
+	    }
 	}
 	
 	public static void setLocation(double lat, double lon) {

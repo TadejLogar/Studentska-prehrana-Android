@@ -1,6 +1,7 @@
 package com.sciget.studentmeals.database.data;
 
 import java.sql.Time;
+import java.util.Calendar;
 
 import si.feri.projekt.studentskaprehrana.Settings;
 
@@ -179,7 +180,12 @@ public class RestaurantData extends Data {
     }
     
     public double getFee() {
-        return round2(price - Settings.getSubsidy());
+        double fee = round2(price - Settings.getSubsidy());
+        if (fee < 0) {
+            return 0;
+        } else {
+            return fee;
+        }
     }
     
     private double round2(double value) {
@@ -218,7 +224,7 @@ public class RestaurantData extends Data {
     }
     
     public boolean isNear(double lat, double lon) {
-        if (Math.abs(locationLatitude - lat) < 0.01 && Math.abs(locationLongitude - lon) < 0.01) {
+        if (Math.abs(locationLatitude - lat) < 0.5 && Math.abs(locationLongitude - lon) < 0.5) {
             return true;
         }
         return false;
@@ -226,7 +232,44 @@ public class RestaurantData extends Data {
     
     public Double howNear(double lat, double lon) {
         double distance = Math.sqrt(Math.pow(lat - locationLatitude, 2.0) + Math.pow(lon - locationLongitude, 2.0));
-        return Math.abs(locationLatitude - lat);
+        return distance;
+        //return Math.abs(locationLatitude - lat);
+    }
+    
+    public boolean isOpen() {
+        int currentTimeInMinutes = getTimeInMinutes(null);
+        int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+        
+        Time timeFrom = null;
+        Time timeTo = null;
+        if (dayOfWeek == Calendar.SUNDAY) {
+            timeFrom = openSundayFrom;
+            timeTo = openSundayTo;
+        } else if (dayOfWeek == Calendar.SATURDAY) {
+            timeFrom = openSaturdayFrom;
+            timeTo = openSaturdayTo;
+        } else {
+            timeFrom = openWorkdayFrom;
+            timeTo = openWorkdayTo;
+        }
+        
+        int timeFromInMinutes = getTimeInMinutes(timeFrom);
+        int timeToInMinutes = getTimeInMinutes(timeTo);
+        
+        if (timeFromInMinutes < timeToInMinutes) {
+            return currentTimeInMinutes >= timeFromInMinutes && currentTimeInMinutes < timeToInMinutes;
+        } else {
+            return currentTimeInMinutes >= timeFromInMinutes && currentTimeInMinutes < timeToInMinutes; // TODO: popravi (čas po polnoči)
+        }
+    }
+    
+    public static int getTimeInMinutes(Time time) {
+        Calendar calendar = Calendar.getInstance();
+        if (time != null) calendar.setTimeInMillis(time.getTime());
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        int currentTime = hour * 60 + minute;
+        return currentTime;
     }
     
     public void setFavorited(boolean favorited) {

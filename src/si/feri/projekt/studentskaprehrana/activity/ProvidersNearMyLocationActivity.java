@@ -55,7 +55,7 @@ public class ProvidersNearMyLocationActivity extends MyListActivity {
                 RestaurantData p2 = (RestaurantData) o2;
             	Double r1 = p1.howNear(lat, lon);
             	Double r2 = p2.howNear(lat, lon);
-                return r1.compareTo(r2) * -1;
+                return r1.compareTo(r2);
             }
         });
 	}

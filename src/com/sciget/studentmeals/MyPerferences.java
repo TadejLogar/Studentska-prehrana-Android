@@ -20,6 +20,7 @@ public class MyPerferences extends Perferences {
     private Timestamp lastDailyMenusUpdate;
     private Timestamp lastPernamentMenusUpdate;
     private Timestamp lastUserHistoryUpdate;
+    private String server;
     
     private static final String USER_ID = "userId";
     private static final String USER_KEY = "userKey";
@@ -29,6 +30,13 @@ public class MyPerferences extends Perferences {
     private static final String LAST_DAILY_UPDATE = "lastDailyMenusUpdate";
     private static final String LAST_PERMANENT_MENUS_UPDATE = "lastPernamentMenusUpdate";
     private static final String LAST_USER_HISTORY_UPDATE = "lastUserHistoryUpdate";
+    private static final String SERVER = "server";
+    
+    public MyPerferences() {
+        super();
+        instatnce = this;
+        server = "164.8.221.136";
+    }
     
     public MyPerferences(Context context) {
         super(context);
@@ -41,6 +49,11 @@ public class MyPerferences extends Perferences {
             if (user != null) {
                 setUserId(user.userId);
                 setUserKey(user.key);
+            }
+            
+            String server = getServer();
+            if (server == null || server.length() == 0) {
+                setServer("164.8.221.136");
             }
         }
     }
@@ -104,6 +117,13 @@ public class MyPerferences extends Perferences {
         }
         return userKey;
     }
+    
+    public String getServer() {
+        if (server == null) {
+            server = get(SERVER);
+        }
+        return server;
+    }
 
     public void setUserId(int userId) {
         this.userId = userId;
@@ -143,5 +163,10 @@ public class MyPerferences extends Perferences {
     public void setUserKey(String userKey) {
         this.userKey = userKey;
         set(USER_KEY, userKey);
+    }
+    
+    public void setServer(String server) {
+        this.server = server;
+        set(SERVER, server);
     }
 }

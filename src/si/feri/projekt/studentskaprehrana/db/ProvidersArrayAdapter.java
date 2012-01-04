@@ -32,6 +32,7 @@ import android.widget.TextView;
  */
 public class ProvidersArrayAdapter extends ArrayAdapter<RestaurantData> {
 	LayoutInflater mInflater;
+	private static final int NICE_BLUE = Color.rgb(0, 148, 255);
 	
 	public ProvidersArrayAdapter(Context context, int textViewResourceId, List<RestaurantData> objects) {
         super(context, textViewResourceId, objects);
@@ -75,15 +76,26 @@ public class ProvidersArrayAdapter extends ArrayAdapter<RestaurantData> {
 		    time = " (" + time + ")";
 		}
 		
+		if (!tmp.isOpen()) {
+		    holder.name.setTextColor(Color.GRAY);
+		} else {
+		    holder.name.setTextColor(NICE_BLUE);
+		}
+		
 		// Bind the data efficiently with the holder.
 		holder.name.setText(tmp.getName());
 		holder.fee.setText(tmp.getEuroFee());
 		holder.address.setText(tmp.getPost() + time);
 		//holder.openTime.setText(""); // tmp.getOpenTime()
-		if (tmp.imageSha1 != null) {
+		if (tmp.imageSha1 == null) {
+		    holder.icon.setVisibility(View.GONE);
+		} else {
 		    File file = new File(Environment.getExternalStorageDirectory() + "/StudentMeals/" + tmp.imageSha1 + ".jpg");
 		    if (file.exists()) {
 		        holder.icon.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
+		        holder.icon.setVisibility(View.VISIBLE);
+		    } else {
+		        holder.icon.setVisibility(View.GONE);
 		    }
 		}
 		//holder.icon.setImageBitmap((position & 1) == 1 ? mIcon1 : mIcon2);

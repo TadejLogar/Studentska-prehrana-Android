@@ -2,6 +2,7 @@ package si.feri.projekt.studentskaprehrana;
 
 import si.feri.projekt.studentskaprehrana.activity.HistoryListActivity;
 import si.feri.projekt.studentskaprehrana.activity.PersonalInfoActivity;
+import si.feri.projekt.studentskaprehrana.activity.UpdateActivity;
 
 import com.sciget.studentmeals.MyPerferences;
 import com.sciget.studentmeals.Perferences;
@@ -52,6 +53,18 @@ public class Preferences extends PreferenceActivity {
             myPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                  public boolean onPreferenceClick(Preference preference) {
                      Intent intent = new Intent(Preferences.this, PersonalInfoActivity.class);
+                     startActivity(intent);
+                     return true;
+                 }
+             });
+             myPref.setEnabled(MyPerferences.getInstance().getUserId() > 0);
+        }
+        
+        {
+            Preference myPref = (Preference) findPreference("updateKey");
+            myPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                 public boolean onPreferenceClick(Preference preference) {
+                     Intent intent = new Intent(Preferences.this, UpdateActivity.class);
                      startActivity(intent);
                      return true;
                  }

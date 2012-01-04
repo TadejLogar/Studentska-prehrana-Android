@@ -11,8 +11,20 @@ public class HistoryActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        RestaurantModel restaurantModel = new RestaurantModel(this);
-        restaurantModel.getHistory();
+        RestaurantModel restaurantModel = null;
+        try {
+            restaurantModel = new RestaurantModel(this);
+            restaurantModel.getHistory();
+        } catch (Exception e) {
+            // V primeru, da zgodovina še ni bila posodobljena
+            finish();
+        } finally {
+            if (restaurantModel != null) {
+                try {
+                    restaurantModel.close();
+                } catch (Exception e) {}
+            }
+        }
     }
     
 }

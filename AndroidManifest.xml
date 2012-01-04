@@ -85,6 +85,7 @@
 		<activity android:name=".activity.AccountCreatedActivity"></activity>
 		<activity android:name=".activity.CommentActivity"></activity>
 		<activity android:name=".activity.PersonalInfoActivity"></activity>
+		<activity android:name=".activity.UpdateActivity"></activity>
 		<activity android:name="com.sciget.studentmeals.camera.CameraActivity"></activity>
 		
 		    
@@ -103,6 +104,15 @@
 		</receiver>
 
         <service android:enabled="true" android:name="com.sciget.studentmeals.service.UpdateService" />
+        
+        
+        <receiver android:name="com.sciget.studentmeals.widget.MyWidgetProvider">
+			<intent-filter>
+				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+			</intent-filter>
+			<meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_info" />
+		</receiver>
+		<service android:name="com.sciget.studentmeals.widget.UpdateWidgetService" />
     </application>
     
 </manifest>

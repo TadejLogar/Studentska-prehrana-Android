@@ -12,6 +12,7 @@ import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import com.sciget.studentmeals.MyPerferences;
 import com.sciget.studentmeals.Perferences;
 import com.sciget.studentmeals.client.service.data.CommentData;
 import com.sciget.studentmeals.client.service.data.Data;
@@ -49,11 +50,15 @@ public class StudentMealsService extends WebService {
 		}
 	}
 	
-	private static String URL = "http://" + Perferences.SERVER + ":8080/StudentMealsWebService/services/StudentMealsMain?wsdl";
+	//private static String URL = "http://" + Perferences.SERVER + ":8080/StudentMealsWebService/services/StudentMealsMain?wsdl";
 	private static String NAMESPACE = "http://studentmeals.sciget.com";
 	
 	public StudentMealsService() {
-		super(URL, NAMESPACE);
+		super(getUrl(), NAMESPACE);
+	}
+	
+	public static String getUrl() {
+	    return "http://" + MyPerferences.getInstance().getServer() + ":8080/StudentMealsWebService/services/StudentMealsMain?wsdl";
 	}
 
 	public StudentMealsStateData captchaImageUrl() {

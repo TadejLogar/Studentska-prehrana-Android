@@ -6,6 +6,7 @@ import com.sciget.studentmeals.MyPerferences;
 import com.sciget.studentmeals.client.service.StudentMealsService;
 import com.sciget.studentmeals.client.service.data.RestaurantData;
 import com.sciget.studentmeals.database.model.RestaurantModel;
+import com.sciget.studentmeals.service.UpdateDataTask;
 import com.sciget.studentmeals.service.UpdateService;
 
 import si.feri.projekt.studentskaprehrana.activity.RestaurantsListActivity;
@@ -39,6 +40,7 @@ Na GitHub si odprite svoj projekt, kjer boste imeli kopijo in kljeb bomo spremlj
 public class Main extends Activity {
     private ListApplication app;
     private boolean done;
+    private boolean ipSet = false;
     
     ProgressDialog dialogWait;
 
@@ -52,6 +54,15 @@ public class Main extends Activity {
         //setContentView(R.layout.main);
         startUpdateService();
         //new NewThread().start();
+        
+        if (!ipSet) {
+            new Thread() {
+                public void run() {
+                    UpdateDataTask.updateServerHost();
+                    ipSet = true;
+                }
+            }.start();
+        }
         
         app.loadData();
         finish();

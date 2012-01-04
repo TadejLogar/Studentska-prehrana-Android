@@ -7,6 +7,7 @@ import java.util.Vector;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.sciget.studentmeals.MyPerferences;
 import com.sciget.studentmeals.client.service.data.CommentData;
 import com.sciget.studentmeals.client.service.data.FavoritedRestaurantData;
 import com.sciget.studentmeals.client.service.data.FileData;
@@ -23,6 +24,8 @@ public class StudentMealsServiceTest {
 
 	@Before
 	public void setUp() throws Exception {
+	    new MyPerferences();
+	    
 		meals = new StudentMealsService();
 		key = meals.getUserKey("tadej.logar.101@gmail.com", "studentskaprehrana.si");
 		assertTrue(key.length() > 0);

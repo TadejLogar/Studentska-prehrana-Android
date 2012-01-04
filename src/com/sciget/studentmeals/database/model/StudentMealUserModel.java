@@ -1,5 +1,6 @@
 package com.sciget.studentmeals.database.model;
 
+import com.sciget.studentmeals.database.data.StudentMealHistoryData;
 import com.sciget.studentmeals.database.data.StudentMealUserData;
 
 import android.content.Context;
@@ -40,5 +41,16 @@ public class StudentMealUserModel extends Model {
     
     public void removeOld() {
         update("DELETE FROM " + StudentMealUserData.NAME + " WHERE date < '" + todayDate() + "'");
+    }
+
+    public String getLastVisitedProvider() {
+        Cursor cursor = rawQuery("SELECT provider FROM " + StudentMealHistoryData.NAME);
+        if (cursor.moveToNext()) {
+            //StudentMealHistoryData data = new StudentMealHistoryData();
+            //data.provider = cursor.getString(0);
+            //return data;
+            return cursor.getString(0);
+        }
+        return null;
     }
 }

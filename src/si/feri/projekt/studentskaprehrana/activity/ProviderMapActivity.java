@@ -37,7 +37,7 @@ public class ProviderMapActivity extends MapActivity {
     MapView mapView;
     private Road mRoad;
     
-    private boolean enableGps = false;
+    //private boolean enableGps = false;
     double latitude;
     double longitude;
 
