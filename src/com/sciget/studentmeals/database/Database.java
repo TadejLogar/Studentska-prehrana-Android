@@ -134,6 +134,7 @@ public class Database {
     }
 
     public static java.sql.Time toTime(String timeStr) {
+        if (timeStr == null) return null;
         try {
             int n = countOccurrences(timeStr, ':');
             long longTime = -1;
@@ -146,7 +147,7 @@ public class Database {
             java.sql.Time time = new java.sql.Time(longTime);
             return time;
         } catch (Exception e) {
-            System.out.println(e.toString());
+            //System.out.println(e.toString());
         }
         return null;
     }

@@ -5,6 +5,8 @@ import java.sql.Date;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
+import android.util.Log;
+
 public class MenuData {
 	public int restaurantId;
 	public String date;
@@ -16,7 +18,7 @@ public class MenuData {
 			date = toString(obj.getProperty("date"));
 			menu = obj.getPropertyAsString("menu");
 		} catch (Exception e) {
-		    System.out.println(e.toString());
+		    Log.e("MenuData", e.toString());
 		}
 	}
 	

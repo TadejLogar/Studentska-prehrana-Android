@@ -54,8 +54,10 @@ public class HistoryListActivity extends ListActivity {
         menusDB = new RestaurantModel(this);
         menuList = new ArrayList<StudentMealHistoryData>();
         Vector<StudentMealHistoryData> menus = menusDB.getHistory();
-        for (StudentMealHistoryData menu : menus) {
-            menuList.add(menu);
+        if (menus != null) {
+            for (StudentMealHistoryData menu : menus) {
+                menuList.add(menu);
+            }
         }
         menusDB.close();
 

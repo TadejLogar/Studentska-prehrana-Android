@@ -21,8 +21,8 @@ public class MyWidgetProvider extends AppWidgetProvider {
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
 
         // To react to a click we have to use a pending intent as the onClickListener is excecuted by the homescreen application
-        PendingIntent pendingIntent = PendingIntent.getService(context.getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.buttonWidgetUpdate, pendingIntent);        
+        //PendingIntent pendingIntent = PendingIntent.getService(context.getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        //remoteViews.setOnClickPendingIntent(R.id.buttonWidgetUpdate, pendingIntent);
         
         Intent intent2 = new Intent(context, Main.class);
         intent2.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds);  // Identifies the particular widget...
@@ -33,7 +33,8 @@ public class MyWidgetProvider extends AppWidgetProvider {
         PendingIntent pendIntent = PendingIntent.getActivity(context, 0, intent2, PendingIntent.FLAG_UPDATE_CURRENT);
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-        views.setOnClickPendingIntent(R.id.textViewWidget, pendIntent);
+        views.setOnClickPendingIntent(R.id.textViewWidgetNumber, pendIntent);
+        views.setOnClickPendingIntent(R.id.textViewWidgetRestaurant, pendIntent);
         appWidgetManager.updateAppWidget(appWidgetIds,views);
         
         // Finally update all widgets with the information about the click listener

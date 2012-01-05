@@ -35,7 +35,7 @@ public class UpdateDataTask {
             updateDailyMenus();
             updatePermanentMenus();
         } catch (Exception e) {
-            System.out.println(e.toString());
+            Log.e("update", e.toString());
         }
         closeModel();
     }

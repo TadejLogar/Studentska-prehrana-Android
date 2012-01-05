@@ -24,12 +24,13 @@ public class UpdateWidgetService extends Service {
             for (int widgetId : appWidgetIds) {
                 RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.widget_layout);
                 String provider = app.getLastProvider();
+                String number = app.getSubsidiesNumber() + "";
                 if (provider == null) {
                     provider = "Nimaš dodanega računa";
-                } else {
-                    provider = app.getSubsidiesNumber() + " " + provider;
+                    number = "";
                 }
-                remoteViews.setTextViewText(R.id.textViewWidget, provider);
+                remoteViews.setTextViewText(R.id.textViewWidgetRestaurant, provider);
+                remoteViews.setTextViewText(R.id.textViewWidgetNumber, number);
                 //app.updateLastVisit();
                 appWidgetManager.updateAppWidget(widgetId, remoteViews);
             }

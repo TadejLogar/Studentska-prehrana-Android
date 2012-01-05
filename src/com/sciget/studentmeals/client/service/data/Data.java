@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 
 import org.ksoap2.serialization.SoapObject;
 
+import android.util.Log;
+
 public class Data {
 	private SoapObject obj;
 	
@@ -27,7 +29,7 @@ public class Data {
         try {
             return Boolean.parseBoolean(obj.getProperty(name).toString());
         } catch (Exception e) {
-            System.out.println(e.toString());
+            Log.e("Data getBoolean", e.toString());
             return false;
         }
 	}

@@ -195,12 +195,25 @@ public class RestaurantModel extends Model {
     }
     
     public Vector<StudentMealHistoryData> getHistory() {
-        Vector<StudentMealHistoryData> list = new Vector<StudentMealHistoryData>();
-        Cursor cursor = rawQuery("SELECT id, userId, time, provider, company, fee, fullPrice, note FROM " + StudentMealHistoryData.NAME + " ORDER BY time DESC");
-        while (cursor.moveToNext()) {
-            StudentMealHistoryData history = new StudentMealHistoryData(cursor.getInt(0), cursor.getInt(1), toTimestamp(cursor.getString(2)), cursor.getString(3), cursor.getString(4), cursor.getDouble(5), cursor.getDouble(6), cursor.getString(7));
-            list.add(history);
+        boolean ok = false;
+        String sql = "SELECT name FROM sqlite_master WHERE type = 'table' AND name = '" + StudentMealHistoryData.NAME + "'";
+        Cursor cursor0 = rawQuery(sql);
+        if (cursor0.moveToNext()) {
+            ok = true;
         }
-        return list;
+        cursor0.close();
+        
+        if (ok) {
+            Vector<StudentMealHistoryData> list = new Vector<StudentMealHistoryData>();
+            Cursor cursor = rawQuery("SELECT id, userId, time, provider, company, fee, fullPrice, note FROM " + StudentMealHistoryData.NAME + " ORDER BY time DESC");
+            while (cursor.moveToNext()) {
+                StudentMealHistoryData history = new StudentMealHistoryData(cursor.getInt(0), cursor.getInt(1), toTimestamp(cursor.getString(2)), cursor.getString(3), cursor.getString(4), cursor.getDouble(5), cursor.getDouble(6), cursor.getString(7));
+                list.add(history);
+            }
+            cursor.close();
+            return list;
+        } else {
+            return null;
+        }
     }
 }
