@@ -48,7 +48,7 @@ public class UpdateService extends Service {
         
         @Override
         public void handleMessage(Message msg) {
-            Toast.makeText(getApplicationContext(), msg.getData().getString("msg"), Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), msg.getData().getString("msg"), Toast.LENGTH_LONG).show();
         }
     };
     private NotificationManager mNotificationManager;

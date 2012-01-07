@@ -1,5 +1,6 @@
 package com.sciget.studentmeals.database.model;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 import com.sciget.studentmeals.client.service.data.HistoryData;
@@ -59,13 +60,14 @@ public class RestaurantModel extends Model {
         final int features = ih.getColumnIndex("features");
         final int message = ih.getColumnIndex("message");
         final int imageSha1 = ih.getColumnIndex("imageSha1");
+        final int mapImageSha1 = ih.getColumnIndex("mapImageSha1");
  
         int i = 0;
         getDatabase().beginTransaction();
         for (com.sciget.studentmeals.client.service.data.RestaurantData data : list) {
             ih.prepareForInsert();
             
-            RestaurantData restaurant = new RestaurantData(data.id, data.hash, data.name, data.address, data.post, data.country, data.price, data.phone, data.openWorkdayFrom, data.openWorkdayTo, data.openSaturdayFrom, data.openSaturdayTo, data.openSundayFrom, data.openSundayTo, data.locationLatitude, data.locationLongitude, data.features, data.message, data.imageSha1);
+            RestaurantData restaurant = new RestaurantData(data.id, data.hash, data.name, data.address, data.post, data.country, data.price, data.phone, data.openWorkdayFrom, data.openWorkdayTo, data.openSaturdayFrom, data.openSaturdayTo, data.openSundayFrom, data.openSundayTo, data.locationLatitude, data.locationLongitude, data.features, data.message, data.imageSha1, null);
             ih.bind(id, restaurant.id);
             ih.bind(hash, restaurant.hash);
             ih.bind(name, restaurant.name);
@@ -85,6 +87,7 @@ public class RestaurantModel extends Model {
             ih.bind(features, restaurant.features);
             ih.bind(message, restaurant.message);
             ih.bind(imageSha1, restaurant.imageSha1);
+            ih.bind(mapImageSha1, restaurant.mapImageSha1);
             
             ih.execute();
             
@@ -101,14 +104,15 @@ public class RestaurantModel extends Model {
         return restaurant.add(this);
     }
 
-    public Vector<RestaurantData> getAllRestaurants() {
-        Vector<RestaurantData> restaurants = new Vector<RestaurantData>();
-        Cursor cursor = rawQuery("SELECT id, hash, name, address, post, country, price, phone, openWorkdayFrom, openWorkdayTo, openSaturdayFrom, openSaturdayTo, openSundayFrom, openSundayTo, locationLatitude, locationLongitude, features, message, imageSha1 FROM " + RestaurantData.NAME);
+    public ArrayList<RestaurantData> getAllRestaurants() {
+        ArrayList<RestaurantData> restaurants = new ArrayList<RestaurantData>();
+        Cursor cursor = rawQuery("SELECT id, hash, name, address, post, country, price, phone, openWorkdayFrom, openWorkdayTo, openSaturdayFrom, openSaturdayTo, openSundayFrom, openSundayTo, locationLatitude, locationLongitude, features, message, imageSha1, mapImageSha1 FROM " + RestaurantData.NAME);
         while (cursor.moveToNext()) {
             Cursor resultSet = cursor;
-            RestaurantData restaurant = new RestaurantData(resultSet.getInt(0), resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getDouble(6), resultSet.getString(7), toTime(resultSet.getString(8)), toTime(resultSet.getString(9)), toTime(resultSet.getString(10)), toTime(resultSet.getString(11)), toTime(resultSet.getString(12)), toTime(resultSet.getString(13)), resultSet.getDouble(14), resultSet.getDouble(15), resultSet.getString(16), resultSet.getString(17), resultSet.getString(18));
+            RestaurantData restaurant = new RestaurantData(resultSet.getInt(0), resultSet.getString(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getDouble(6), resultSet.getString(7), toTime(resultSet.getString(8)), toTime(resultSet.getString(9)), toTime(resultSet.getString(10)), toTime(resultSet.getString(11)), toTime(resultSet.getString(12)), toTime(resultSet.getString(13)), resultSet.getDouble(14), resultSet.getDouble(15), resultSet.getString(16), resultSet.getString(17), resultSet.getString(18), resultSet.getString(19));
             restaurants.add(restaurant);
         }
+        cursor.close();
         return restaurants;
     }
 
@@ -215,5 +219,9 @@ public class RestaurantModel extends Model {
         } else {
             return null;
         }
+    }
+
+    public void setRestaurantMapImageHash(int restaurantId, String newHash) {
+        update("UPDATE " + RestaurantData.NAME + " SET mapImageSha1 = ? WHERE id = ?", new Object[] { newHash, restaurantId });
     }
 }

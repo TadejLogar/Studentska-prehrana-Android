@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import si.feri.projekt.studentskaprehrana.activity.MyListActivity;
 
+@Deprecated
 public class ListApplication extends Application {
 	
 	public ArrayList<RestaurantData> list = new ArrayList<RestaurantData>();
@@ -61,7 +62,7 @@ public class ListApplication extends Application {
 		favoritesDB = new FavoritedRestaurantModel(this);
 		usersDB = new StudentMealUserModel(this);
 		
-		fillProvidersFromDB();
+		//fillProvidersFromDB();
 		providersAdapter = new ProvidersArrayAdapter(this, R.layout.provider_layout2, list);
 	}
 	
@@ -70,7 +71,7 @@ public class ListApplication extends Application {
 		providersAdapter = new ProvidersArrayAdapter(this, R.layout.provider_layout2, list);
 	}
 
-	private void fillProvidersFromDB() {
+	/*private void fillProvidersFromDB() {
 		providersDB.open();
 		Vector<RestaurantData> providers = providersDB.getAllRestaurants();
 		list.clear();
@@ -82,7 +83,7 @@ public class ListApplication extends Application {
 			}
 		}
 		providersDB.close();
-	}
+	}*/
 	
 	/*public void insertTest() {
 		Testing.insertProviders(providersDB);
@@ -101,9 +102,9 @@ public class ListApplication extends Application {
 		return currentProvider;
 	}
 	
-	public RestaurantData getProviderById(int id) {
+	/*public RestaurantData getProviderById(int id) {
 		return Settings.arrayListProviders.get(id);
-	}
+	}*/
 	
     public int getSubsidiesNumber() {
         StudentMealUserData user = new StudentMealUserModel(this).getUserAll();

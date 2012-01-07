@@ -1,10 +1,17 @@
 package com.sciget.studentmeals.database;
 
+import java.io.File;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
+import com.sciget.studentmeals.database.data.FavoritedRestaurantData;
+import com.sciget.studentmeals.database.data.RestaurantData;
+import com.sciget.studentmeals.database.data.RestaurantMenuData;
+import com.sciget.studentmeals.database.data.StudentMealHistoryData;
+import com.sciget.studentmeals.database.data.StudentMealUserData;
 
 import si.feri.projekt.studentskaprehrana.db.DatabaseHelperOld;
 import si.feri.projekt.studentskaprehrana.db.MenusDB;
@@ -37,6 +44,9 @@ public class Database {
     public Database open() throws SQLException {
         if (database == null) {
             database = databaseHelper.getWritableDatabase();
+
+            //database = SQLiteDatabase.openOrCreateDatabase(new File("/sdcard/sp.sqlite"), null);
+            //databaseHelper.onCreate(database);
         }
         return this;
     }
@@ -160,6 +170,17 @@ public class Database {
             }
         }
         return count;
+    }
+    
+    public static boolean tableExists(SQLiteDatabase database, String tableName) {
+        String sql = "SELECT name FROM sqlite_master WHERE type = 'table' AND name = '" + tableName + "'";
+        Cursor cursor0 = database.rawQuery(sql, new String[] {});
+        boolean exists = false;
+        if (cursor0.moveToNext()) {
+            exists = true;
+        }
+        cursor0.close();
+        return exists;
     }
 
 }

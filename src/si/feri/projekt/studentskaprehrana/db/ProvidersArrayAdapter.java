@@ -54,7 +54,7 @@ public class ProvidersArrayAdapter extends ArrayAdapter<RestaurantData> {
 			// holder.icon = (ImageView) convertView.findViewById(R.id.icon);
 			holder.fee = (TextView) convertView.findViewById(R.id.fee);
 			holder.address = (TextView) convertView.findViewById(R.id.address);
-			//holder.openTime = (TextView) convertView.findViewById(R.id.openTime);
+			holder.distance = (TextView) convertView.findViewById(R.id.distance);
 			holder.icon = (ImageView) convertView.findViewById(R.id.imageViewIcon);
 			convertView.setTag(holder);
 		} else {
@@ -76,6 +76,16 @@ public class ProvidersArrayAdapter extends ArrayAdapter<RestaurantData> {
 		    time = " (" + time + ")";
 		}
 		
+		String distanceStr = "";
+		float distance = tmp.getDistance();
+		if (distance > 0) {
+		    if (distance >= 1000) {
+		        distanceStr = " " + (distance / 1000) + " km";
+		    } else {
+		        distanceStr = " " + distance + " m";
+		    }
+		}
+		
 		if (!tmp.isOpen()) {
 		    holder.name.setTextColor(Color.GRAY);
 		} else {
@@ -86,7 +96,7 @@ public class ProvidersArrayAdapter extends ArrayAdapter<RestaurantData> {
 		holder.name.setText(tmp.getName());
 		holder.fee.setText(tmp.getEuroFee());
 		holder.address.setText(tmp.getPost() + time);
-		//holder.openTime.setText(""); // tmp.getOpenTime()
+		holder.distance.setText(distanceStr);
 		if (tmp.imageSha1 == null) {
 		    holder.icon.setVisibility(View.GONE);
 		} else {
@@ -105,7 +115,7 @@ public class ProvidersArrayAdapter extends ArrayAdapter<RestaurantData> {
 		TextView name;
 		TextView fee;
 		TextView address;
-		//TextView openTime;
+		TextView distance;
 		ImageView icon;
 	}
 }

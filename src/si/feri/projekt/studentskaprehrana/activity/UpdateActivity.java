@@ -36,6 +36,7 @@ public class UpdateActivity extends Activity {
                 UpdateDataTask updateDataTask = new UpdateDataTask(UpdateActivity.this);
                 updateDataTask.all();
                 updateDataTask.updateUserHistory();
+                updateDataTask.closeModel();
                 MyPerferences.getInstance().setLastRestaurantsUpdate(Data.time());
                 
                 int userId = MyPerferences.getInstance().getUserId();
@@ -60,7 +61,7 @@ public class UpdateActivity extends Activity {
         finish();
         finish();
         
-        Intent intent = new Intent(this, Main.class);
+        Intent intent = new Intent(this, RestaurantsListActivity2.class);
         startActivity(intent);
     }
     

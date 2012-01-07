@@ -32,12 +32,15 @@ public class UpdateDataTask {
             updateSubsidy();
             updateRestaurants();
             new RestaurantMenuData().create(restaurantModel.getDatabase());
-            updateDailyMenus();
-            updatePermanentMenus();
+            /*new Thread() {
+                public void run() {*/
+                    updateDailyMenus();
+                    updatePermanentMenus();
+                /*}
+            }.start();*/
         } catch (Exception e) {
             Log.e("update", e.toString());
         }
-        closeModel();
     }
     
     public static void updateServerHost() {

@@ -13,6 +13,7 @@ import si.feri.projekt.studentskaprehrana.Main;
 import si.feri.projekt.studentskaprehrana.R;
 import si.feri.projekt.studentskaprehrana.activity.DetailsActivity;
 import si.feri.projekt.studentskaprehrana.activity.RestaurantsListActivity;
+import si.feri.projekt.studentskaprehrana.activity.RestaurantsListActivity2;
 
 import com.sciget.studentmeals.MyPerferences;
 import com.sciget.studentmeals.client.service.StudentMealsService;
@@ -165,7 +166,7 @@ public class StudentMealsWebServiceClientActivity extends Activity {
 	                pd.cancel();
 	                
 	                finish();
-	                Intent myIntent = new Intent(view.getContext(), Main.class);
+	                Intent myIntent = new Intent(view.getContext(), RestaurantsListActivity2.class);
 	                startActivityForResult(myIntent, 0);
 	            } else {
 	                pd.cancel();

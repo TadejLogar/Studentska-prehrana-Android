@@ -1,5 +1,6 @@
 package com.sciget.studentmeals.service;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 import com.sciget.studentmeals.MyPerferences;
@@ -27,7 +28,7 @@ public class UpdateDataTaskTest extends AndroidTestCase {
         updateDataTask.closeModel();
         
         RestaurantModel restaurantModel2 = new RestaurantModel(getContext());
-        Vector<RestaurantData> list = restaurantModel2.getAllRestaurants();
+        ArrayList<RestaurantData> list = restaurantModel2.getAllRestaurants();
         
         assertTrue(list.size() > 5);
         assertTrue(list.get(0).id != list.get(1).id);
@@ -39,7 +40,7 @@ public class UpdateDataTaskTest extends AndroidTestCase {
         updateDataTask.all();
         
         RestaurantModel restaurantModel = new RestaurantModel(getContext());
-        Vector<RestaurantData> list = restaurantModel.getAllRestaurants();
+        ArrayList<RestaurantData> list = restaurantModel.getAllRestaurants();
         assertTrue(list.size() > 20);
         
         RestaurantMenuModel restaurantMenuModel = new RestaurantMenuModel(getContext());

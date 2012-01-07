@@ -2,6 +2,7 @@ package com.sciget.studentmeals.widget;
 
 import si.feri.projekt.studentskaprehrana.Main;
 import si.feri.projekt.studentskaprehrana.R;
+import si.feri.projekt.studentskaprehrana.activity.RestaurantsListActivity2;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -24,7 +25,7 @@ public class MyWidgetProvider extends AppWidgetProvider {
         //PendingIntent pendingIntent = PendingIntent.getService(context.getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         //remoteViews.setOnClickPendingIntent(R.id.buttonWidgetUpdate, pendingIntent);
         
-        Intent intent2 = new Intent(context, Main.class);
+        Intent intent2 = new Intent(context, RestaurantsListActivity2.class);
         intent2.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds);  // Identifies the particular widget...
         //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         

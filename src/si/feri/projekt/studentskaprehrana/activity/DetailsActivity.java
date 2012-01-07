@@ -11,6 +11,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Vector;
 
+import com.sciget.studentmeals.MainApplication;
 import com.sciget.studentmeals.MyPerferences;
 import com.sciget.studentmeals.Perferences;
 import com.sciget.studentmeals.camera.CameraActivity;
@@ -48,7 +49,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class DetailsActivity extends MainActivity {
-    private ListApplication app;
+    public static final String PROVIDER_ID_KEY = "providerId";
+
+    private MainApplication app;
 
     TextView name;
     TextView address;
@@ -64,6 +67,8 @@ public class DetailsActivity extends MainActivity {
 
     private Button addButton;
     private TextView properties;
+
+    private RestaurantData provider;
     
     public static String getFileDownloadUrl() {
         return "http://" + MyPerferences.getInstance().getServer() + ":8080/StudentMealsWebService/restaurantFiles?hash=";
@@ -71,7 +76,7 @@ public class DetailsActivity extends MainActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        app = (ListApplication) getApplication();
+        app = (MainApplication) getApplication();
         setContentView(R.layout.provider);
 
         name = (TextView) findViewById(R.id.textViewProviderName);
@@ -88,10 +93,13 @@ public class DetailsActivity extends MainActivity {
         
         registerForContextMenu(addButton);
         
-        currentProvider = app.getProviderById(app.getCurrentProvider());
+        //currentProvider = app.getProviderById(app.getCurrentProvider());
+        //currentProvider = app.getProviderById(1);
+        provider = currentProvider;
         
 
-        setData(app.getCurrentProvider());
+        // setData(app.getCurrentProvider());
+        //setData(1);
 
     }
 
@@ -127,7 +135,7 @@ public class DetailsActivity extends MainActivity {
     }
     
     private void setFavorite(int restaurantId, int userId) {
-        boolean favorited = app.favoritesDB.isFavorited(restaurantId);
+        /*boolean favorited = app.favoritesDB.isFavorited(restaurantId);
         if (favorited) {
             app.favoritesDB.removeFavorite(restaurantId);
             currentProvider.setFavorited(false);
@@ -136,11 +144,12 @@ public class DetailsActivity extends MainActivity {
             app.favoritesDB.addFavorite(restaurantId);
             currentProvider.setFavorited(true);
             fav.setBackgroundResource(R.drawable.starred48);
-        }
+        }/
     }
 
     public void setData(int id) {
-        final RestaurantData provider = app.getProviderById(id);
+        //final RestaurantData provider = app.getProviderById(id);
+        final RestaurantData provider = app.getRestaurant(1);
         provider.setFavorited(app.favoritesDB.isFavorited(currentProvider.getId()));
         
         int restaurantId = currentProvider.getId();

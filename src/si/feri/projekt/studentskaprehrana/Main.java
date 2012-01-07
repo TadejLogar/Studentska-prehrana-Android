@@ -37,6 +37,7 @@ import android.widget.TextView;
 Na GitHub si odprite svoj projekt, kjer boste imeli kopijo in kljeb bomo spremljali napredek vašega projekta (lahko pod psevdonimom).
 */
 
+@Deprecated
 public class Main extends Activity {
     private ListApplication app;
     private boolean done;
@@ -54,15 +55,6 @@ public class Main extends Activity {
         //setContentView(R.layout.main);
         startUpdateService();
         //new NewThread().start();
-        
-        if (!ipSet) {
-            new Thread() {
-                public void run() {
-                    UpdateDataTask.updateServerHost();
-                    ipSet = true;
-                }
-            }.start();
-        }
         
         app.loadData();
         finish();
@@ -111,7 +103,7 @@ public class Main extends Activity {
 	private final LocationListener locationListener = new LocationListener() {
     	public void onLocationChanged(Location location) {
     		if (location != null) {
-	    		Settings.setLocation(location.getLatitude(), location.getLongitude());
+	    		//Settings.setLocation(location.getLatitude(), location.getLongitude());
 				//changeMap(location);
     		}
     	}
@@ -152,7 +144,7 @@ public class Main extends Activity {
             	Location location = locationManager.getLastKnownLocation(provider);
             	
             	if (location != null) {
-            		Settings.setLocation(location.getLatitude(), location.getLongitude());
+            		//Settings.setLocation(location.getLatitude(), location.getLongitude());
             	}
             	
                 return new LocationStuff(locationManager, provider);

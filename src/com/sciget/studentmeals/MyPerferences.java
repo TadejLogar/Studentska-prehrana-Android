@@ -3,13 +3,26 @@ package com.sciget.studentmeals;
 import java.sql.Timestamp;
 
 import android.content.Context;
+import android.os.Environment;
 
+import com.sciget.studentmeals.activity.RestaurantMapActivity;
 import com.sciget.studentmeals.database.data.StudentMealUserData;
 import com.sciget.studentmeals.database.model.StudentMealUserModel;
 
 import si.feri.projekt.studentskaprehrana.Main;
+import si.feri.projekt.studentskaprehrana.activity.RestaurantsListActivity2;
 
 public class MyPerferences extends Perferences {
+    public static class Location {
+        public double latitude;
+        public double longitude;
+        
+        public Location(double latitude, double longitude) {
+            this.latitude = latitude;
+            this.longitude = longitude;
+        }
+    }
+    
     private static MyPerferences instatnce;
     
     private Integer userId;
@@ -21,6 +34,10 @@ public class MyPerferences extends Perferences {
     private Timestamp lastPernamentMenusUpdate;
     private Timestamp lastUserHistoryUpdate;
     private String server;
+    private Location location;
+
+    private RestaurantMapActivity restaurantMapActivity;
+    private RestaurantsListActivity2 restaurantsListActivity;
     
     private static final String USER_ID = "userId";
     private static final String USER_KEY = "userKey";
@@ -31,6 +48,11 @@ public class MyPerferences extends Perferences {
     private static final String LAST_PERMANENT_MENUS_UPDATE = "lastPernamentMenusUpdate";
     private static final String LAST_USER_HISTORY_UPDATE = "lastUserHistoryUpdate";
     private static final String SERVER = "server";
+    private static final String LOCATION_LATITUDE = "locationLatitude";
+    private static final String LOCATION_LONGITUDE = "locationLongitude";
+    
+    public static final double LOCATION_LATITUDE_DEFAULT = 46.5575721;
+    public static final double LOCATION_LONGITUDE_DEFAULT = 15.6375547;
     
     public MyPerferences() {
         super();
@@ -124,6 +146,19 @@ public class MyPerferences extends Perferences {
         }
         return server;
     }
+    
+    public Location getLocation() {
+        if (location == null) {
+            double latitude = getDouble(LOCATION_LATITUDE);
+            double longitude = getDouble(LOCATION_LONGITUDE);
+            if (latitude != -1 && longitude != -1) {
+                location = new Location(latitude, longitude);
+            } else {
+                location = new Location(LOCATION_LATITUDE_DEFAULT, LOCATION_LONGITUDE_DEFAULT);
+            }
+        }
+        return location;
+    }
 
     public void setUserId(int userId) {
         this.userId = userId;
@@ -168,5 +203,37 @@ public class MyPerferences extends Perferences {
     public void setServer(String server) {
         this.server = server;
         set(SERVER, server);
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+        set(LOCATION_LATITUDE, location.latitude);
+        set(LOCATION_LONGITUDE, location.longitude);
+        if (restaurantMapActivity != null) {
+            restaurantMapActivity.changeMap(location);
+        }
+        if (restaurantsListActivity != null) {
+            restaurantsListActivity.sortNearList(location);
+        }
+    }
+    
+    public void registerRestaurantMapActivity(RestaurantMapActivity restaurantMapActivity) {
+        this.restaurantMapActivity = restaurantMapActivity;
+    }
+    
+    public void unregisterRestaurantMapActivity() {
+        this.restaurantMapActivity = null;
+    }
+    
+    public void registerRestaurantsListActivity(RestaurantsListActivity2 restaurantsListActivity) {
+        this.restaurantsListActivity = restaurantsListActivity;
+    }
+    
+    public void unregisterRestaurantsListActivity() {
+        this.restaurantsListActivity = null;
+    }
+
+    public String getExternalStoragePath() {
+        return Environment.getExternalStorageDirectory().getAbsolutePath() + "/StudentMeals/";
     }
 }

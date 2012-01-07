@@ -7,6 +7,7 @@ import si.feri.projekt.studentskaprehrana.Settings;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import com.sciget.studentmeals.MyPerferences.Location;
 import com.sciget.studentmeals.client.service.data.RestaurantData.Features;
 import com.sciget.studentmeals.database.Database;
 
@@ -31,10 +32,13 @@ public class RestaurantData extends Data {
 	public Double locationLongitude;
 	public String features;
 	public String message;
+	public String mapImageSha1;
 	
 	public String imageSha1;
 
     private boolean favorited;
+
+    private float distance;
 	
 	public static final double SUBSIDY = 2.62;
 	
@@ -91,7 +95,7 @@ public class RestaurantData extends Data {
 		this.hash = hash;
 	}
 	
-	public RestaurantData(int id, String hash, String name, String address, String post, String country, double price, String phone, Time openWorkdayFrom, Time openWorkdayTo, Time openSaturdayFrom, Time openSaturdayTo, Time openSundayFrom, Time openSundayTo, double locationLatitude, double locationLongitude, String features, String message, String imageSha1) {
+	public RestaurantData(int id, String hash, String name, String address, String post, String country, double price, String phone, Time openWorkdayFrom, Time openWorkdayTo, Time openSaturdayFrom, Time openSaturdayTo, Time openSundayFrom, Time openSundayTo, double locationLatitude, double locationLongitude, String features, String message, String imageSha1, String mapImageSha1) {
 		this.id = id;
 		this.hash = hash;
 		this.name = name;
@@ -111,6 +115,7 @@ public class RestaurantData extends Data {
 		this.features = features;
 		this.message = message;
 		this.imageSha1 = imageSha1;
+		this.mapImageSha1 = mapImageSha1;
 	}
 	
 	public RestaurantData(String hash, String name, String address, String post, String country, double price, String phone, Time openWorkdayFrom, Time openWorkdayTo, Time openSaturdayFrom, Time openSaturdayTo, Time openSundayFrom, Time openSundayTo, Double locationLatitude, Double locationLongitude, String features, String message) {
@@ -145,6 +150,7 @@ public class RestaurantData extends Data {
 	
     @Override
     public void create(SQLiteDatabase db) {
+        //if (Database.tableExists(db, NAME)) return;
         db.execSQL("DROP TABLE IF EXISTS " + NAME);
         String sql = new StringBuilder().append("CREATE TABLE `" + NAME + "` (\n").
         append("  `id` INTEGER,\n").
@@ -165,7 +171,8 @@ public class RestaurantData extends Data {
         append("  `locationLongitude` double,\n").
         append("  `features` varchar(20),\n").
         append("  `message` text,\n").
-        append("  `imageSha1` varchar(50)\n").
+        append("  `imageSha1` varchar(50),\n").
+        append("  `mapImageSha1` varchar(50)\n").
         append(")").toString();
         db.execSQL(sql);
     }
@@ -206,7 +213,7 @@ public class RestaurantData extends Data {
             }
         }
         
-        String lowerStr = str.toLowerCase();
+        String lowerStr = str;
         
         if (name != null) {
             if (name.toLowerCase().contains(lowerStr)) return true;
@@ -223,8 +230,8 @@ public class RestaurantData extends Data {
         return false;
     }
     
-    public boolean isNear(double lat, double lon) {
-        if (Math.abs(locationLatitude - lat) < 0.5 && Math.abs(locationLongitude - lon) < 0.5) {
+    public boolean isNear(double latitude, double longitude) {
+        if (Math.abs(locationLatitude - latitude) < 0.5 && Math.abs(locationLongitude - longitude) < 0.5) {
             return true;
         }
         return false;
@@ -234,6 +241,21 @@ public class RestaurantData extends Data {
         double distance = Math.sqrt(Math.pow(lat - locationLatitude, 2.0) + Math.pow(lon - locationLongitude, 2.0));
         return distance;
         //return Math.abs(locationLatitude - lat);
+    }
+    
+    public static float distanceInMeters(float lat1, float lng1, float lat2, float lng2) {
+        double earthRadius = 3958.75;
+        double dLat = Math.toRadians(lat2-lat1);
+        double dLng = Math.toRadians(lng2-lng1);
+        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                   Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+                   Math.sin(dLng/2) * Math.sin(dLng/2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double dist = earthRadius * c;
+
+        int meterConversion = 1609;
+
+        return new Float(dist * meterConversion).floatValue();
     }
     
     public boolean isOpen() {
@@ -310,6 +332,15 @@ public class RestaurantData extends Data {
         } else {
             return null;
         }
+    }
+    
+    public void setDistance(Location location) {
+        distance = distanceInMeters(new Float(locationLatitude), new Float(locationLongitude), new Float(location.latitude), new Float(location.longitude));
+        distance = Math.round(distance * 100) / 100;
+    }
+    
+    public float getDistance() {
+        return distance;
     }
 
 }

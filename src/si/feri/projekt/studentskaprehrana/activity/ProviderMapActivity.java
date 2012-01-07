@@ -32,6 +32,7 @@ import si.feri.projekt.studentskaprehrana.Settings;
  * Zemljvid
  * Prikaži pot od trenutne lokacije do ponudnika
  */
+@Deprecated
 public class ProviderMapActivity extends MapActivity {
     LinearLayout linearLayout;
     MapView mapView;

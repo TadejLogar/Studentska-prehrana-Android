@@ -35,6 +35,7 @@ public class FavoritedRestaurantData extends Data {
     
     @Override
     public void create(SQLiteDatabase db) {
+        //if (Database.tableExists(db, NAME)) return;
         db.execSQL("DROP TABLE IF EXISTS " + NAME);
         String sql = new StringBuilder().append("CREATE TABLE `" + NAME + "` (\n").
         append("  `id` INTEGER PRIMARY KEY AUTOINCREMENT,\n").

@@ -1,5 +1,6 @@
 package com.sciget.studentmeals.database.model;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 import com.sciget.studentmeals.database.data.RestaurantData;
@@ -36,5 +37,16 @@ public class RestaurantMenuModel extends Model {
     
     public void add() {
         
+    }
+
+    public ArrayList<RestaurantMenuData> getMenus(int restaurantId) {
+        ArrayList<RestaurantMenuData> menus = new ArrayList<RestaurantMenuData>();
+        Cursor cursor = rawQuery("SELECT restaurantId, date, menu FROM " + RestaurantMenuData.NAME + " WHERE restaurantId = " + restaurantId);
+        while (cursor.moveToNext()) {
+            RestaurantMenuData menu = new RestaurantMenuData(cursor.getInt(0), toDate(cursor.getString(1)), cursor.getString(2));
+            menus.add(menu);
+        }
+        cursor.close();
+        return menus;
     }
 }

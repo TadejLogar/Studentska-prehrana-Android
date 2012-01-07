@@ -1,5 +1,7 @@
 package com.sciget.studentmeals.widget;
 
+import com.sciget.studentmeals.MainApplication;
+
 import si.feri.projekt.studentskaprehrana.ListApplication;
 import si.feri.projekt.studentskaprehrana.R;
 import android.app.Service;
@@ -10,12 +12,12 @@ import android.widget.RemoteViews;
 
 public class UpdateWidgetService extends Service {
 
-    ListApplication app;
+    MainApplication app;
 
     @Override
     public void onStart(Intent intent, int startId) {
         if (app == null)
-            app = (ListApplication) getApplicationContext();
+            app = (MainApplication) getApplication();
 
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this.getApplicationContext());
 

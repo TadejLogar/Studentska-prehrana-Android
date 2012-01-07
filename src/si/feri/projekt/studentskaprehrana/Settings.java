@@ -11,7 +11,7 @@ import com.sciget.studentmeals.database.data.RestaurantData;
 import android.content.SharedPreferences;
 import android.location.Location;
 
-
+@Deprecated
 public class Settings {
 	public static Main main;
 	public static final String SETTINGS = "SETTINGS";
@@ -62,9 +62,7 @@ public class Settings {
 		}
 	}
 	
-	/*
-	 * Nastavi glavno aktivnost
-	 */
+
 	public static void setMain(Main m) {
 		main = m;
 	}

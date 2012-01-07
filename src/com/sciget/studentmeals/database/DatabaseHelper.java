@@ -3,6 +3,7 @@ package com.sciget.studentmeals.database;
 import com.sciget.studentmeals.database.data.FavoritedRestaurantData;
 import com.sciget.studentmeals.database.data.RestaurantData;
 import com.sciget.studentmeals.database.data.RestaurantMenuData;
+import com.sciget.studentmeals.database.data.StudentMealHistoryData;
 import com.sciget.studentmeals.database.data.StudentMealUserData;
 
 import android.content.Context;
@@ -23,22 +24,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         this.db = db;
-        
+        createAll();
+    }
+    
+    public void createAll() {
         new RestaurantData().create(db);
         new FavoritedRestaurantData().create(db);
         new StudentMealUserData().create(db);
         new RestaurantMenuData().create(db);
+        new StudentMealHistoryData().create(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         this.db = db;
-        
-        // TODO: herp derp
-    }
-    
-    public void dropTable(String name) throws Exception {
-        // db.execSQL("DROP TABLE IF EXISTS " + name);
-        throw new Exception("not supported");
+        createAll();
     }
 }

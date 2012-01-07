@@ -45,6 +45,7 @@ public class StudentMealHistoryData extends Data {
 
     @Override
     public void create(SQLiteDatabase db) {
+        //if (Database.tableExists(db, NAME)) return;
         db.execSQL("DROP TABLE IF EXISTS " + NAME);
         db.execSQL(
             "CREATE TABLE `students_meals_history` (" +
