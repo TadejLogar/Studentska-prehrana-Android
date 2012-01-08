@@ -119,5 +119,13 @@ public abstract class WebService {
         marshal.register(soapSerializationEnvelope);
         soapObject.addProperty(key, bytes);
     }
+    
+    protected void addStringVector(String key, Vector<String> values) {
+        PropertyInfo propertyInfo = new PropertyInfo();
+        propertyInfo.setType(PropertyInfo.VECTOR_CLASS);
+        propertyInfo.setName(key);
+        propertyInfo.setValue(values);
+        soapObject.addProperty(propertyInfo);
+    }
 
 }

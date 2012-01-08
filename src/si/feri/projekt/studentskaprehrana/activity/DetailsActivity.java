@@ -232,7 +232,7 @@ public class DetailsActivity extends MainActivity {
         Vector<CommentData> list = meals.getComments(restaurantId);
         Vector<StudentMealCommentData> comments = new Vector<StudentMealCommentData>();
         for (CommentData comment : list) {
-            comments.add(new StudentMealCommentData(comment.userId, comment.restaurantId, comment.comment, Database.toTimestamp(comment.time)));
+            //comments.add(new StudentMealCommentData(comment.userId, comment.restaurantId, comment.comment, Database.toTimestamp(comment.time)));
         }
         return comments;
     }

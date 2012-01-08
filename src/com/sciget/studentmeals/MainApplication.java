@@ -1,7 +1,13 @@
 package com.sciget.studentmeals;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+
+import si.feri.projekt.studentskaprehrana.R;
 
 import com.sciget.studentmeals.database.data.RestaurantData;
 import com.sciget.studentmeals.database.data.StudentMealUserData;
@@ -16,6 +22,8 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,11 +48,44 @@ public class MainApplication extends Application {
         if (!dir.isDirectory()) {
             dir.mkdir();
         }
+        copyDatabase();
+        MyPerferences.getInstance().setValues();
         startService(new Intent(this, UpdateService.class));
         new LocationTask().execute();
         loadRestaurantsList();
     }
     
+    private void copyDatabase() {
+        File file = new File(MyPerferences.getInstance().getDatabasePath());
+        if (file.exists()) return;
+        
+        InputStream in = getResources().openRawResource(R.raw.database);
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(file);
+            byte[] buff = new byte[1024];
+            int read;
+            while ((read = in.read(buff)) > 0) {
+                out.write(buff, 0, read);
+             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+             try {
+                in.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+             try {
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void loadRestaurantsList() {
         if (completeRestaurantsList != null) return;
         
@@ -125,6 +166,28 @@ public class MainApplication extends Application {
             }
         }
     }
+    
+    public boolean hasConnection() {
+        ConnectivityManager cm = (ConnectivityManager) getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        
+        NetworkInfo wifiNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if (wifiNetwork != null && wifiNetwork.isConnected()) {
+            return true;
+        }
+
+        NetworkInfo mobileNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        if (mobileNetwork != null && mobileNetwork.isConnected()) {
+            return true;
+        }
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork != null && activeNetwork.isConnected()) {
+            return true;
+        }
+
+        return false;
+    }
+
 
     public RestaurantData getRestaurantById(int restaurantId) {
         for (RestaurantData restaurant : completeRestaurantsList) {

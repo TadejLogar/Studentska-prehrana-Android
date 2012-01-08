@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import com.sciget.studentmeals.MainApplication;
 import com.sciget.studentmeals.database.data.RestaurantMenuData;
 import com.sciget.studentmeals.database.data.StudentMealHistoryData;
 import com.sciget.studentmeals.database.data.StudentMealUserData;
@@ -31,7 +32,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 public class HistoryListActivity extends ListActivity {
-    private ListApplication app;
+    private MainApplication app;
 
     public HistoryArrayAdapter menusAdapter;
     public ArrayList<StudentMealHistoryData> menuList;
@@ -43,7 +44,7 @@ public class HistoryListActivity extends ListActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        app = (ListApplication) getApplication();
+        app = (MainApplication) getApplication();
         Bundle extras = getIntent().getExtras();
         setData();
         setListAdapter(menusAdapter);

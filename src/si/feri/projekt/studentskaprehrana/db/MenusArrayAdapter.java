@@ -54,7 +54,7 @@ public class MenusArrayAdapter extends ArrayAdapter<RestaurantMenuData> {
 		
 		// Bind the data efficiently with the holder.
 		holder.food1.setText(tmp.getFood1());
-		holder.food2.setText(tmp.getFood2());
+		holder.food2.setText(tmp.getFood2().replace("[", "").replace("\",\"", ", ").replace("]", "").replace("\"", ""));
 		//holder.icon.setImageBitmap((position & 1) == 1 ? mIcon1 : mIcon2);
 		return convertView;
 	}

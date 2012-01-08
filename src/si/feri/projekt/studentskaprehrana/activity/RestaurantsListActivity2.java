@@ -17,16 +17,23 @@ import com.sciget.studentmeals.database.data.RestaurantData;
 import com.sciget.studentmeals.database.model.StudentMealUserModel;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 public class RestaurantsListActivity2 extends ListActivity implements OnItemClickListener {
     public class Type {
@@ -40,11 +47,13 @@ public class RestaurantsListActivity2 extends ListActivity implements OnItemClic
     private MainApplication application;
     private ProvidersArrayAdapter restaurantsAdapter;
     private int type;
+    private String query;
     
     private EditText searchEditText;
     private ImageButton allImageButton;
     private ImageButton nearImageButton;
     private ImageButton favoritesImageButton;
+    private LinearLayout typesLinearLayout;
     private Comparator<? super RestaurantData> nearComparator;
     
     public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +71,7 @@ public class RestaurantsListActivity2 extends ListActivity implements OnItemClic
 
     private void setListeners() {
         searchEditText.addTextChangedListener(new TextWatcher() {
-            
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             
@@ -71,18 +80,17 @@ public class RestaurantsListActivity2 extends ListActivity implements OnItemClic
             
             @Override
             public void afterTextChanged(Editable editable) {
-                String query = editable.toString();
-                search(query);
+                query = editable.toString();
+                setRestaurantsAdapter(type);
             }
         });
         
         getListView().setOnItemClickListener(this);
     }
     
-    private void search(String query) {
-        ArrayList<RestaurantData> restaurants = application.getCompleteRestaurantsList();
-        if (query.length() == 0) {
-            updateRestaurantAdapter(restaurants);
+    private ArrayList<RestaurantData> search(ArrayList<RestaurantData> restaurants) {
+        if (query == null || query.length() == 0) {
+            return restaurants;
         } else {
             query = query.toLowerCase();
             ArrayList<RestaurantData> list = new ArrayList<RestaurantData>();
@@ -91,7 +99,7 @@ public class RestaurantsListActivity2 extends ListActivity implements OnItemClic
                     list.add(restaurant);
                 }
             }
-            updateRestaurantAdapter(list);
+            return list;
         }
     }
 
@@ -100,6 +108,7 @@ public class RestaurantsListActivity2 extends ListActivity implements OnItemClic
         allImageButton = (ImageButton) findViewById(R.id.all);
         nearImageButton = (ImageButton) findViewById(R.id.near);
         favoritesImageButton = (ImageButton) findViewById(R.id.fav);
+        typesLinearLayout = (LinearLayout) findViewById(R.id.linearLayoutTypes);
         
         allImageButton.setOnClickListener(new OnClickListener() {
             
@@ -138,12 +147,12 @@ public class RestaurantsListActivity2 extends ListActivity implements OnItemClic
         ArrayList<RestaurantData> restaurants = application.getCompleteRestaurantsList();
         ArrayList<RestaurantData> list = null;
         if (type == Type.ALL) {
-            list = restaurants;
+            list = search(restaurants);
         } else if (type == Type.NEAR) {
             MyPerferences.Location location = MyPerferences.getInstance().getLocation();
             
             if (location == null) {
-                list = restaurants;
+                list = search(restaurants);
             } else {
                 list = new ArrayList<RestaurantData>();
                 for (RestaurantData restaurant : restaurants) {
@@ -152,6 +161,8 @@ public class RestaurantsListActivity2 extends ListActivity implements OnItemClic
                         list.add(restaurant);
                     }
                 }
+                
+                list = search(list);
                 
                 Collections.sort(list, nearComparator);
             }
@@ -170,18 +181,25 @@ public class RestaurantsListActivity2 extends ListActivity implements OnItemClic
                     }
                 }
             }
+            
+            list = search(list);
         } else {
             throw new RuntimeException("Unsported value: type = " + type);
         }
         
         updateRestaurantAdapter(list);
-        setListAdapter(restaurantsAdapter);
     }
     
     private void updateRestaurantAdapter(ArrayList<RestaurantData> list) {
-        restaurantsAdapter = new ProvidersArrayAdapter(this, R.layout.provider_layout2, list);
-        restaurantsAdapter.notifyDataSetChanged();
-        setListAdapter(restaurantsAdapter);
+        if (restaurantsAdapter == null) {
+            restaurantsAdapter = new ProvidersArrayAdapter(this, R.layout.provider_layout2, list, this);
+            setListAdapter(restaurantsAdapter);
+        } else {
+            ArrayList<RestaurantData> currentList = restaurantsAdapter.getList();
+            currentList.clear();
+            currentList.addAll(list);
+            restaurantsAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -230,7 +248,27 @@ public class RestaurantsListActivity2 extends ListActivity implements OnItemClic
         super.onStop();
         unregister();
     }
+
+    public int getType() {
+        return type;
+    }
     
+    @Override
+    public boolean onSearchRequested() {
+        searchEditText.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+        return false;
+    }
+    
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return MenuForActivity.onOptionsItemSelected(item, this);
+    }
+    
+    public boolean onCreateOptionsMenu(Menu mMenu) {
+        return MenuForActivity.onCreateOptionsMenu(mMenu, this);
+    }
+
 }
 
 class NearComparator implements Comparator {
@@ -245,8 +283,6 @@ class NearComparator implements Comparator {
     public int compare(Object o1, Object o2) {
         RestaurantData p1 = (RestaurantData) o1;
         RestaurantData p2 = (RestaurantData) o2;
-        //Double r1 = p1.howNear(latitude, longitude);
-        //Double r2 = p2.howNear(latitude, longitude);
         Float r1 = p1.getDistance();
         Float r2 = p2.getDistance();
         return r1.compareTo(r2);

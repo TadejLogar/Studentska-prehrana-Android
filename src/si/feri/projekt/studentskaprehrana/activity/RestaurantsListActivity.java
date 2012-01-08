@@ -12,7 +12,10 @@ import si.feri.projekt.studentskaprehrana.R.id;
 import si.feri.projekt.studentskaprehrana.R.layout;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,7 +35,7 @@ public class RestaurantsListActivity extends MyListActivity {
         super.onCreate(savedInstanceState);
         start();
     }
-    
+
     public void start() {
         app = (ListApplication) getApplication();
         setListAdapter(app.providersAdapter);
@@ -53,7 +56,8 @@ public class RestaurantsListActivity extends MyListActivity {
                     }
                     app.loadData();
                     finish();
-                    Intent intent = new Intent(RestaurantsListActivity.this, RestaurantsListActivity.class);
+                    Intent intent = new Intent(RestaurantsListActivity.this,
+                            RestaurantsListActivity.class);
                     startActivity(intent);
                 }
             }.start();

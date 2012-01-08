@@ -7,9 +7,11 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import com.sciget.studentmeals.MyPerferences;
 import com.sciget.studentmeals.database.data.FavoritedRestaurantData;
 import com.sciget.studentmeals.database.data.RestaurantData;
 import com.sciget.studentmeals.database.data.RestaurantMenuData;
+import com.sciget.studentmeals.database.data.StudentMealFileData;
 import com.sciget.studentmeals.database.data.StudentMealHistoryData;
 import com.sciget.studentmeals.database.data.StudentMealUserData;
 
@@ -43,10 +45,12 @@ public class Database {
 
     public Database open() throws SQLException {
         if (database == null) {
-            database = databaseHelper.getWritableDatabase();
+            //database = databaseHelper.getWritableDatabase();
 
-            //database = SQLiteDatabase.openOrCreateDatabase(new File("/sdcard/sp.sqlite"), null);
-            //databaseHelper.onCreate(database);
+            database = SQLiteDatabase.openOrCreateDatabase(new File(MyPerferences.getInstance().getDatabasePath()), null);
+            if (!tableExists(database, RestaurantData.NAME)) {
+                databaseHelper.onCreate(database);
+            }
         }
         return this;
     }

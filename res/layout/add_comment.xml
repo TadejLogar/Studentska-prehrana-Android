@@ -4,23 +4,52 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ime" />
+
+    <EditText
+        android:id="@+id/editTextName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Komentar" />
+
     <EditText
         android:id="@+id/editTextComment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.79"
-        android:inputType="textMultiLine"
-        android:gravity="top">
+        android:layout_weight="0.13"
+        android:gravity="top"
+        android:inputType="textMultiLine" >
 
         <requestFocus />
     </EditText>
-
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ocena" />
+
+    <RatingBar
+        android:id="@+id/rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="1" />
+
     <Button
         android:id="@+id/buttonAddComment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Dodaj komentar"
         android:onClick="addComment"
-        />
+        android:text="Dodaj komentar" />
 
 </LinearLayout>

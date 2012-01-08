@@ -43,7 +43,7 @@ public class FavProvidersActivity extends MyListActivity {
 				completeFavList.add(provider);
 			}
 		}
-		favProvidersAdapter = new ProvidersArrayAdapter(this, R.layout.provider_layout2, favList);
+		//favProvidersAdapter = new ProvidersArrayAdapter(this, R.layout.provider_layout2, favList);
 	}
 
 }

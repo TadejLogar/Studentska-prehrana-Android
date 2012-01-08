@@ -23,6 +23,7 @@ public class MyPerferences extends Perferences {
         }
     }
     
+    private Context context;
     private static MyPerferences instatnce;
     
     private Integer userId;
@@ -64,19 +65,22 @@ public class MyPerferences extends Perferences {
         super(context);
         
         if (instatnce == null) {
+            this.context = context;
             instatnce = this;
-
-            StudentMealUserModel userModel = new StudentMealUserModel(context);
-            StudentMealUserData user = userModel.getUser();
-            if (user != null) {
-                setUserId(user.userId);
-                setUserKey(user.key);
-            }
-            
-            String server = getServer();
-            if (server == null || server.length() == 0) {
-                setServer("164.8.221.136");
-            }
+        }
+    }
+    
+    public void setValues() {
+        StudentMealUserModel userModel = new StudentMealUserModel(context);
+        StudentMealUserData user = userModel.getUser();
+        if (user != null) {
+            setUserId(user.userId);
+            setUserKey(user.key);
+        }
+        
+        String server = getServer();
+        if (server == null || server.length() == 0) {
+            setServer("164.8.221.136");
         }
     }
     
@@ -235,5 +239,9 @@ public class MyPerferences extends Perferences {
 
     public String getExternalStoragePath() {
         return Environment.getExternalStorageDirectory().getAbsolutePath() + "/StudentMeals/";
+    }
+    
+    public String getDatabasePath() {
+        return getExternalStoragePath() + "sp.sqlite";
     }
 }

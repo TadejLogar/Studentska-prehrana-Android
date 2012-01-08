@@ -12,26 +12,32 @@ public class StudentMealCommentData extends Data {
     public int id;
     public int userId;
     public int restaurantId;
+    public String name;
+    public int rate;
     public String comment;
     public Timestamp time;
 
-    public StudentMealCommentData(int id, int userId, int restaurantId, String comment, Timestamp time) {
+    public StudentMealCommentData(int id, int userId, int restaurantId, String name, int rate, String comment, Timestamp time) {
         this.id = id;
         this.userId = userId;
         this.restaurantId = restaurantId;
+        this.name = name;
+        this.rate = rate;
         this.comment = comment;
         this.time = time;
     }
 
-    public StudentMealCommentData(int userId, int restaurantId, String comment, Timestamp time) {
+    public StudentMealCommentData(int userId, int restaurantId, String name, int rate, String comment, Timestamp time) {
         this.userId = userId;
         this.restaurantId = restaurantId;
+        this.name = name;
+        this.rate = rate;
         this.comment = comment;
         this.time = time;
     }
 
     public int add(Database db) {
-        return db.update("INSERT INTO " + NAME + " (userId, restaurantId, comment, time) VALUES (?, ?, ?, ?)", new Object[] { userId, restaurantId, comment, time });
+        return db.update("INSERT INTO " + NAME + " (userId, restaurantId, name, rate, comment, time) VALUES (?, ?, ?, ?, ?, ?)", new Object[] { userId, restaurantId, name, rate, comment, time });
     }
 
     @Override
@@ -41,16 +47,12 @@ public class StudentMealCommentData extends Data {
         append("  `id` INTEGER PRIMARY KEY AUTOINCREMENT,\n").
         append("  `userId` INTEGER,\n").
         append("  `restaurantId` INTEGER,\n").
+        append("  `name` text,\n").
+        append("  `rate` INTEGER,\n").
         append("  `comment` text,\n").
         append("  `time` datetime\n").
         append(")").toString();
         db.execSQL(sql);
     }
-
-    @Override
-    public String toString() {
-        return "StudentMealCommentData [id=" + id + ", userId=" + userId
-                + ", restaurantId=" + restaurantId + ", comment=" + comment
-                + ", time=" + time + "]";
-    }
+    
 }

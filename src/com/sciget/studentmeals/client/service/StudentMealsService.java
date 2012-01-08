@@ -156,11 +156,13 @@ public class StudentMealsService extends WebService {
 		return new DataPrimitive(primitive).getString();
 	}
 	
-    public int addComment(String key, int restaurantId, String comment) {
+    public int addComment(String key, int restaurantId, String name, int rate, String comment) {
         setMethodName("addComment");
         prepare();
         addString("key", key);
         addInt("restaurantId", restaurantId);
+        addString("name", name);
+        addInt("rate", rate);
         addString("comment", comment);
         SoapPrimitive primitive = requestPrimitive();
         return new DataPrimitive(primitive).getInt();
@@ -268,6 +270,14 @@ public class StudentMealsService extends WebService {
             }
         }
         return files;
+    }
+    
+    public String iconsZipFileSha1(String hashes) {
+        setMethodName("iconsZipFileSha1");
+        prepare();
+        addString("hashes", hashes);
+        SoapPrimitive primitive = requestPrimitive();
+        return new DataPrimitive(primitive).getString();
     }
 	
 }

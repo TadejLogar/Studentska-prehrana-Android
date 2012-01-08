@@ -3,11 +3,15 @@ package com.sciget.studentmeals.service;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.Vector;
 
 import com.sciget.mvc.MVC;
 import com.sciget.studentmeals.MyPerferences;
 import com.sciget.studentmeals.Perferences;
+import com.sciget.studentmeals.camera.Image;
 import com.sciget.studentmeals.database.data.Data;
+import com.sciget.studentmeals.database.data.StudentMealFileData;
+import com.sciget.studentmeals.database.model.StudentMealUserModel;
 
 import si.feri.projekt.studentskaprehrana.R;
 import si.feri.projekt.studentskaprehrana.activity.DetailsActivity;
@@ -29,6 +33,7 @@ import android.widget.Toast;
 public class UpdateService extends Service {
     public static boolean running;
     public static boolean updated;
+    public static boolean updateRunning;
 
     public boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -55,22 +60,25 @@ public class UpdateService extends Service {
 
     @Override
     public void onCreate() {
-        new MyPerferences(this);
+        if (MyPerferences.getInstance() == null) {
+            new MyPerferences(this);
+            MyPerferences.getInstance().setValues();
+        }
         
-        if (!running) {
-            running = true;
+        if (isOnline()) {
             System.out.println("service studentmeals create");
             
             mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            
-            final String dir = Environment.getExternalStorageDirectory() + "/StudentMeals/";
+
+            final String dir = MyPerferences.getInstance().getExternalStoragePath();
+            final String imagesFile = "imgs.zip";
             new File(dir).mkdir();
-            final File zipFile = new File(dir + "imgs.zip");
+            final File zipFile = new File(dir + imagesFile);
             if (!zipFile.exists()) {
                 new Thread() {
                     public void run() {
                         try {
-                            MVC.downloadToFile(DetailsActivity.getFileDownloadUrl() + "imgs.zip", zipFile);
+                            MVC.downloadToFile(DetailsActivity.getFileDownloadUrl() + imagesFile, zipFile);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -90,34 +98,32 @@ public class UpdateService extends Service {
                 }
                 
                 public void run() {
-                    Timestamp last = MyPerferences.getInstance().getLastRestaurantsUpdate();
-                    if (last != null) {
-                        long last1 = last.getTime() + (24 * 3600 * 1000);
-                        long now = Data.time().getTime();
-                        if (last1 > now) {
-                            return;
+                    if (!updateRunning) {
+                        updateRunning = true;
+                        
+                        Timestamp last = MyPerferences.getInstance().getLastRestaurantsUpdate();
+                        if (last != null) {
+                            long last1 = last.getTime() + (24 * 3600 * 1000);
+                            long now = Data.time().getTime();
+                            if (last1 > now) {
+                                return;
+                            }
                         }
+                        
+                        sendMessage("UPDATING");                
+                        displayNotification("UPDATING", "UPDATING", "UPDATING", UpdateService.class, 0);
+        
+        
+                        UpdateDataTask updateDataTask = new UpdateDataTask(UpdateService.this);
+                        updateDataTask.all();
+                        updated = true;
+                        MyPerferences.getInstance().setLastRestaurantsUpdate(Data.time());
+                        
+                        sendMessage("DONE");
+                        displayNotification("DONE", "DONE", "DONE", UpdateService.class, 1);
+                        
+                        updateRunning = false;
                     }
-                    
-                    while (!isOnline()) {
-                        try {
-                            Thread.sleep(60 * 1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    
-                    sendMessage("UPDATING");                
-                    displayNotification("UPDATING", "UPDATING", "UPDATING", UpdateService.class, 0);
-    
-    
-                    UpdateDataTask updateDataTask = new UpdateDataTask(UpdateService.this);
-                    updateDataTask.all();
-                    updated = true;
-                    MyPerferences.getInstance().setLastRestaurantsUpdate(Data.time());
-                    
-                    sendMessage("DONE");
-                    displayNotification("DONE", "DONE", "DONE", UpdateService.class, 1);
                 }
             }.start();
         }
@@ -131,6 +137,26 @@ public class UpdateService extends Service {
     @Override
     public void onStart(Intent intent, int startid) {
         System.out.println("service studentmeals start");
+        
+        if (isOnline()) {
+            new Thread() {
+                public void run() {
+                    StudentMealUserModel userModel = new StudentMealUserModel(UpdateService.this);
+                    Vector<StudentMealFileData> list = userModel.getFilesData();
+                    for (StudentMealFileData file : list) {
+                        if (!file.done) {
+                            Image image = new com.sciget.studentmeals.camera.Image(file);
+                            if (image.isDone() || image.sha1 == null) { // če je sha1 == null, datoteka ne obstaja - napako -> zato izbriše
+                                userModel.setFileDone(file.id);
+                            } else {
+                                userModel.setFileHashes(file.id, image.sha1, image.smallSha1);
+                            }
+                        }
+                    }
+                    userModel.close();
+                }
+            }.start();
+        }
     }
     
     public void displayNotification(String extra, String contentTitle, String contentText, Class<?> cls, int id) {     

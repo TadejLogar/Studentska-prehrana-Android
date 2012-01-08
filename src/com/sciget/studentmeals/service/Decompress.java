@@ -14,7 +14,6 @@ public class Decompress {
     public Decompress(File zipFile, String location) {
         _zipFile = zipFile;
         _location = location;
-
         _dirChecker("");
     }
 
@@ -29,14 +28,17 @@ public class Decompress {
                 if (ze.isDirectory()) {
                     _dirChecker(ze.getName());
                 } else {
-                    FileOutputStream fout = new FileOutputStream(_location
-                            + ze.getName());
-                    for (int c = zin.read(); c != -1; c = zin.read()) {
-                        fout.write(c);
+                    File file = new File(_location + ze.getName());
+                    if (!file.exists()) {
+                        FileOutputStream fout = new FileOutputStream(file);
+                        byte data[] = new byte[1024];
+                        int count;
+                        while ((count = zin.read(data, 0, 1024)) != -1) {
+                            fout.write(data, 0, count);
+                        }
+                        fout.close();
                     }
-
                     zin.closeEntry();
-                    fout.close();
                 }
 
             }
@@ -44,12 +46,10 @@ public class Decompress {
         } catch (Exception e) {
             Log.e("Decompress", "unzip", e);
         }
-
     }
 
     private void _dirChecker(String dir) {
         File f = new File(_location + dir);
-
         if (!f.isDirectory()) {
             f.mkdirs();
         }

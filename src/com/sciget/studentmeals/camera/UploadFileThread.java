@@ -14,6 +14,7 @@ public class UploadFileThread extends Thread {
 	private String ip;
 	private File file;
 	private String sha1;
+    private boolean done;
 	
 	public UploadFileThread(String ip, File file, String sha1) {
 		this.ip = ip;
@@ -24,9 +25,14 @@ public class UploadFileThread extends Thread {
 	public void run() {
 		try {
 			send();
+			done = true;
 		} catch (IOException e) {
 			Log.info(e.toString());
 		}
+	}
+	
+	public boolean isDone() {
+	    return done;
 	}
 	
 	public void send() throws IOException {

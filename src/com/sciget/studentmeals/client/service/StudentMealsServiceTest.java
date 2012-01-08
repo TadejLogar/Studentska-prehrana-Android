@@ -128,13 +128,15 @@ public class StudentMealsServiceTest {
     public void testAddComment() {
         int restaurantId = 1;
         String commentStr = "test comment";
+        String name = "neo";
+        int rate = 5;
         
-        meals.addComment(key, restaurantId, commentStr);
+        meals.addComment(key, restaurantId, name, rate, commentStr);
         Vector<CommentData> comments = meals.getComments(restaurantId);
         assertTrue(comments.size() > 0);
         boolean pass = false;
         for (CommentData comment : comments) {
-            if (comment.restaurantId == restaurantId && comment.comment.equals(commentStr)) {
+            if (comment.restaurantId == restaurantId && comment.comment.equals(commentStr) && comment.rate == rate) {
                 pass = true;
             }
         }
@@ -173,6 +175,12 @@ public class StudentMealsServiceTest {
         Vector<FileData> files = meals.restaurantFiles(restaurantId);
         assertTrue(files.size() > 0);
         assertTrue(new FileData(1, restaurantId, 0, type, smallHash, hash, false, false, fileKey).equals(files.get(0)));
+    }
+    
+    @Test
+    public void testIconsZipFileSha1() {
+        String zipHash = meals.iconsZipFileSha1("1a1b59ac2cf9645c2cd8b37c64accf11341fdcda,0ae9c92d6be596a18883a6411eeeaa196fe94350");
+        assertTrue(zipHash.length() == 40);
     }
 
 }

@@ -5,18 +5,24 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Vector;
 
 import com.sciget.mvc.MVC;
 import com.sciget.studentmeals.MyPerferences;
 import com.sciget.studentmeals.Perferences;
+import com.sciget.studentmeals.activity.RestaurantDetailsActivity;
 import com.sciget.studentmeals.client.StudentMealsWebServiceClientActivity;
 import com.sciget.studentmeals.client.service.StudentMealsService;
 import com.sciget.studentmeals.client.service.data.FileData;
+import com.sciget.studentmeals.database.data.StudentMealFileData;
+import com.sciget.studentmeals.database.model.StudentMealUserModel;
+import com.sciget.studentmeals.service.UpdateService;
 
 import si.feri.projekt.studentskaprehrana.R;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -57,7 +63,7 @@ public class CameraActivity extends Activity {
 		
         Bundle extras = getIntent().getExtras(); 
         if (extras != null) {
-            this.restaurantId = extras.getInt("restaurantId");
+            this.restaurantId = extras.getInt(RestaurantDetailsActivity.RESTAURANT_ID_KEY);
         }
 	}
 	
@@ -108,97 +114,41 @@ public class CameraActivity extends Activity {
 	};
 	
 	public PictureCallback jpegCallback = new PictureCallback() {
-		private File image;
-		private File smallImage;
-		private String randomFileKey;
-		private String smallSha1;
-		private String sha1;
-		private String userKey;
 		
 		public void onPictureTaken(byte[] data, Camera camera) {
 		    muteMusicAudio(false);
 		    
-			File dir = new File(Environment.getExternalStorageDirectory() + "/StudentMeals/");
-			dir.mkdirs();
-			
-			String name = "img" + System.currentTimeMillis();
-			image = new File(dir.getAbsolutePath() + "/" + name + ".jpg");
-			smallImage = new File(dir.getAbsolutePath() + "/" + name + ".small.jpg");
-			FileOutputStream outStream = null;
+		    File dir = new File(MyPerferences.getInstance().getExternalStoragePath());
+		    dir.mkdirs();
 
-			try {
-				outStream = new FileOutputStream(image);
-				outStream.write(data);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				try {
-					outStream.close();
-				} catch (IOException e) {}
-			}
-
-			resize(image, smallImage, 512);
-			
-			randomFileKey = MVC.random(40);
-            smallSha1 = Security.fileSha1(smallImage);
-            sha1 = Security.fileSha1(image);
-            userKey = MyPerferences.getInstance().getUserKey();
-			
-			upload(MyPerferences.getInstance().getServer());
-			//upload(Perferences.SERVER2);
-
-			destroyPreview();
-			createPreview();
-			
-			finish();
-		}
-		
-		private void upload(String ip) {
-		    StudentMealsService meals = new StudentMealsService();
-		    meals.uploadRestaurantFile(userKey, restaurantId, smallSha1, FileData.FileType.IMAGE, FileData.Size.SMALL, randomFileKey);
-		    meals.uploadRestaurantFile(userKey, restaurantId, sha1, FileData.FileType.IMAGE, FileData.Size.ORIGINAL, randomFileKey);
+		    String fileKey = MVC.random(40);
+		    File image = new File(dir.getAbsolutePath() + "/" + fileKey);
+		    FileOutputStream outStream = null;
+		    try {
+		        outStream = new FileOutputStream(image);
+		        outStream.write(data);
+		    } catch (FileNotFoundException e) {
+		        e.printStackTrace();
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		    } finally {
+		        try {
+		            outStream.close();
+		        } catch (IOException e) {}
+		    }
 		    
-			new UploadFileThread(ip, smallImage, smallSha1).start();
-			new UploadFileThread(ip, image, sha1).start();
+            StudentMealUserModel userModel = new StudentMealUserModel(CameraActivity.this);
+            userModel.addImageFileData(restaurantId, fileKey);
+            userModel.getFilesData();
+            userModel.close();
+            
+            destroyPreview();
+            createPreview();
+            
+            Intent startServiceIntent = new Intent(getBaseContext(), UpdateService.class);
+            getBaseContext().startService(startServiceIntent);
+            
+            finish();
 		}
 	};
-	
-	private void resize(File file, File small, int maxSize) {
-		Bitmap bitmap = decodeFile(file, maxSize);
-		try {
-			FileOutputStream out = new FileOutputStream(small);
-			bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		bitmap.recycle();
-		bitmap = null;
-	}
-	
-	private Bitmap decodeFile(File f, int maxSize) {
-	    Bitmap b = null;
-	    try {
-	        BitmapFactory.Options o = new BitmapFactory.Options();
-	        o.inJustDecodeBounds = true;
-
-	        FileInputStream fis = new FileInputStream(f);
-	        BitmapFactory.decodeStream(fis, null, o);
-	        fis.close();
-
-	        int scale = 1;
-	        if (o.outHeight > maxSize || o.outWidth > maxSize) {
-	            scale = (int)Math.pow(2, (int) Math.round(Math.log(maxSize / (double) Math.max(o.outHeight, o.outWidth)) / Math.log(0.5)));
-	        }
-
-	        BitmapFactory.Options o2 = new BitmapFactory.Options();
-	        o2.inSampleSize = scale;
-	        fis = new FileInputStream(f);
-	        b = BitmapFactory.decodeStream(fis, null, o2);
-	        fis.close();
-	    } catch (IOException e) {
-	    }
-	    return b;
-	}
 }

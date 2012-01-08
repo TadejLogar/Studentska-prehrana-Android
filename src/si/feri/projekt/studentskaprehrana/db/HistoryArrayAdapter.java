@@ -5,6 +5,7 @@ import java.util.List;
 import com.sciget.studentmeals.database.data.Data;
 import com.sciget.studentmeals.database.data.RestaurantMenuData;
 import com.sciget.studentmeals.database.data.StudentMealHistoryData;
+import com.sciget.studentmeals.helper.Helper;
 
 import si.feri.projekt.studentskaprehrana.R;
 import android.content.Context;
@@ -55,7 +56,7 @@ public class HistoryArrayAdapter extends ArrayAdapter<StudentMealHistoryData> {
 		}
 		
 		// Bind the data efficiently with the holder.
-		holder.food1.setText(Data.toString(tmp.time) + ": " + tmp.provider);
+		holder.food1.setText(Helper.toSloTime(tmp.time) + ": " + tmp.provider);
 		holder.food2.setText(tmp.fee + " €");
 		//holder.icon.setImageBitmap((position & 1) == 1 ? mIcon1 : mIcon2);
 		return convertView;

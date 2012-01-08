@@ -3,6 +3,7 @@ package com.sciget.studentmeals.database;
 import com.sciget.studentmeals.database.data.FavoritedRestaurantData;
 import com.sciget.studentmeals.database.data.RestaurantData;
 import com.sciget.studentmeals.database.data.RestaurantMenuData;
+import com.sciget.studentmeals.database.data.StudentMealFileData;
 import com.sciget.studentmeals.database.data.StudentMealHistoryData;
 import com.sciget.studentmeals.database.data.StudentMealUserData;
 
@@ -33,6 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         new StudentMealUserData().create(db);
         new RestaurantMenuData().create(db);
         new StudentMealHistoryData().create(db);
+        new StudentMealFileData().create(db);
     }
 
     @Override
