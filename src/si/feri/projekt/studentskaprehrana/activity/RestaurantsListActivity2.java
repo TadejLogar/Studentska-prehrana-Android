@@ -14,6 +14,7 @@ import com.sciget.studentmeals.MainApplication;
 import com.sciget.studentmeals.MyPerferences;
 import com.sciget.studentmeals.activity.RestaurantDetailsActivity;
 import com.sciget.studentmeals.database.data.RestaurantData;
+import com.sciget.studentmeals.database.model.FavoritedRestaurantModel;
 import com.sciget.studentmeals.database.model.StudentMealUserModel;
 
 import android.app.ListActivity;
@@ -34,6 +35,7 @@ import android.widget.EditText;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
 public class RestaurantsListActivity2 extends ListActivity implements OnItemClickListener {
     public class Type {
@@ -49,12 +51,14 @@ public class RestaurantsListActivity2 extends ListActivity implements OnItemClic
     private int type;
     private String query;
     
+    private ListView restaurantsListView;
     private EditText searchEditText;
     private ImageButton allImageButton;
     private ImageButton nearImageButton;
     private ImageButton favoritesImageButton;
     private LinearLayout typesLinearLayout;
     private Comparator<? super RestaurantData> nearComparator;
+    private boolean goToTop;
     
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +71,7 @@ public class RestaurantsListActivity2 extends ListActivity implements OnItemClic
             type = savedInstanceState.getInt(Type.KEY);
         }
         setRestaurantsAdapter(type);
+        application.setRestaurantsListActivity(this);
     }
 
     private void setListeners() {
@@ -104,8 +109,9 @@ public class RestaurantsListActivity2 extends ListActivity implements OnItemClic
     }
 
     private void setViews() {
+        restaurantsListView = (ListView) findViewById(android.R.id.list);
         searchEditText = (EditText) findViewById(R.id.editTextSearch);
-        allImageButton = (ImageButton) findViewById(R.id.all);
+        allImageButton = (ImageButton) findViewById(R.id.all2);
         nearImageButton = (ImageButton) findViewById(R.id.near);
         favoritesImageButton = (ImageButton) findViewById(R.id.fav);
         typesLinearLayout = (LinearLayout) findViewById(R.id.linearLayoutTypes);
@@ -134,12 +140,26 @@ public class RestaurantsListActivity2 extends ListActivity implements OnItemClic
             }
         });
         
-        nearComparator = new NearComparator(MyPerferences.getInstance().getLocation());
+        nearComparator = new NearComparator();
+    }
+    
+    public void update() {
+        runOnUiThread(new Runnable() {
+            
+            @Override
+            public void run() {
+                setRestaurantsAdapter(type);
+            }
+        });
     }
 
     private void setRestaurantsAdapter(int type) {
         if (type == 0) {
             type = Type.ALL;
+        }
+        
+        if (type != this.type) {
+            goToTop = true;
         }
         
         this.type = type;
@@ -167,16 +187,14 @@ public class RestaurantsListActivity2 extends ListActivity implements OnItemClic
                 Collections.sort(list, nearComparator);
             }
         } else if (type == Type.FAVORITES) {
-            StudentMealUserModel userModel = new StudentMealUserModel(this);
-            Vector<Integer> favoritesList = userModel.getFavorites(MyPerferences.getInstance().getUserId());
-            userModel.close();
+            FavoritedRestaurantModel favoritesModel = new FavoritedRestaurantModel(this);
+            Vector<Integer> favoritesList = favoritesModel.getFavorites(MyPerferences.getInstance().getUserId());
+            favoritesModel.close();
             
-            if (favoritesList.isEmpty()) {
-                list = new ArrayList<RestaurantData>();
-            } else {
-                list = new ArrayList<RestaurantData>();
+            list = new ArrayList<RestaurantData>();
+            if (!favoritesList.isEmpty()) {
                 for (RestaurantData restaurant : restaurants) {
-                    if (list.contains(restaurant.getId())) {
+                    if (favoritesList.contains(restaurant.getId())) {
                         list.add(restaurant);
                     }
                 }
@@ -200,6 +218,12 @@ public class RestaurantsListActivity2 extends ListActivity implements OnItemClic
             currentList.addAll(list);
             restaurantsAdapter.notifyDataSetChanged();
         }
+        
+        if (goToTop && list.size() > 0) {
+            restaurantsListView.setSelection(0);
+        }
+        
+        goToTop = false;
     }
 
     @Override
@@ -272,14 +296,6 @@ public class RestaurantsListActivity2 extends ListActivity implements OnItemClic
 }
 
 class NearComparator implements Comparator {
-    private double latitude;
-    private double longitude;
-    
-    public NearComparator(MyPerferences.Location location) {
-        this.latitude = location.latitude;
-        this.longitude = location.longitude;
-    }
-    
     public int compare(Object o1, Object o2) {
         RestaurantData p1 = (RestaurantData) o1;
         RestaurantData p2 = (RestaurantData) o2;

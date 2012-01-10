@@ -61,10 +61,6 @@ public class StudentMealUserModel extends Model {
         return null;
     }
 
-    public Vector<Integer> getFavorites(int userId) {
-        return new Vector<Integer>(); // TODO: novo, popravi
-    }
-
     public boolean isRestaurantFavorited(int restaurantId) {
         int val = getValue("SELECT id FROM " + FavoritedRestaurantData.NAME + " WHERE restaurantId = " + restaurantId + " AND userId = " + MyPerferences.getInstance().getUserId());
         return val != -1;
@@ -102,7 +98,7 @@ public class StudentMealUserModel extends Model {
     }
     
     public Vector<StudentMealFileData> getFilesData() {
-        Cursor cursor = rawQuery("SELECT id, restaurantId, userId, type, smallHash, hash, smallDone, done, fileKey FROM " + StudentMealFileData.NAME);
+        Cursor cursor = rawQuery("SELECT id, restaurantId, userId, type, smallHash, hash, smallDone, done, fileKey FROM " + StudentMealFileData.NAME + " WHERE done = 0");
         Vector<StudentMealFileData> list = new Vector<StudentMealFileData>();
         while (cursor.moveToNext()) {
             list.add(new StudentMealFileData(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3), cursor.getString(4), cursor.getString(5), cursor.getInt(6), cursor.getInt(7), cursor.getString(8)));
@@ -112,8 +108,8 @@ public class StudentMealUserModel extends Model {
     }
     
     public void setFileDone(int id) {
-        //update("UPDATE " + StudentMealFileData.NAME + " SET done = 1, smallDone = 1 WHERE id = " + id);
-        update("DELETE FROM " + StudentMealFileData.NAME + " WHERE id = " + id);
+        update("UPDATE " + StudentMealFileData.NAME + " SET done = 1, smallDone = 1 WHERE id = " + id);
+        //update("DELETE FROM " + StudentMealFileData.NAME + " WHERE id = " + id);
     }
 
     public void addImageFileData(int restaurantId, String fileKey) {

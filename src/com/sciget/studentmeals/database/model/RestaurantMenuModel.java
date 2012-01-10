@@ -49,4 +49,9 @@ public class RestaurantMenuModel extends Model {
         cursor.close();
         return menus;
     }
+
+    public boolean hasMenus(int restaurantId) {
+        int value = getValue("SELECT id FROM " + RestaurantMenuData.NAME + " WHERE restaurantId = " + restaurantId + " LIMIT 1");
+        return value != -1;
+    }
 }

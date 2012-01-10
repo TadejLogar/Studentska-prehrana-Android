@@ -8,9 +8,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 import si.feri.projekt.studentskaprehrana.R;
+import si.feri.projekt.studentskaprehrana.activity.RestaurantsListActivity2;
 
 import com.sciget.studentmeals.database.data.RestaurantData;
+import com.sciget.studentmeals.database.data.RestaurantMenuData;
 import com.sciget.studentmeals.database.data.StudentMealUserData;
+import com.sciget.studentmeals.database.model.RestaurantMenuModel;
 import com.sciget.studentmeals.database.model.RestaurantModel;
 import com.sciget.studentmeals.database.model.StudentMealUserModel;
 import com.sciget.studentmeals.service.UpdateService;
@@ -31,6 +34,7 @@ import android.util.Log;
 public class MainApplication extends Application {
     private boolean first = true;
     private ArrayList<RestaurantData> completeRestaurantsList;
+    private RestaurantsListActivity2 restaurantsListActivity;
     
     public void onCreate() {
         super.onCreate();
@@ -44,19 +48,18 @@ public class MainApplication extends Application {
     
     private void initialization() {
         new MyPerferences(this);
-        File dir = new File(MyPerferences.getInstance().getExternalStoragePath());
+        File dir = new File(MyPerferences.getExternalStoragePath());
         if (!dir.isDirectory()) {
             dir.mkdir();
         }
         copyDatabase();
-        MyPerferences.getInstance().setValues();
         startService(new Intent(this, UpdateService.class));
         new LocationTask().execute();
         loadRestaurantsList();
     }
     
     private void copyDatabase() {
-        File file = new File(MyPerferences.getInstance().getDatabasePath());
+        File file = new File(MyPerferences.getDatabasePath());
         if (file.exists()) return;
         
         InputStream in = getResources().openRawResource(R.raw.database);
@@ -84,14 +87,33 @@ public class MainApplication extends Application {
                 e.printStackTrace();
             }
         }
+        try {
+            Runtime.getRuntime().exec("chmod 777 " + file.getAbsolutePath());
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+    }
+    
+    public void setRestaurantsListActivity(RestaurantsListActivity2 restaurantsListActivity) {
+        this.restaurantsListActivity = restaurantsListActivity;
     }
 
     private void loadRestaurantsList() {
         if (completeRestaurantsList != null) return;
-        
+        updateRestaurantsList();
+    }
+    
+    private void updateRestaurantsList() {
         RestaurantModel restaurantModel = new RestaurantModel(this);
         completeRestaurantsList = restaurantModel.getAllRestaurants();
         restaurantModel.close();
+    }
+    
+    public void update() {
+        if (restaurantsListActivity != null) {
+            updateRestaurantsList();
+            restaurantsListActivity.update();
+        }
     }
     
     public ArrayList<RestaurantData> getCompleteRestaurantsList() {
@@ -101,7 +123,11 @@ public class MainApplication extends Application {
 
     public int getSubsidiesNumber() {
         StudentMealUserData user = new StudentMealUserModel(this).getUserAll();
-        return user.remainingSubsidies;
+        if (user == null) {
+            return -1;
+        } else {
+            return user.remainingSubsidies;
+        }
     }
 
     public String getLastProvider() {
@@ -112,7 +138,6 @@ public class MainApplication extends Application {
         public void onLocationChanged(Location location) {
             if (location != null) {
                 MyPerferences.getInstance().setLocation(new MyPerferences.Location(location.getLatitude(), location.getLongitude()));
-                //changeMap(location);
             }
         }
 
@@ -210,9 +235,20 @@ public class MainApplication extends Application {
         return result;
     }
     
+    public boolean hasMenus(int restaurantId) {
+        RestaurantMenuModel menuModel = new RestaurantMenuModel(this);
+        boolean menus = menuModel.hasMenus(restaurantId);
+        menuModel.close();
+        return menus;
+    }
+    
     public void setRestaurantFavorited(int restaurantId, boolean favorited) {
         StudentMealUserModel userModel = new StudentMealUserModel(this);
         userModel.setRestaurantFavorited(restaurantId, favorited);
         userModel.close();
+        
+        if (restaurantsListActivity != null) {
+            restaurantsListActivity.update();
+        }
     }
 }

@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.util.Vector;
 
 import com.sciget.mvc.MVC;
+import com.sciget.studentmeals.MainApplication;
 import com.sciget.studentmeals.MyPerferences;
 import com.sciget.studentmeals.Perferences;
 import com.sciget.studentmeals.camera.Image;
@@ -62,7 +63,6 @@ public class UpdateService extends Service {
     public void onCreate() {
         if (MyPerferences.getInstance() == null) {
             new MyPerferences(this);
-            MyPerferences.getInstance().setValues();
         }
         
         if (isOnline()) {
@@ -70,7 +70,7 @@ public class UpdateService extends Service {
             
             mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-            final String dir = MyPerferences.getInstance().getExternalStoragePath();
+            final String dir = MyPerferences.getExternalStoragePath();
             final String imagesFile = "imgs.zip";
             new File(dir).mkdir();
             final File zipFile = new File(dir + imagesFile);

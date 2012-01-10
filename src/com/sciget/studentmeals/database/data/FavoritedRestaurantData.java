@@ -16,12 +16,12 @@ public class FavoritedRestaurantData extends Data {
     
     public FavoritedRestaurantData() {}
     
-    /*public FavoritedRestaurantData(int id, int userId, int restaurantId, Timestamp time) {
+    public FavoritedRestaurantData(int id, int userId, int restaurantId, Timestamp time) {
         this.id = id;
         this.userId = userId;
         this.restaurantId = restaurantId;
         this.time = time;
-    }*/
+    }
     
     public FavoritedRestaurantData(int userId, int restaurantId, Timestamp time) {
         this.userId = userId;

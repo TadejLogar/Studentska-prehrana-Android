@@ -83,13 +83,13 @@ public class DetailsActivity extends MainActivity {
         address = (TextView) findViewById(R.id.textViewAddress);
         phone = (TextView) findViewById(R.id.textViewPhone);
         fee = (TextView) findViewById(R.id.textViewFee);
-        time = (TextView) findViewById(R.id.textViewOpenTime);
-        fav = (ImageButton) findViewById(R.id.imageButtonFav);
+        //time = (TextView) findViewById(R.id.textViewOpenTime);
+        //fav = (ImageButton) findViewById(R.id.imageButtonFav);
         menuButton = (Button) findViewById(R.id.buttonMenu);
         comments = (TextView) findViewById(R.id.textViewComments);
         addButton = (Button) findViewById(R.id.buttonAdd);
         imagesLinearLayout = (LinearLayout) findViewById(R.id.linearLayoutImages);
-        properties = (TextView) findViewById(R.id.textViewProperties);
+        //properties = (TextView) findViewById(R.id.textViewProperties);
         
         registerForContextMenu(addButton);
         
@@ -304,8 +304,8 @@ public class DetailsActivity extends MainActivity {
         }
 
         protected void onProgressUpdate(Bitmap... img) {
-            ImageView i = (ImageView) findViewById(R.id.mapImage);
-            i.setImageBitmap(img[0]);
+            //ImageView i = (ImageView) findViewById(R.id.mapImage);
+            //i.setImageBitmap(img[0]);
         }
 
         public void loadMapImage(String address) {

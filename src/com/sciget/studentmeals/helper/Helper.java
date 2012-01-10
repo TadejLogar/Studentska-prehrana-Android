@@ -29,6 +29,14 @@ public class Helper {
         }
     }
     
+    public static String data(String title, String value) {
+        if (value != null && value.length() > 0) {
+            return title + ": " + value;
+        } else {
+            return "";
+        }
+    }
+    
     public static String toSloTime(Timestamp time) {
         if (time == null) return "";
         Calendar cal = Calendar.getInstance();

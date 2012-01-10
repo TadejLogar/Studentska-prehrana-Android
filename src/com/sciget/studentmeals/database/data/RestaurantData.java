@@ -308,6 +308,7 @@ public class RestaurantData extends Data {
             return "";
         }
     }
+    
     public String getOpenTimes() {
         StringBuilder str = new StringBuilder();
         
@@ -323,6 +324,30 @@ public class RestaurantData extends Data {
             str.append("Nedelja: " + getOpenSundayFrom() + " - " + getOpenSundayTo());
         }
         
+        return str.toString();
+    }
+    
+    public String getOpenTimeWorkday() {
+        return generateTime("Delovnik", getOpenWorkdayFrom(), getOpenWorkdayTo());
+    }
+    
+    public String getOpenTimeSaturday() {
+        return generateTime("Sobota", getOpenSaturdayFrom(), getOpenSaturdayTo());
+    }
+    
+    public String getOpenTimeSunday() {
+        return generateTime("Nedelja", getOpenSundayFrom(), getOpenSundayTo());
+    }
+    
+    private String generateTime(String day, String from, String to) {
+        StringBuilder str = new StringBuilder();
+        str.append(day);
+        str.append(": ");
+        if (from == null) {
+            str.append("zaprto");
+        } else {
+            str.append(from + " - " + to);
+        }
         return str.toString();
     }
     

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Vector;
 
 import com.sciget.mvc.MVC;
+import com.sciget.studentmeals.MainApplication;
 import com.sciget.studentmeals.MyPerferences;
 import com.sciget.studentmeals.client.service.StudentMealsService;
 import com.sciget.studentmeals.client.service.data.HistoryData;
@@ -66,6 +67,12 @@ public class UpdateDataTask {
         Vector<RestaurantData> list = meals.restaurants();
         Log.e("A", "DOWNLOADED");
         restaurantModel.addRestaurants(list);
+        
+        if (context instanceof UpdateService) {
+            UpdateService updateService = (UpdateService) context;
+            MainApplication application = (MainApplication) updateService.getApplication();
+            application.update();
+        }
     }
     
     public void updateDailyMenus() {

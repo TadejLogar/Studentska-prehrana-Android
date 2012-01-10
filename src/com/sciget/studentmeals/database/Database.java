@@ -47,7 +47,7 @@ public class Database {
         if (database == null) {
             //database = databaseHelper.getWritableDatabase();
 
-            database = SQLiteDatabase.openOrCreateDatabase(new File(MyPerferences.getInstance().getDatabasePath()), null);
+            database = SQLiteDatabase.openOrCreateDatabase(new File(MyPerferences.getDatabasePath()), null);
             if (!tableExists(database, RestaurantData.NAME)) {
                 databaseHelper.onCreate(database);
             }

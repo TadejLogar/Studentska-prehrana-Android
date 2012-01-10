@@ -22,6 +22,7 @@ import com.sciget.studentmeals.camera.Security;
 import com.sciget.studentmeals.client.service.StudentMealsService;
 import com.sciget.studentmeals.client.service.data.CommentData;
 import com.sciget.studentmeals.client.service.data.FileData;
+import com.sciget.studentmeals.client.service.data.RestaurantData.Features;
 import com.sciget.studentmeals.database.Database;
 import com.sciget.studentmeals.database.data.RestaurantData;
 import com.sciget.studentmeals.database.data.StudentMealCommentData;
@@ -31,6 +32,7 @@ import com.sciget.studentmeals.task.RestaurantMapImageTask;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -48,25 +50,43 @@ import android.widget.TextView;
 public class RestaurantDetailsActivity extends MainActivity {
     public static final String RESTAURANT_ID_KEY = "restaurantId";
     
+    private class Icon {
+        public ImageView celiac; // celiakiji prijazni obroki
+        public ImageView delivery; // dostava
+        public ImageView mealAssembly; // možnost sestavljanja obrokov
+        public ImageView salad; // solatni bar
+        public ImageView invalid; // dostop za invalide
+        public ImageView invalidWC; // dostop za invalide (WC)
+        public ImageView vegetarian; // vegetarijanska prehrana
+        public ImageView weekend; // odprto ob vikendih
+    }
+    
     private MainApplication application;
     private RestaurantData provider;
     
     private TextView nameTextView;
     private TextView addressTextView;
     private TextView phoneTextView;
+    private TextView messageTextView;
     private TextView feeTextView;
-    private TextView timeTextView;
+    private TextView timeWorkdayTextView;
+    private TextView timeSaturdayTextView;
+    private TextView timeSundayTextView;
+    private LinearLayout iconsPropertiesLinearLayout; // linearLayoutPropertiesIcons
+    private LinearLayout openTimeslinearLayout;
     private ImageButton favoriteImageButton;
     private Button menuButton;
     private TextView commentsTextView;
+    private TextView distanceTextView;
     private LinearLayout imagesLinearLayout;
     private Button addButton;
-    private TextView propertiesTextView;
+    //private TextView propertiesTextView;
     private ImageView mapImageView;
+    private Icon icon;
     
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.provider);
+        setContentView(R.layout.provider3);
         application = (MainApplication) getApplication();
         setViews();
         Bundle extras = getIntent().getExtras();
@@ -79,22 +99,45 @@ public class RestaurantDetailsActivity extends MainActivity {
         addressTextView.setText(provider.getFullAddress());
         String providerStr = provider.getFullPhone();
         if (providerStr == null) {
-            phoneTextView.setText(providerStr);
+            phoneTextView.setVisibility(View.GONE);
         } else {
-            phoneTextView.setVisibility(View.GONE); 
+            phoneTextView.setText(providerStr);
         }
-        feeTextView.setText("Doplačilo: " + provider.getEuroFee());
-        timeTextView.setText(provider.getOpenTimes());
-        String distance = Helper.distanceInMeters(provider.getDistance());
-        distance = Helper.dataInNewLine("Razdalja", distance);
-        propertiesTextView.setText(provider.getFeatures().toString() + distance);
+        String message = provider.message;
+        if (message != null && message.length() > 0 && !message.equals("anyType{}")) {
+            messageTextView.setText(Helper.data("Obvestilo", message));
+        } else {
+            messageTextView.setVisibility(View.GONE); 
+        }
+        feeTextView.setText(provider.getEuroFee());
+        int day = MyPerferences.getInstance().getOpenTimeType();
+        if (day == MyPerferences.Day.WORKDAY) {
+            timeWorkdayTextView.setTypeface(null, Typeface.BOLD);
+        } else if (day == MyPerferences.Day.WORKDAY) {
+            timeSaturdayTextView.setTypeface(null, Typeface.BOLD);
+        } else if (day == MyPerferences.Day.WORKDAY) {
+            timeSundayTextView.setTypeface(null, Typeface.BOLD);
+        }
+        timeWorkdayTextView.setText(provider.getOpenTimeWorkday());
+        timeSaturdayTextView.setText(provider.getOpenTimeSaturday());
+        timeSundayTextView.setText(provider.getOpenTimeSunday());
+        
+        String distance = Helper.dataInNewLine("Razdalja", Helper.distanceInMeters(provider.getDistance()));
+        distanceTextView.setText(Helper.data("Razdalja", Helper.distanceInMeters(provider.getDistance())));
+        //String message = Helper.dataInNewLine("Obvestilo", provider.message);
+        //propertiesTextView.setText(provider.getFeatures().toString() + distance + message);
+        setIconsData();
         setMapImage();
+        setFavoriteIcon(application.isRestaurantFavorited(provider.getId()));
+        if (!application.hasMenus(provider.getId())) {
+            menuButton.setVisibility(View.GONE);
+        }
         new DownloadRestaurantCommentsTask().execute();
         new DownloadRestaurantImagesTask().execute();
     }
 
     private void setMapImage() {
-        RestaurantMapImageTask task = new RestaurantMapImageTask(application, provider.id, mapImageView, provider.mapImageSha1, provider.address);
+        RestaurantMapImageTask task = new RestaurantMapImageTask(application, provider.id, mapImageView, provider.mapImageSha1, provider.address + ", " + provider.post);
         task.execute();
     }
 
@@ -107,14 +150,20 @@ public class RestaurantDetailsActivity extends MainActivity {
         addressTextView = (TextView) findViewById(R.id.textViewAddress);
         phoneTextView = (TextView) findViewById(R.id.textViewPhone);
         feeTextView = (TextView) findViewById(R.id.textViewFee);
-        timeTextView = (TextView) findViewById(R.id.textViewOpenTime);
-        favoriteImageButton = (ImageButton) findViewById(R.id.imageButtonFav);
+        openTimeslinearLayout = (LinearLayout) findViewById(R.id.linearLayoutOpenTimes);
+        timeWorkdayTextView = (TextView) findViewById(R.id.textViewOpenTimeWorkday);
+        timeSaturdayTextView= (TextView) findViewById(R.id.textViewOpenTimeSaturday);
+        timeSundayTextView = (TextView) findViewById(R.id.textViewOpenTimeSunday);
+        favoriteImageButton = (ImageButton) findViewById(R.id.imageButtonFavorite);
         menuButton = (Button) findViewById(R.id.buttonMenu);
-        commentsTextView = (TextView) findViewById(R.id.textViewComments);
         addButton = (Button) findViewById(R.id.buttonAdd);
+        commentsTextView = (TextView) findViewById(R.id.textViewComments);
         imagesLinearLayout = (LinearLayout) findViewById(R.id.linearLayoutImages);
-        propertiesTextView = (TextView) findViewById(R.id.textViewProperties);
-        mapImageView = (ImageView) findViewById(R.id.mapImage);
+        //propertiesTextView = (TextView) findViewById(R.id.textViewProperties);
+        distanceTextView = (TextView) findViewById(R.id.textViewDistance);
+        mapImageView = (ImageView) findViewById(R.id.mapImageView);
+        messageTextView = (TextView) findViewById(R.id.textViewMessage);
+        setIcons();
         
         registerForContextMenu(addButton);
         
@@ -144,7 +193,7 @@ public class RestaurantDetailsActivity extends MainActivity {
             }
         });
         
-        mapImageView.setOnClickListener(new OnClickListener() {
+        OnClickListener mapClickListener = new OnClickListener() {
             
             @Override
             public void onClick(View v) {
@@ -153,7 +202,42 @@ public class RestaurantDetailsActivity extends MainActivity {
                 intent.putExtra(RestaurantMapActivity.LONGITUDE_KEY, provider.locationLongitude);
                 startActivity(intent);
             }
-        });
+        };
+        
+        openTimeslinearLayout.setOnClickListener(mapClickListener);
+        mapImageView.setOnClickListener(mapClickListener);
+    }
+
+    private void setIcons() {
+        icon = new Icon();
+        icon.celiac = (ImageView) findViewById(R.id.icncoeliac);
+        icon.delivery = (ImageView) findViewById(R.id.icndelivery);
+        icon.salad = (ImageView) findViewById(R.id.icnsaladbar);
+        icon.vegetarian = (ImageView) findViewById(R.id.icnvegetarian);
+        icon.weekend = (ImageView) findViewById(R.id.icnweekend);
+        icon.invalidWC = (ImageView) findViewById(R.id.icnwheelchairwc);
+    }
+    
+    private void setIconsData() {
+        Features features = provider.getFeatures();
+        if (features.celiac) {
+            icon.celiac.setVisibility(View.VISIBLE);
+        }
+        if (features.delivery) {
+            icon.delivery.setVisibility(View.VISIBLE);
+        }
+        if (features.salad) {
+            icon.salad.setVisibility(View.VISIBLE);
+        }
+        if (features.vegetarian) {
+            icon.vegetarian.setVisibility(View.VISIBLE);
+        }
+        if (features.weekend) {
+            icon.weekend.setVisibility(View.VISIBLE);
+        }
+        if (features.invalidWC) {
+            icon.invalidWC.setVisibility(View.VISIBLE);
+        }
     }
 
     public static String getFileDownloadUrl() {
@@ -188,13 +272,21 @@ public class RestaurantDetailsActivity extends MainActivity {
     }
     
     private void setFavorite(int restaurantId) {
-        boolean favorited = application.isRestaurantFavorited(restaurantId);
+        boolean favorited = !application.isRestaurantFavorited(restaurantId);
+        setFavoriteIcon(favorited);
+        application.setRestaurantFavorited(restaurantId, favorited);
+    }
+    
+    private void setFavoriteIcon(boolean favorited) {
         if (favorited) {
-            favoriteImageButton.setBackgroundResource(R.drawable.unstarred48);
-        } else {
             favoriteImageButton.setBackgroundResource(R.drawable.starred48);
+        } else {
+            favoriteImageButton.setBackgroundResource(R.drawable.unstarred48);
         }
-        application.setRestaurantFavorited(restaurantId, !favorited);
+    }
+    
+    public void drawDetails() {
+        
     }
     
     public boolean onOptionsItemSelected(MenuItem item) {

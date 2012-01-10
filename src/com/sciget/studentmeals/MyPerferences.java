@@ -1,6 +1,9 @@
 package com.sciget.studentmeals;
 
+import java.io.File;
 import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import android.content.Context;
 import android.os.Environment;
@@ -23,6 +26,12 @@ public class MyPerferences extends Perferences {
         }
     }
     
+    public static class Day {
+        public static final int WORKDAY = 1;
+        public static final int SATURDAY = 2;
+        public static final int SUNDAY = 3;
+    }
+    
     private Context context;
     private static MyPerferences instatnce;
     
@@ -39,6 +48,8 @@ public class MyPerferences extends Perferences {
 
     private RestaurantMapActivity restaurantMapActivity;
     private RestaurantsListActivity2 restaurantsListActivity;
+    private Boolean first;
+    private int openTimeType;
     
     private static final String USER_ID = "userId";
     private static final String USER_KEY = "userKey";
@@ -51,6 +62,7 @@ public class MyPerferences extends Perferences {
     private static final String SERVER = "server";
     private static final String LOCATION_LATITUDE = "locationLatitude";
     private static final String LOCATION_LONGITUDE = "locationLongitude";
+    private static final String FIRST = "first";
     
     public static final double LOCATION_LATITUDE_DEFAULT = 46.5575721;
     public static final double LOCATION_LONGITUDE_DEFAULT = 15.6375547;
@@ -67,10 +79,31 @@ public class MyPerferences extends Perferences {
         if (instatnce == null) {
             this.context = context;
             instatnce = this;
+            if (isFirst()) {
+                deleteDirectory(new File(getExternalStoragePath()));
+            }
+            setValues();
         }
     }
     
-    public void setValues() {
+    public static boolean deleteDirectory(File path) {
+        if (path.exists()) {
+            File[] files = path.listFiles();
+            if (files == null) {
+                return true;
+            }
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].isDirectory()) {
+                    deleteDirectory(files[i]);
+                } else {
+                    files[i].delete();
+                }
+            }
+        }
+        return (path.delete());
+    }
+    
+    private void setValues() {
         StudentMealUserModel userModel = new StudentMealUserModel(context);
         StudentMealUserData user = userModel.getUser();
         if (user != null) {
@@ -237,11 +270,45 @@ public class MyPerferences extends Perferences {
         this.restaurantsListActivity = null;
     }
 
-    public String getExternalStoragePath() {
+    public static String getExternalStoragePath() {
         return Environment.getExternalStorageDirectory().getAbsolutePath() + "/StudentMeals/";
     }
     
-    public String getDatabasePath() {
+    public static String getDatabasePath() {
         return getExternalStoragePath() + "sp.sqlite";
+    }
+    
+    public boolean isFirst() {
+        if (first == null) {
+            first = false;
+            int firstInt = getInt(FIRST);
+            if (firstInt == -1) {
+                set(FIRST, 1);
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+    
+    private void setOpenTimeType() {
+        GregorianCalendar newCal = new GregorianCalendar();
+        int day = newCal.get(Calendar.DAY_OF_WEEK);
+        if (day == Calendar.SUNDAY) {
+            openTimeType = Day.SUNDAY;
+        } else if (day == Calendar.SATURDAY) {
+            openTimeType = Day.SATURDAY;
+        } else {
+            openTimeType = Day.WORKDAY;
+        }
+    }
+    
+    public int getOpenTimeType() {
+        if (openTimeType == 0) {
+            setOpenTimeType();
+        }
+        return openTimeType;
     }
 }

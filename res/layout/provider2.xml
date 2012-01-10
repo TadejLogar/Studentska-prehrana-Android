@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#2D1C0B"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:padding="10dp"
+        android:background="#FFF5D7"
+        android:layout_margin="5dp"
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        <TextView
+            android:id="@+id/textViewProviderName"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2"
+            android:text="Ime ponudnika"
+            android:textColor="#000000"
+            android:textSize="30sp" />
+            
+        <ImageButton
+            android:id="@+id/imageButtonFav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:onClick="addToFavoritesListClick"
+            android:src="@drawable/unstarred48" >
+        </ImageButton>
+        </LinearLayout>
+        
+<LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:background="#000000"
+            android:text="TextView" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="match_parent"
+            android:layout_height="15dip"
+            android:text="TextView" >
+        </TextView>
+    </LinearLayout>
+    
+        <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+<TextView
+    android:textColor="#000000"
+    android:id="@+id/textViewAddress"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Naslov" />
+<TextView
+    android:textColor="#000000"
+    android:id="@+id/textViewPhone"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Telefon" />
+
+<LinearLayout
+    android:id="@+id/linearLayout5"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <LinearLayout
+    android:id="@+id/linearLayout4"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:layout_marginTop="20dp"
+    android:background="#EAD6B1"
+    android:orientation="vertical"
+    android:padding="5dp"
+    android:layout_marginRight="5dp">
+        
+    <TextView
+    android:textColor="#000000"
+    android:id="@+id/textViewOpenTime"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Delovnik" />
+<TextView
+    android:textColor="#000000"
+    android:id="@+id/textView2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Sobota" />
+<TextView
+    android:textColor="#000000"
+    android:id="@+id/textViewProperties2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Nedelja" />
+    
+</LinearLayout>
+
+<LinearLayout
+    android:id="@+id/linearLayout4"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:layout_marginTop="20dp"
+    android:background="#EAD6B1"
+    android:orientation="vertical"
+    android:padding="5dp"
+    android:layout_marginLeft="5dp">
+        
+    <TextView
+    android:textColor="#000000"
+    android:id="@+id/textViewFee"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textSize="20sp"
+    android:text="Doplačilo" />
+    
+</LinearLayout>
+</LinearLayout>
+
+<TextView
+    android:id="@+id/textViewProperties"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="TextView" />
+
+                <ImageView
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/mapImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon" >
+                </ImageView>
+                
+<LinearLayout
+    android:id="@+id/linearLayout5"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
+    >
+                <Button
+                    android:id="@+id/buttonMenu"
+android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+                    android:text="Meni"
+    android:padding="5dp"
+    android:layout_marginRight="5dp" />
+                                <Button
+                    android:id="@+id/buttonAdd"
+android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+                    android:text="Dodaj"
+    android:padding="5dp"
+    android:layout_marginLeft="5dp"
+                    />
+    </LinearLayout>
+    
+
+                                
+
+
+                         <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+                <LinearLayout
+                    android:id="@+id/linearLayout3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/textViewComments"
+                        android:layout_width="0pt"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Komentarji" >
+                    </TextView>
+                </LinearLayout>
+            </ScrollView>
+
+            <LinearLayout
+                android:id="@+id/linearLayoutImages"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+
+            </LinearLayout>
+            
+
+</LinearLayout>
+</ScrollView>
+
+    </LinearLayout>
+
+</LinearLayout>

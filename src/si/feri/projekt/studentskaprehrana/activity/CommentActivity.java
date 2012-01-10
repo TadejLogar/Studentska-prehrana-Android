@@ -44,6 +44,7 @@ public class CommentActivity extends Activity {
         
         finish();
         finish();
+        finish();
         
         Intent intent = new Intent(this, RestaurantDetailsActivity.class);
         intent.putExtra(RestaurantDetailsActivity.RESTAURANT_ID_KEY, restaurantId);

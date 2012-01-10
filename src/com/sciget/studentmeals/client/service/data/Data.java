@@ -19,7 +19,12 @@ public class Data {
 	
 	public String get(String name) {
 		try {
-			return obj.getPropertyAsString(name);
+			String value = obj.getPropertyAsString(name);
+			if (value.equals("anyType{}")) {
+			    return "";
+			} else {
+			    return value;
+			}
 		} catch (Exception e) {
 			return null;
 		}
