@@ -78,12 +78,12 @@
                     xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_marginTop="20dp"
                     android:layout_weight="1"
                     android:background="#6FBF44"
                     android:orientation="vertical"
-                    android:padding="5dp"
                     >
 
                     <TextView
@@ -142,13 +142,61 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:background="#FFF5D7" >
+                android:background="#FFF5D7"
+                >
+                
+            <LinearLayout
+                android:id="@+id/linearLayoutStars"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:layout_marginRight="5dp"
+                >
+                    
+                <ImageView
+                    android:id="@+id/star1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/star_empty" />
+                <ImageView
+                    android:id="@+id/star2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/star_empty" />
+                <ImageView
+                    android:id="@+id/star3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/star_empty" />
+                <ImageView
+                    android:id="@+id/star4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/star_empty" />
+                <ImageView
+                    android:id="@+id/star5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/star_empty" />
+                
+                </LinearLayout>
+                
+            <LinearLayout
+                android:id="@+id/linearLayoutStars"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:layout_marginLeft="5dp"
+                >
 
                 <ImageView
                     android:id="@+id/icncoeliac"
                     android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
                     android:src="@drawable/icncoeliac" />
 
                 <ImageView
@@ -156,6 +204,7 @@
                     android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
                     android:src="@drawable/icndelivery" />
 
                 <ImageView
@@ -163,6 +212,7 @@
                     android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
                     android:src="@drawable/icnsaladbar" />
 
                 <ImageView
@@ -170,6 +220,7 @@
                     android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
                     android:src="@drawable/icnvegetarian" />
 
                 <ImageView
@@ -177,6 +228,7 @@
                     android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
                     android:src="@drawable/icnweekend" />
 
                 <ImageView
@@ -184,7 +236,11 @@
                     android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
                     android:src="@drawable/icnwheelchairwc" />
+                
+                </LinearLayout>
+                
             </LinearLayout>
 
             <LinearLayout

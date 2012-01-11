@@ -41,7 +41,7 @@ public class RestaurantMenuModel extends Model {
 
     public ArrayList<RestaurantMenuData> getMenus(int restaurantId) {
         ArrayList<RestaurantMenuData> menus = new ArrayList<RestaurantMenuData>();
-        Cursor cursor = rawQuery("SELECT restaurantId, date, menu FROM " + RestaurantMenuData.NAME + " WHERE restaurantId = " + restaurantId);
+        Cursor cursor = rawQuery("SELECT restaurantId, date, menu FROM " + RestaurantMenuData.NAME + " WHERE restaurantId = " + restaurantId + " ORDER BY date ASC");
         while (cursor.moveToNext()) {
             RestaurantMenuData menu = new RestaurantMenuData(cursor.getInt(0), toDate(cursor.getString(1)), cursor.getString(2));
             menus.add(menu);

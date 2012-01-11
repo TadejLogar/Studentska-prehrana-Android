@@ -118,6 +118,8 @@ public class ProviderMapActivity extends MapActivity {
                 String locationData = mRoad.mName + ", " + mRoad.mDescription;
                 locationData = locationData.replaceAll("Distance", "Razdalja");
                 locationData = locationData.replaceAll("about", "približno");
+                locationData = locationData.replaceAll(" to ", " do ");
+                locationData = locationData.replaceAll("mins", "minute");
 	        textView.setText(locationData);
 	        MapOverlay mapOverlay = new MapOverlay(mRoad, mapView);
 	        List<Overlay> listOfOverlays = mapView.getOverlays();

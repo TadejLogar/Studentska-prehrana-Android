@@ -30,6 +30,7 @@ public class FavoritedRestaurantData extends Data {
     }
     
     public int add(Database db) {
+        db.update("DELETE FROM " + NAME + " WHERE restaurantId = ? AND userId = ?", new Object[] { restaurantId, userId });
         return db.update("INSERT INTO " + NAME + " (userId, restaurantId, time) VALUES (?, ?, ?)", new Object[] { userId, restaurantId, time });
     }
     

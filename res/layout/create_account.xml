@@ -60,21 +60,6 @@
         android:inputType="textPassword"
         android:text="studentskaprehrana.si"
         />
-    
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Geslo (aplikacija)" />
-
-    <EditText
-        android:id="@+id/editTextAppPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:text="studentskaprehrana.si"
-        />
-    
-    
 
     <TextView
         android:id="@+id/textView1"
@@ -86,7 +71,7 @@
         android:id="@+id/imageViewRecaptcha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/icon" />
+        android:src="@drawable/logo" />
 
     <EditText
         android:id="@+id/editTextRecaptchaCode"
@@ -106,6 +91,6 @@
         android:id="@+id/textViewStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="-" />
+        android:text="" />
 
 </LinearLayout>

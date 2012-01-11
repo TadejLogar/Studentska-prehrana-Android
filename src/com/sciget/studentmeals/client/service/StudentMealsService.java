@@ -279,5 +279,19 @@ public class StudentMealsService extends WebService {
         SoapPrimitive primitive = requestPrimitive();
         return new DataPrimitive(primitive).getString();
     }
+    
+    public Vector<Integer> mostVisitedRestaurants(String key) {
+        setMethodName("mostVisitedRestaurants");
+        prepare();
+        addString("key", key);
+        Vector<SoapObject> list = requestVector();
+        Vector<Integer> restaurants = new Vector<Integer>();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i) != null) {
+                restaurants.add(Data.parseInt(list.get(i)));
+            }
+        }
+        return restaurants;
+    }
 	
 }

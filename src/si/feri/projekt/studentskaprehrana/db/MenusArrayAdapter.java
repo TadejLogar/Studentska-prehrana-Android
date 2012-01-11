@@ -1,5 +1,6 @@
 package si.feri.projekt.studentskaprehrana.db;
 
+import java.util.Date;
 import java.util.List;
 
 import com.sciget.studentmeals.database.data.RestaurantMenuData;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -20,11 +22,16 @@ import android.widget.TextView;
 @Deprecated
 public class MenusArrayAdapter extends ArrayAdapter<RestaurantMenuData> {
 	LayoutInflater mInflater;
+    private int blueColor = Color.parseColor("#008BCC");
+    private int greenColor = Color.parseColor("#6FBF44");
+    private Date todayDate;
 	
 	public MenusArrayAdapter(Context context, int textViewResourceId, List<RestaurantMenuData> objects) {
         super(context, textViewResourceId, objects);
 	    mInflater = LayoutInflater.from(context);
+	    todayDate = new Date(System.currentTimeMillis());
 	}
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 	    RestaurantMenuData tmp = getItem(position);
@@ -37,6 +44,7 @@ public class MenusArrayAdapter extends ArrayAdapter<RestaurantMenuData> {
 			// Creates a ViewHolder and store references to the two children views
 			// we want to bind data to.
 			holder = new ViewHolder();
+			holder.colorTag = (LinearLayout) convertView.findViewById(R.id.linearLayoutColorTag);
 			holder.food1 = (TextView) convertView.findViewById(R.id.food1);
 			holder.food2 = (TextView) convertView.findViewById(R.id.food2);
 			convertView.setTag(holder);
@@ -52,6 +60,14 @@ public class MenusArrayAdapter extends ArrayAdapter<RestaurantMenuData> {
 			convertView.setBackgroundColor(Color.rgb(30, 30, 31));
 		}
 		
+		if (tmp.date == null) {
+		    holder.colorTag.setBackgroundColor(blueColor);
+		} else if (areEqual(tmp.date, todayDate)) {
+		    holder.colorTag.setBackgroundColor(greenColor );
+		} else {
+		    holder.colorTag.setBackgroundColor(Color.GRAY);
+		}
+		
 		// Bind the data efficiently with the holder.
 		holder.food1.setText(tmp.getFood1());
 		holder.food2.setText(tmp.getFood2().replace("[", "").replace("\",\"", ", ").replace("]", "").replace("\"", ""));
@@ -61,5 +77,10 @@ public class MenusArrayAdapter extends ArrayAdapter<RestaurantMenuData> {
 	static class ViewHolder {
 		TextView food1;
 		TextView food2;
+		LinearLayout colorTag; // linearLayoutColorTag
+	}
+	
+	public static boolean areEqual(Date date1, Date date2) {
+        return date1.getYear() == date2.getYear() && date1.getMonth() == date2.getMonth() && date1.getDay() == date2.getDay();
 	}
 }

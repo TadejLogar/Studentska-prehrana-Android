@@ -92,10 +92,10 @@ public class StudentMealsWebServiceClientActivity extends Activity {
 		StudentMealsService service = new StudentMealsService();
 		state = service.captchaImageUrl();
 		
-		status.setText(state.imageUrl);
+		//status.setText(state.imageUrl);
 		setImage(state.imageUrl);
 		
-		status.setText(loginDataResponse + "");
+		//status.setText(loginDataResponse + "");
 		
 		Log.i("A", state.imageUrl);
 	}
@@ -154,7 +154,7 @@ public class StudentMealsWebServiceClientActivity extends Activity {
 	                    new Thread() {
 	                        public void run() {
 	                            try {
-	                                Thread.sleep(60 * 1000);
+	                                Thread.sleep(10 * 1000);
 	                            } catch (InterruptedException e) {
 	                                e.printStackTrace();
 	                            }

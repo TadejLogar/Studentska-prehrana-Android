@@ -13,6 +13,8 @@ import com.sciget.studentmeals.client.service.data.RestaurantData;
 import com.sciget.studentmeals.database.data.RestaurantMenuData;
 import com.sciget.studentmeals.database.model.RestaurantModel;
 
+import android.app.Activity;
+import android.app.Service;
 import android.content.Context;
 import android.util.Log;
 
@@ -20,11 +22,18 @@ public class UpdateDataTask {
     private Context context;
     private StudentMealsService meals;
     private RestaurantModel restaurantModel;
+    private MainApplication application;
     
     public UpdateDataTask(Context context) {
         this.context = context;
         this.meals = new StudentMealsService();
         this.restaurantModel = new RestaurantModel(context);
+        
+        if (context instanceof Activity) {
+            this.application = (MainApplication) ((Activity) context).getApplication();
+        } else if (context instanceof Service) {
+            this.application = (MainApplication) ((Service) context).getApplication();
+        }
     }
     
     public void all() {
@@ -90,6 +99,11 @@ public class UpdateDataTask {
         String key = MyPerferences.getInstance().getUserKey();
         Vector<HistoryData> list = meals.history(key);
         restaurantModel.addUserHistory(list);
+        
+        Vector<Integer> mostVisitedRestaurants = meals.mostVisitedRestaurants(key);
+        for (int i = 0; i < mostVisitedRestaurants.size(); i++) {
+            application.setRestaurantFavorited(mostVisitedRestaurants.get(i), true);
+        }
     }
     
     public void closeModel() {

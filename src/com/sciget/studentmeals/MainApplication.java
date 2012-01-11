@@ -48,50 +48,9 @@ public class MainApplication extends Application {
     
     private void initialization() {
         new MyPerferences(this);
-        File dir = new File(MyPerferences.getExternalStoragePath());
-        if (!dir.isDirectory()) {
-            dir.mkdir();
-        }
-        copyDatabase();
         startService(new Intent(this, UpdateService.class));
         new LocationTask().execute();
         loadRestaurantsList();
-    }
-    
-    private void copyDatabase() {
-        File file = new File(MyPerferences.getDatabasePath());
-        if (file.exists()) return;
-        
-        InputStream in = getResources().openRawResource(R.raw.database);
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(file);
-            byte[] buff = new byte[1024];
-            int read;
-            while ((read = in.read(buff)) > 0) {
-                out.write(buff, 0, read);
-             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-             try {
-                in.close();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-             try {
-                out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        try {
-            Runtime.getRuntime().exec("chmod 777 " + file.getAbsolutePath());
-        } catch (Exception e) {
-            System.out.println(e.toString());
-        }
     }
     
     public void setRestaurantsListActivity(RestaurantsListActivity2 restaurantsListActivity) {
@@ -122,7 +81,9 @@ public class MainApplication extends Application {
     }
 
     public int getSubsidiesNumber() {
-        StudentMealUserData user = new StudentMealUserModel(this).getUserAll();
+        StudentMealUserModel userModel = new StudentMealUserModel(this);
+        StudentMealUserData user = userModel.getUserAll();
+        userModel.close();
         if (user == null) {
             return -1;
         } else {
@@ -131,7 +92,10 @@ public class MainApplication extends Application {
     }
 
     public String getLastProvider() {
-        return new StudentMealUserModel(this).getLastVisitedProvider();
+        StudentMealUserModel userModel = new StudentMealUserModel(this);
+        String provider = userModel.getLastVisitedProvider();
+        userModel.close();
+        return provider;
     }
     
     private final LocationListener locationListener = new LocationListener() {

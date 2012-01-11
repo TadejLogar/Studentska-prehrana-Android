@@ -1,6 +1,10 @@
 package com.sciget.studentmeals;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -13,6 +17,7 @@ import com.sciget.studentmeals.database.data.StudentMealUserData;
 import com.sciget.studentmeals.database.model.StudentMealUserModel;
 
 import si.feri.projekt.studentskaprehrana.Main;
+import si.feri.projekt.studentskaprehrana.R;
 import si.feri.projekt.studentskaprehrana.activity.RestaurantsListActivity2;
 
 public class MyPerferences extends Perferences {
@@ -86,6 +91,48 @@ public class MyPerferences extends Perferences {
         }
     }
     
+    public static boolean hasStorage(boolean requireWriteAccess) {  
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        } else if (!requireWriteAccess && Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {  
+            return true;
+        }  
+        return false;  
+    }
+    
+    private void copyDatabase() {
+        File file = new File(MyPerferences.getDatabasePath());
+        if (file.exists()) return;
+        if (!hasStorage(true)) return; // TODO: popravi
+        
+        InputStream in = context.getResources().openRawResource(R.raw.database);
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(file);
+            byte[] buff = new byte[1024];
+            int read;
+            while ((read = in.read(buff)) > 0) {
+                out.write(buff, 0, read);
+             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+             try {
+                in.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+             try {
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
     public static boolean deleteDirectory(File path) {
         if (path.exists()) {
             File[] files = path.listFiles();
@@ -104,6 +151,12 @@ public class MyPerferences extends Perferences {
     }
     
     private void setValues() {
+        File dir = new File(MyPerferences.getExternalStoragePath());
+        if (!dir.isDirectory()) {
+            dir.mkdir();
+        }
+        copyDatabase();
+        
         StudentMealUserModel userModel = new StudentMealUserModel(context);
         StudentMealUserData user = userModel.getUser();
         if (user != null) {

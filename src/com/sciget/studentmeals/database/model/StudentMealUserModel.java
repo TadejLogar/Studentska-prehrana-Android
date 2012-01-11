@@ -51,14 +51,16 @@ public class StudentMealUserModel extends Model {
     }
 
     public String getLastVisitedProvider() {
-        Cursor cursor = rawQuery("SELECT provider FROM " + StudentMealHistoryData.NAME);
+        Cursor cursor = rawQuery("SELECT provider FROM " + StudentMealHistoryData.NAME + " ORDER BY time DESC");
+        String provider = null;
         if (cursor.moveToNext()) {
             //StudentMealHistoryData data = new StudentMealHistoryData();
             //data.provider = cursor.getString(0);
             //return data;
-            return cursor.getString(0);
+            provider = cursor.getString(0);
         }
-        return null;
+        cursor.close();
+        return provider;
     }
 
     public boolean isRestaurantFavorited(int restaurantId) {

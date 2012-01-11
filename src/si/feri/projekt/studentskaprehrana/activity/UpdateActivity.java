@@ -11,14 +11,18 @@ import com.sciget.studentmeals.database.data.StudentMealUserData;
 import com.sciget.studentmeals.database.model.StudentMealUserModel;
 import com.sciget.studentmeals.service.UpdateDataTask;
 import com.sciget.studentmeals.service.UpdateService;
+import com.sciget.studentmeals.widget.UpdateWidgetService;
 
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.RemoteViews;
 import android.widget.TableLayout;
 
 public class UpdateActivity extends Activity {
@@ -32,12 +36,17 @@ public class UpdateActivity extends Activity {
 
         new Thread() {
             public void run() {
-                displayNotification("UPDATING", "UPDATING", "UPDATING", UpdateActivity.class, 0);
+                //displayNotification("UPDATING", "UPDATING", "UPDATING", UpdateActivity.class, 0);
                 UpdateDataTask updateDataTask = new UpdateDataTask(UpdateActivity.this);
                 updateDataTask.all();
                 updateDataTask.updateUserHistory();
                 updateDataTask.closeModel();
                 MyPerferences.getInstance().setLastRestaurantsUpdate(Data.time());
+
+                RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(), R.layout.widget_layout);
+                ComponentName thisWidget = new ComponentName(getApplicationContext(), UpdateWidgetService.class);
+                AppWidgetManager.getInstance(getApplicationContext()).updateAppWidget(thisWidget, remoteViews);
+                
                 
                 int userId = MyPerferences.getInstance().getUserId();
                 if (userId > 0) {
@@ -48,7 +57,7 @@ public class UpdateActivity extends Activity {
                         new StudentMealUserModel(UpdateActivity.this).add(new StudentMealUserData(0, user.userId, user.email, user.password, user.firstName, user.lastName, user.pin, user.getAddress(), "", "", user.getTempAddress(), "", "", user.university, user.facility, user.length, user.currentYear, user.studyMethod, user.statusValidation, user.enrollmentNumber, user.phone, key, "", user.remainingSubsidies));
                     }
                 }
-                displayNotification("DONE", "DONE", "DONE", UpdateActivity.class, 1);
+                displayNotification("Posodobljeno", "Posodobljeno", "Posodobljeno", "Posodobljeno", UpdateActivity.class, 1);
                 done();
             }
         }.start();
@@ -65,9 +74,9 @@ public class UpdateActivity extends Activity {
         startActivity(intent);
     }
     
-    public void displayNotification(String extra, String contentTitle, String contentText, Class<?> cls, int id) {
+    public void displayNotification(String title, String extra, String contentTitle, String contentText, Class<?> cls, int id) {
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        Notification notifyDetails = new Notification(R.drawable.icon, "New Alert!", System.currentTimeMillis());
+        Notification notifyDetails = new Notification(R.drawable.logo, title, System.currentTimeMillis());
         Intent intent = new Intent(this, cls);
         intent.putExtra("extra", extra);
         PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), id, intent, PendingIntent.FLAG_ONE_SHOT);

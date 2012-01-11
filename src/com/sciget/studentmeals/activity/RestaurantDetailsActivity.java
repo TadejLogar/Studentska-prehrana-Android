@@ -29,10 +29,13 @@ import com.sciget.studentmeals.database.data.StudentMealCommentData;
 import com.sciget.studentmeals.helper.Helper;
 import com.sciget.studentmeals.task.RestaurantMapImageTask;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -206,7 +209,39 @@ public class RestaurantDetailsActivity extends MainActivity {
         
         openTimeslinearLayout.setOnClickListener(mapClickListener);
         mapImageView.setOnClickListener(mapClickListener);
+        
+        phoneTextView.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                String phone = provider.getPhone();
+                if (phone != null && phone.length() > 6) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(RestaurantDetailsActivity.this);
+                    builder.setMessage("Želiš poklicati?").setPositiveButton("Da", dialogPhoneClickListener).setNegativeButton("Ne", dialogPhoneClickListener).show();
+                }
+            }
+        });
     }
+    
+    DialogInterface.OnClickListener dialogPhoneClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    
+                    String phone = provider.getPhone();
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    intent.setData(Uri.parse("tel:" + phone.replace(" ", "")));
+                    startActivity(intent);
+                    
+                    break;
+    
+                case DialogInterface.BUTTON_NEGATIVE:
+                    break;
+            }
+        }
+    };
+
 
     private void setIcons() {
         icon = new Icon();

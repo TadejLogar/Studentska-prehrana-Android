@@ -36,6 +36,9 @@ public class RestaurantMapActivity extends MapActivity {
             String locationData = mapRoad.mName + ", " + mapRoad.mDescription;
             locationData = locationData.replaceAll("Distance", "Razdalja");
             locationData = locationData.replaceAll("about", "približno");
+            locationData = locationData.replaceAll(" to ", " do ");
+            locationData = locationData.replaceAll("mins", "minute");
+            locationData = locationData.replaceAll("secs", "sekund");
             mapMessageTextView.setText(locationData);
             MapOverlay mapOverlay = new MapOverlay(mapRoad, mapView);
             List<Overlay> listOfOverlays = mapView.getOverlays();
