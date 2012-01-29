@@ -289,7 +289,7 @@
                 android:id="@+id/linearLayoutImages"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical" >
                 
             <TextView
@@ -314,7 +314,7 @@
                 android:id="@+id/linearLayoutImages"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical" >
             </LinearLayout>
 

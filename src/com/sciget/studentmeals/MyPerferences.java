@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream.GetField;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -36,6 +37,9 @@ public class MyPerferences extends Perferences {
         public static final int SATURDAY = 2;
         public static final int SUNDAY = 3;
     }
+    
+    //private static final String SERVER_ADDRESS = "164.8.221.136:8080";
+    private static final String SERVER_ADDRESS = "sciget.com:80";
     
     private Context context;
     private static MyPerferences instatnce;
@@ -75,7 +79,7 @@ public class MyPerferences extends Perferences {
     public MyPerferences() {
         super();
         instatnce = this;
-        server = "164.8.221.136";
+        server = SERVER_ADDRESS;
     }
     
     public MyPerferences(Context context) {
@@ -102,9 +106,8 @@ public class MyPerferences extends Perferences {
     }
     
     private void copyDatabase() {
-        File file = new File(MyPerferences.getDatabasePath());
+        File file = new File(getDatabasePath());
         if (file.exists()) return;
-        if (!hasStorage(true)) return; // TODO: popravi
         
         InputStream in = context.getResources().openRawResource(R.raw.database);
         FileOutputStream out = null;
@@ -147,7 +150,7 @@ public class MyPerferences extends Perferences {
                 }
             }
         }
-        return (path.delete());
+        return path.delete();
     }
     
     private void setValues() {
@@ -166,7 +169,7 @@ public class MyPerferences extends Perferences {
         
         String server = getServer();
         if (server == null || server.length() == 0) {
-            setServer("164.8.221.136");
+            setServer(SERVER_ADDRESS);
         }
     }
     
@@ -327,8 +330,12 @@ public class MyPerferences extends Perferences {
         return Environment.getExternalStorageDirectory().getAbsolutePath() + "/StudentMeals/";
     }
     
-    public static String getDatabasePath() {
+    public static String getDatabasePath0() {
         return getExternalStoragePath() + "sp.sqlite";
+    }
+    
+    public String getDatabasePath() {
+        return context.getFilesDir() + File.separator + "sp.sqlite";
     }
     
     public boolean isFirst() {

@@ -71,7 +71,7 @@ public class DetailsActivity extends MainActivity {
     private RestaurantData provider;
     
     public static String getFileDownloadUrl() {
-        return "http://" + MyPerferences.getInstance().getServer() + ":8080/StudentMealsWebService/restaurantFiles?hash=";
+        return "http://" + MyPerferences.getInstance().getServer() + "/StudentMealsWebService/restaurantFiles?hash=";
     }
 
     public void onCreate(Bundle savedInstanceState) {

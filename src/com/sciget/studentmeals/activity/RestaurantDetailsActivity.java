@@ -6,6 +6,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Vector;
 
+import net.londatiga.android.ActionItem;
+import net.londatiga.android.QuickAction;
+
 import si.feri.projekt.studentskaprehrana.R;
 import si.feri.projekt.studentskaprehrana.activity.CommentActivity;
 import si.feri.projekt.studentskaprehrana.activity.DetailsActivity;
@@ -53,6 +56,9 @@ import android.widget.TextView;
 public class RestaurantDetailsActivity extends MainActivity {
     public static final String RESTAURANT_ID_KEY = "restaurantId";
     
+    protected static final int ID_COMMENT = 1;
+    protected static final int ID_IMAGE = 2;
+    
     private class Icon {
         public ImageView celiac; // celiakiji prijazni obroki
         public ImageView delivery; // dostava
@@ -95,6 +101,7 @@ public class RestaurantDetailsActivity extends MainActivity {
         Bundle extras = getIntent().getExtras();
         setRestaurant(extras.getInt(RESTAURANT_ID_KEY));
         setData();
+        addMenu();
     }
 
     private void setData() {
@@ -168,7 +175,7 @@ public class RestaurantDetailsActivity extends MainActivity {
         messageTextView = (TextView) findViewById(R.id.textViewMessage);
         setIcons();
         
-        registerForContextMenu(addButton);
+        //registerForContextMenu(addButton);
         
         favoriteImageButton.setOnClickListener(new OnClickListener() {
             
@@ -276,7 +283,7 @@ public class RestaurantDetailsActivity extends MainActivity {
     }
 
     public static String getFileDownloadUrl() {
-        return "http://" + MyPerferences.getInstance().getServer() + ":8080/StudentMealsWebService/restaurantFiles?hash=";
+        return "http://" + MyPerferences.getInstance().getServer() + "/StudentMealsWebService/restaurantFiles?hash=";
     }
     
     @Override
@@ -286,6 +293,58 @@ public class RestaurantDetailsActivity extends MainActivity {
         menu.add(0, 1, 0, "Dodaj komentar");
         //menu.add(0, 2, 0, "Dodaj zvočni posnetek");
         menu.add(0, 3, 0, "Dodaj sliko");
+    }
+    
+    private void addMenu() {
+        ActionItem addItem      = new ActionItem(ID_COMMENT, "Dodaj komentar", getResources().getDrawable(R.drawable.ic_add));
+        ActionItem acceptItem   = new ActionItem(ID_IMAGE, "Dodaj sliko", getResources().getDrawable(R.drawable.ic_accept));
+        
+        final QuickAction mQuickAction  = new QuickAction(this);
+        
+        mQuickAction.addActionItem(addItem);
+        mQuickAction.addActionItem(acceptItem);
+        
+        //setup the action item click listener
+        mQuickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
+            @Override
+            public void onItemClick(QuickAction quickAction, int pos, int actionId) {
+                ActionItem actionItem = quickAction.getActionItem(pos);
+                
+                if (actionId == ID_COMMENT) {
+                    Intent i = new Intent(RestaurantDetailsActivity.this, CommentActivity.class);
+                    i.putExtra(RESTAURANT_ID_KEY, provider.getId());
+                    startActivity(i);
+                } else if (actionId == ID_IMAGE) {
+                    Intent i = new Intent(RestaurantDetailsActivity.this, CameraActivity.class);
+                    i.putExtra(RESTAURANT_ID_KEY, provider.getId());
+                    startActivity(i);
+                }
+            }
+        });
+        
+        mQuickAction.setOnDismissListener(new QuickAction.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                //Toast.makeText(getApplicationContext(), "Ups..dismissed", Toast.LENGTH_SHORT).show();
+            }
+        });
+        
+        /*Button btn1 = (Button) this.findViewById(R.id.btn1);
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //mQuickAction.show(v);
+            }
+        });
+
+        Button btn2 = (Button) this.findViewById(R.id.btn2);*/
+        addButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mQuickAction.show(v);
+                mQuickAction.setAnimStyle(QuickAction.ANIM_GROW_FROM_CENTER);
+            }
+        });
     }
     
     @Override

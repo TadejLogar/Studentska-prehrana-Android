@@ -49,8 +49,7 @@ public class StudentMealsService extends WebService {
 			}
 		}
 	}
-	
-	//private static String URL = "http://" + Perferences.SERVER + ":8080/StudentMealsWebService/services/StudentMealsMain?wsdl";
+
 	private static String NAMESPACE = "http://studentmeals.sciget.com";
 	
 	public StudentMealsService() {
@@ -58,7 +57,7 @@ public class StudentMealsService extends WebService {
 	}
 	
 	public static String getUrl() {
-	    return "http://" + MyPerferences.getInstance().getServer() + ":8080/StudentMealsWebService/services/StudentMealsMain?wsdl";
+	    return "http://" + MyPerferences.getInstance().getServer() + "/StudentMealsWebService/services/StudentMealsMain?wsdl";
 	}
 
 	public StudentMealsStateData captchaImageUrl() {

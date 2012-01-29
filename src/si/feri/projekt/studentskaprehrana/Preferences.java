@@ -69,7 +69,7 @@ public class Preferences extends PreferenceActivity {
                      return true;
                  }
              });
-             myPref.setEnabled(MyPerferences.getInstance().getUserId() > 0);
+             //myPref.setEnabled(MyPerferences.getInstance().getUserId() > 0);
         }
     }
 

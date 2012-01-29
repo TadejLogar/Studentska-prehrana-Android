@@ -68,6 +68,12 @@ public class UpdateService extends Service {
         if (isOnline()) {
             System.out.println("service studentmeals create");
             
+            new Thread() {
+                public void run() {
+                    UpdateDataTask.updateServerHost();
+                }
+            }.start();
+            
             mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
             final String dir = MyPerferences.getExternalStoragePath();

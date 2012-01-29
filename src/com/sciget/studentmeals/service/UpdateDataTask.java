@@ -54,6 +54,7 @@ public class UpdateDataTask {
     }
     
     public static void updateServerHost() {
+        if (true) return;
         String ip;
         try {
             ip = MVC.downloadToString("http://dl.dropbox.com/u/14013671/ip.txt");

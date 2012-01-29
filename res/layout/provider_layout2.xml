@@ -63,6 +63,7 @@
                     android:layout_weight="0.19"
                     android:gravity="right"
                     android:text="€"
+                    android:textStyle="bold"
                     android:textColor="#A4C639" >
                 </TextView>
             </LinearLayout>

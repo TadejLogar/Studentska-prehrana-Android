@@ -40,7 +40,12 @@ public class Data {
 	}
 	
 	public int getInt(String name) {
-		return parseInt(obj.getProperty(name));
+	    try {
+	        return parseInt(obj.getProperty(name));
+	    } catch (Exception e) {
+	        Log.e("PARSE", e.toString() + ": " + name);
+	        return 0;
+	    }
 	}
 	
 	public double getDouble(String name) {

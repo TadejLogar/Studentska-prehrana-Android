@@ -30,6 +30,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class HistoryListActivity extends ListActivity {
     private MainApplication app;
@@ -41,17 +42,22 @@ public class HistoryListActivity extends ListActivity {
     private RestaurantModel menusDB;
     
     private ProgressDialog pd;
+    
+    private TextView providerNameTextView;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.menus_list_activity);
         app = (MainApplication) getApplication();
+        providerNameTextView = (TextView) findViewById(R.id.textViewProviderName);
         Bundle extras = getIntent().getExtras();
         setData();
         setListAdapter(menusAdapter);
-        setContentView(R.layout.menus_list_activity);
     }
 
     public void setData() {
+        providerNameTextView.setText("Zgodovina obiskov");
+        
         menusDB = new RestaurantModel(this);
         menuList = new ArrayList<StudentMealHistoryData>();
         Vector<StudentMealHistoryData> menus = menusDB.getHistory();

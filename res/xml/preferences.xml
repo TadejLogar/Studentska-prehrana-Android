@@ -4,7 +4,7 @@
         <Preference android:title="Dodaj račun" android:key="createAccountKey"></Preference>
         <Preference android:title="Zgodovina" android:key="historyKey"></Preference>
         <Preference android:title="Osebni podatki" android:key="personalInfoKey"></Preference>
-        <Preference android:title="Pododobi" android:key="updateKey"></Preference>
+        <Preference android:title="Posodobi" android:key="updateKey"></Preference>
     </PreferenceCategory>
 </PreferenceScreen>
  
