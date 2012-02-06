@@ -116,8 +116,8 @@ public class UpdateService extends Service {
                             }
                         }
                         
-                        sendMessage("UPDATING");                
-                        displayNotification("UPDATING", "UPDATING", "UPDATING", UpdateService.class, 0);
+                        //sendMessage("UPDATING");                
+                        //displayNotification("UPDATING", "UPDATING", "UPDATING", UpdateService.class, 0);
         
         
                         UpdateDataTask updateDataTask = new UpdateDataTask(UpdateService.this);
@@ -125,8 +125,8 @@ public class UpdateService extends Service {
                         updated = true;
                         MyPerferences.getInstance().setLastRestaurantsUpdate(Data.time());
                         
-                        sendMessage("DONE");
-                        displayNotification("DONE", "DONE", "DONE", UpdateService.class, 1);
+                        sendMessage("Posodobljeno");
+                        displayNotification("Posodobljeno", "Posodobljeno", "Posodobljeno", UpdateService.class, 1);
                         
                         updateRunning = false;
                     }

@@ -371,4 +371,8 @@ public class MyPerferences extends Perferences {
         }
         return openTimeType;
     }
+
+    public String getServerHost() {
+        return "sciget.com";
+    }
 }

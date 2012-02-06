@@ -64,7 +64,7 @@ public class Image {
         
         userKey = MyPerferences.getInstance().getUserKey();
         
-        upload(MyPerferences.getInstance().getServer(), smallSha1, sha1, smallImage, image);
+        upload(MyPerferences.getInstance().getServerHost(), smallSha1, sha1, smallImage, image);
     }
 
     private void upload(String ip, String smallSha1, String sha1, File smallImage, File image) throws InterruptedException {

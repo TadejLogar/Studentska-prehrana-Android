@@ -64,7 +64,8 @@ public class MenuForActivity {
 	}
 
 	private static void showFood(Activity activity) {
-		Intent i = new Intent(activity, si.feri.projekt.studentskaprehrana.activity.RestaurantsListActivity.class);
+	    activity.finish();
+		Intent i = new Intent(activity, RestaurantsListActivity2.class);
 		activity.startActivity(i);
 	}
 }

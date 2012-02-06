@@ -57,7 +57,11 @@ public class RestaurantMapActivity extends MapActivity {
         setContentView(R.layout.maps_layout);
         setViews();
         setData();
-        changeMap(MyPerferences.getInstance().getLocation());
+        try {
+            changeMap(MyPerferences.getInstance().getLocation());
+        } catch (Exception e) {
+            finish();
+        }
     }
     
     @Override

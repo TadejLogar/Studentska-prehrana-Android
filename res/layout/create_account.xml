@@ -26,13 +26,6 @@
         android:layout_height="wrap_content"
         android:text="Geslo (aplikacija)" />
 
-    <EditText
-        android:id="@+id/editTextAppPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:text="studentskaprehrana.si"
-        />
          -->
 
     <TextView
@@ -58,7 +51,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
-        android:text="studentskaprehrana.si"
+        android:text=""
         />
 
     <TextView

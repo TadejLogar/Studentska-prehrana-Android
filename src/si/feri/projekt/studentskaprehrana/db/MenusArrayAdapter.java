@@ -1,5 +1,6 @@
 package si.feri.projekt.studentskaprehrana.db;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -81,6 +82,13 @@ public class MenusArrayAdapter extends ArrayAdapter<RestaurantMenuData> {
 	}
 	
 	public static boolean areEqual(Date date1, Date date2) {
-        return date1.getYear() == date2.getYear() && date1.getMonth() == date2.getMonth() && date1.getDay() == date2.getDay();
+	    Calendar d1 = Calendar.getInstance();
+	    d1.setTimeInMillis(date1.getTime());
+	    
+        Calendar d2 = Calendar.getInstance();
+        d2.setTimeInMillis(date2.getTime());
+        
+        return d1.get(Calendar.DAY_OF_MONTH) == d2.get(Calendar.DAY_OF_MONTH) && d1.get(Calendar.MONTH) == d2.get(Calendar.MONTH) && d1.get(Calendar.YEAR) == d2.get(Calendar.YEAR);        
+        //return date1.getYear() == date2.getYear() && date1.getMonth() == date2.getMonth() && date1.get() == date2.getDay();
 	}
 }
